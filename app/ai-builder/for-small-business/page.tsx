@@ -1,6 +1,6 @@
 import Link from "next/link";
-import TopBar from "../../components/TopBar";
-import SiteFooter from "../../components/SiteFooter";
+import TopBar from "@/components/ai-builder/TopBar";
+import SiteFooter from "@/components/ai-builder/SiteFooter";
 
 const includes = [
   { icon: "📅", title: "Online Booking", desc: "Let customers book appointments or services directly from your site." },

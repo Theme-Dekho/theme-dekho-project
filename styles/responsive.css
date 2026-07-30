@@ -1,0 +1,133 @@
+/* ============================================================
+   RESPONSIVE OVERRIDES
+   All @media breakpoints from the original stylesheet, kept together
+   since each one touches selectors across several component groups
+   (header, hero, category, product, sections, footer, modal).
+   ============================================================ */
+
+@media (max-width: 980px) {
+    .ad-inner { flex-direction: column; align-items: stretch; gap: 28px; padding: 0 24px; }
+    .ad-title { font-size: 25px; max-width: none; }
+    .ad-right-stack { min-width: 0; }
+    .ad-banner { padding: 34px 0; }
+  }
+
+@media (max-width: 1024px) {
+    .product-grid { grid-template-columns: repeat(2, 1fr); }
+    .why-grid     { grid-template-columns: repeat(2, 1fr); }
+    .test-grid    { grid-template-columns: repeat(2, 1fr); }
+    .footer-grid  { grid-template-columns: 1fr 1fr; gap: 32px; }
+    .hero-inner   { grid-template-columns: 1fr; gap: 36px; }
+    .hero-graphic { display: none; }        /* decorative constellation, not content */
+    .hero-sub     { max-width: none; }
+    .cta-inner    { grid-template-columns: 1fr; gap: 28px; }
+  }
+
+@media (max-width: 768px) {
+
+    /* Header: swap nav for hamburger */
+    .mnav-toggle { display: flex; }
+    header nav   { display: none; }
+    .header-right .btn-login,
+    .header-right .phone-tag { display: none; }
+    .header-inner { padding: 0 14px; height: 60px; gap: 10px; }
+    .logo-img { height: 22px; }
+
+    /* Topbar: drop the clutter, keep the badge */
+    .topbar .inner { padding: 0 14px; justify-content: center; }
+    .topbar span, .topbar .divider { display: none; }
+
+    /* Hero */
+    .hero { padding: 40px 0 36px; }
+    .hero-badge { font-size: 9.5px; padding: 6px 13px; letter-spacing: 0.02em; border-radius: 14px; }
+    .hero-inner { padding: 0 18px; }
+    .hero h1 { font-size: 28px; line-height: 1.25; }
+    .hero-sub { font-size: 14px; }
+    .hero-actions { flex-direction: column; align-items: stretch; gap: 10px; }
+    .hero-actions .btn-primary,
+    .hero-actions .btn-secondary-outline { width: 100%; justify-content: center; min-height: 48px; }
+    .hero-actions > div { width: 100%; }
+    .click-tag { display: none; }
+
+    /* Category strip → horizontal scroll, no wrap */
+    .cat-inner {
+      padding: 0 14px; gap: 8px;
+      overflow-x: auto; flex-wrap: nowrap;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .cat-inner::-webkit-scrollbar { display: none; }
+    .cat-lbl { display: none; }
+    .cat-pill { flex-shrink: 0; min-height: 40px; }
+    .cat-search { display: none; }
+    .subcat-pills { overflow-x: auto; flex-wrap: nowrap; scrollbar-width: none; }
+    .subcat-pills::-webkit-scrollbar { display: none; }
+
+    /* Sections */
+    .section { padding: 40px 0; }
+    .section-inner { padding: 0 18px; }
+    .section-head { flex-direction: column; align-items: flex-start; gap: 12px; }
+    .section-title { font-size: 21px; }
+    .section-sub { font-size: 13px; }
+    .view-all { font-size: 13px; }
+
+    /* Product cards: single column, comfortable */
+    .product-grid { grid-template-columns: 1fr; gap: 16px; }
+    .pc-actions .pc-buy { min-height: 46px; }
+    .pc-save, .pc-share { min-width: 44px; min-height: 44px; }
+    .save-tooltip { display: none; }
+    .pc-preview { opacity: 1; }   /* no hover on touch — always visible */
+
+    /* Offer banner */
+    .ad-banner { padding: 28px 0; }
+    .ad-inner { padding: 0 18px; }
+    .ad-title { font-size: 22px; }
+    .ad-sub { gap: 12px 16px; }
+    .ad-right-stack { width: 100%; padding: 22px 20px 18px; }
+    .ad-price { font-size: 32px; }
+    .ad-btn { min-height: 48px; }
+
+    /* Why / testimonials / footer */
+    .why-grid  { grid-template-columns: 1fr; }
+    .test-grid { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr; gap: 26px; }
+    .footer-inner { padding: 0 18px; }
+    .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
+    .footer-bottom-links { justify-content: center; flex-wrap: wrap; }
+
+    /* CTA band */
+    .cta-inner { padding: 0 18px; }
+    .cta-form { flex-direction: column; }
+    .cta-input, .cta-submit { width: 100%; min-height: 48px; }
+
+    /* Modals: full-bleed sheet */
+    .modal { max-width: 100%; max-height: 92vh; border-radius: 16px 16px 0 0; }
+    .modal-overlay { align-items: flex-end; }
+    .modal-grid, .quote-grid { grid-template-columns: 1fr; }
+    .modal-body { padding: 20px 18px 24px; }
+
+    /* Saved drawer full width */
+    .saved-drawer { width: 100%; }
+
+    /* Prevent iOS zoom-on-focus */
+    input, select, textarea { font-size: 16px; }
+  }
+
+@media (max-width: 400px) {
+    .hero h1 { font-size: 25px; }
+    .ad-title { font-size: 20px; }
+    .section-title { font-size: 19px; }
+    .ad-price { font-size: 29px; }
+    .pc-prices { flex-wrap: wrap; gap: 6px; }
+  }
+
+@media (max-width: 768px) {
+    .pc-range { font-size: 14px; }
+    .pinfo-overlay { align-items: flex-end; padding: 0; }
+    .pinfo-box { border-radius: 16px 16px 0 0; max-height: 90vh; }
+  }
+
+@media (max-width: 768px) {
+    .pc-meta { flex-wrap: wrap; gap: 6px; }
+    .pc-sold { font-size: 10px; }
+  }

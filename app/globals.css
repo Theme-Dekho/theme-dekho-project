@@ -1,0 +1,535 @@
+/* ============================================================
+   GLOBAL STYLES — design tokens, reset, base typography
+   ============================================================ */
+
+@import "../styles/quote-model.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  /* ── Project Studio palette ──
+     blue  #155DFD  PRIMARY CTA / links / accents  (white text, 4.9:1)
+     band  #0169DC  filled feature / CTA bands
+     ink   #0F172A  slate headings / footer / base
+     Warm tones (gold/amber/rose) retired — all accents are blue now.
+  */
+
+  /* PRIMARY = deep premium blue. --orange is the CTA slot.
+     Tonal ladder: 700 pressed · 600 base · 500 hover-lift · 100 tint · 050 wash */
+  --blue-700: #123FC0;
+  --blue-600: #1B4DE4;   /* base primary */
+  --blue-500: #3D6BF5;   /* hover / lighter accent */
+  --blue-100: #DCE6FF;   /* borders on tint */
+  --blue-050: #EEF3FF;   /* light wash */
+
+  --orange: #1B4DE4;
+  --orange-dark: #123FC0;
+  --orange-light: #EEF3FF;
+  --orange-border: #DCE6FF;
+
+  /* Ink that sits ON blue = white. */
+  --on-primary: #FFFFFF;
+
+  /* SECONDARY = slate ink. */
+  --blue: #0F172A;
+  --blue-dark: #0A101F;
+  --blue-light: #F3F6FD;
+  --blue-border: #C3D3E2;
+
+  /* SUCCESS stays green — savings must not read as brand colour. */
+  --green: #12855A;
+  --green-dark: #0E6B49;
+  --green-light: #E7F5EF;
+  --green-border: #A9DCC6;
+
+  /* Named tokens */
+  --navy: #0F172A;
+  --navy-deep: #0A101F;
+  --gold: #1B4DE4;
+  --amber: #1B4DE4;
+  --amber-ink: #123FC0;
+  --amber-hl: #123FC0;
+  --rose: #1B4DE4;
+  --rose-band: #0169DC;
+
+  --dark: #0F172A;
+  --dark2: #0A101F;
+  --text: #4A5A66;
+  --muted: #7B8794;
+  --light: #F3F6FD;
+  --white: #ffffff;
+  --border: #E1E8F0;
+  --shadow: 0 4px 20px rgba(15, 23, 42, 0.08);
+  --shadow-hover: 0 12px 36px rgba(15, 23, 42, 0.16);
+  --radius: 12px;
+  --radius-sm: 8px;
+
+  --font: var(--font-inter), -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: var(--font-sora), var(--font-inter), sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font);
+  color: var(--text);
+  background: #FFFFFF;
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  font-feature-settings: 'cv11', 'ss01';
+}
+
+/* ── DISPLAY TYPE ── headings use Sora, tighter tracking for editorial weight */
+h1, h2, h3, h4,
+.logo, .hero h1, .stat-num, .hg-center-num, .hg-stat-num,
+.modal-header h3, .sec-title, .section-title, .price, .pc-price {
+  font-family: var(--font-display);
+}
+h1, h2, h3, .hero h1 {
+  letter-spacing: -0.025em;
+}
+
+/* ── TABULAR NUMERALS ── locks price/stat columns so digits never shift width */
+.stat-num, .hg-center-num, .hg-stat-num, .price, .pc-price,
+.pc-rating, .cart-count, .quote-total, [class*="price"], [class*="num"] {
+  font-feature-settings: 'tnum' 1, 'lnum' 1;
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: color 0.2s;
+}
+
+button {
+  font-family: inherit;
+}
+
+body.mnav-open {
+  overflow: hidden;
+}
+
+/* Utility used by ProductFilters/page.tsx to hide non-matching category sections,
+   replacing the original `element.style.display = 'none'` DOM manipulation. */
+.is-hidden {
+  display: none !important;
+}
+
+.login-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 999999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.login-modal-box {
+  position: relative;
+  width: 100%;
+  max-width: 430px;
+  padding: 36px 30px 30px;
+  border-radius: 18px;
+  background: #ffffff;
+  color: #111827;
+  text-align: center;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+}
+
+.login-modal-box h2 {
+  margin: 0 0 10px;
+  font-size: 28px;
+  color: #111827;
+}
+
+.login-modal-box p {
+  margin: 0 0 24px;
+  color: #6b7280;
+  font-size: 15px;
+}
+
+.login-modal-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 50%;
+  background: #f3f4f6;
+  color: #111827;
+  font-size: 25px;
+  cursor: pointer;
+}
+
+.login-phone-input {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  border: 1px solid #d1d5db;
+  border-radius: 10px;
+  background: #ffffff;
+}
+
+.login-phone-input:focus-within {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.login-phone-input span {
+  padding: 14px;
+  border-right: 1px solid #d1d5db;
+  background: #f9fafb;
+  color: #111827;
+  font-weight: 600;
+}
+
+.login-phone-input input {
+  width: 100%;
+  padding: 14px;
+  border: none;
+  outline: none;
+  background: #ffffff;
+  color: #111827;
+  font-size: 16px;
+}
+
+.login-send-otp {
+  width: 100%;
+  margin-top: 18px;
+  padding: 14px;
+  border: none;
+  border-radius: 10px;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.login-send-otp:hover {
+  background: #1d4ed8;
+}
+
+.btn-login {
+  border: none;
+  cursor: pointer;
+  font: inherit;
+}
+
+/* added CSS at 20-Jul-2026 18:46 */
+.login-otp-section {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.login-otp-description {
+  margin-bottom: 8px;
+  color: #64748b;
+  font-size: 15px;
+  line-height: 1.6;
+  text-align: center;
+}
+
+.login-otp-description strong {
+  display: block;
+  margin-top: 4px;
+  color: #0f172a;
+  font-size: 16px;
+}
+
+.login-change-number {
+  margin: 0 0 22px;
+  border: none;
+  background: transparent;
+  color: #2563eb;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.login-change-number:hover {
+  text-decoration: underline;
+}
+
+.login-otp-section label {
+  display: block;
+  margin-bottom: 12px;
+  color: #1e293b;
+  font-size: 15px;
+  font-weight: 700;
+  text-align: left;
+}
+
+.login-otp-boxes {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.login-otp-input {
+  width: 54px;
+  height: 54px;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  outline: none;
+  background: #ffffff;
+  color: #0f172a;
+  font-size: 22px;
+  font-weight: 700;
+  text-align: center;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.login-otp-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.14);
+  transform: translateY(-1px);
+}
+
+.login-verify-otp {
+  width: 100%;
+  height: 48px;
+  margin-top: 4px;
+  border: none;
+  border-radius: 10px;
+  background: #2563eb;
+  color: #ffffff;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.login-verify-otp:hover:not(:disabled) {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+}
+
+.login-verify-otp:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+}
+
+.login-resend-otp {
+  width: 100%;
+  height: 44px;
+  margin-top: 12px;
+  border: 1px solid #2563eb;
+  border-radius: 10px;
+  background: #ffffff;
+  color: #2563eb;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.login-resend-otp:hover:not(:disabled) {
+  background: #eff6ff;
+}
+
+.login-resend-otp:disabled {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+
+.login-timer {
+  margin-top: 12px;
+  color: #64748b;
+  font-size: 13px;
+  text-align: center;
+}
+
+.login-error-message {
+  margin-top: 16px;
+  padding: 10px 12px;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  background: #fef2f2;
+  color: #b91c1c;
+  font-size: 14px;
+  text-align: center;
+}
+
+.login-success-message {
+  margin-top: 16px;
+  padding: 10px 12px;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+  background: #f0fdf4;
+  color: #15803d;
+  font-size: 14px;
+  text-align: center;
+}
+
+@media (max-width: 480px) {
+  .login-otp-boxes {
+    gap: 8px;
+  }
+
+  .login-otp-input {
+    width: 48px;
+    height: 48px;
+    font-size: 20px;
+  }
+}
+
+
+/* login-Register to My Account*/
+.profile-wrap {
+  position: relative;
+}
+
+.profile-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  border: 1.5px solid #e1e8f0;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #0f172a;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.profile-btn:hover {
+  border-color: #1b4de4;
+  box-shadow: 0 5px 16px rgba(15, 23, 42, 0.12);
+}
+
+.profile-avatar {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  border-radius: 50%;
+  background: #eef3ff;
+}
+
+.profile-arrow {
+  color: #7b8794;
+  font-size: 11px;
+}
+
+.profile-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  right: 0;
+  z-index: 1000;
+  width: 250px;
+  overflow: hidden;
+  border: 1px solid #e1e8f0;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.16);
+  display: none;
+}
+
+.profile-dropdown.open {
+  display: block;
+}
+
+.profile-dd-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px;
+  background: #f8f9fb;
+}
+
+.profile-dd-avatar {
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  border-radius: 50%;
+  background: #dce6ff;
+  font-size: 20px;
+}
+
+.profile-dd-name {
+  color: #0f172a;
+  font-size: 14px;
+  font-weight: 800;
+}
+
+.profile-dd-sub {
+  margin-top: 2px;
+  color: #7b8794;
+  font-size: 12px;
+}
+
+.profile-dd-divider {
+  height: 1px;
+  background: #e1e8f0;
+}
+
+.profile-dd-item {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border: 0;
+  background: #ffffff;
+  color: #4a5a66;
+  font: inherit;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.profile-dd-item:hover {
+  background: #eef3ff;
+  color: #0f172a;
+}
+
+.profile-dd-logout {
+  color: #c62828;
+}
+
+.profile-dd-logout:hover {
+  background: #fff1f1;
+  color: #b91c1c;
+}
+
+.profile-dropdown.open {
+  display: block;
+}
+
+.section {
+  padding: 40px 20px;
+}

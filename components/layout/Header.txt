@@ -1,0 +1,1165 @@
+
+// "use client";
+
+// import {
+//   ChangeEvent,
+//   ClipboardEvent,
+//   KeyboardEvent,
+//   useEffect,
+//   useRef,
+//   useState,
+// } from "react";
+// import Image from "next/image";
+// import Link from "next/link";
+
+// import MegaMenu from "@/components/navigation/MegaMenu";
+// import {
+//   customDevLinks,
+//   mobileOurWorkLinks,
+//   phoneNumber,
+// } from "@/constants/menu";
+// import { cn } from "@/lib/utils";
+// import { useSite } from "@/lib/site-context";
+
+// import logo from "@/public/images/logo.jpg";
+
+// type LoginStep = "phone" | "otp" | "success";
+
+// type ApiResponse = {
+//   success?: boolean;
+//   message?: string;
+//   detail?: string;
+//   error?: string;
+//   retry_after?: number;
+// };
+
+// const OTP_LENGTH = 4;
+// const DEFAULT_RESEND_SECONDS = 30;
+
+// export default function Header() {
+//   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+//   const [mobileAccOpen, setMobileAccOpen] = useState(false);
+
+//   const [loginModalOpen, setLoginModalOpen] = useState(false);
+//   const [loginStep, setLoginStep] = useState<LoginStep>("phone");
+//   const [loginPhone, setLoginPhone] = useState("");
+//   const [loginOtp, setLoginOtp] = useState<string[]>(
+//     Array(OTP_LENGTH).fill(""),
+//   );
+
+//   const [loginError, setLoginError] = useState("");
+//   const [loginMessage, setLoginMessage] = useState("");
+//   const [loginLoading, setLoginLoading] = useState(false);
+//   const [resendSeconds, setResendSeconds] = useState(0);
+
+//   // Login Information
+//   const [isLoggedIn, setIsLoggedIn] = useState(false);
+//   const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+//   const [verifiedPhone, setVerifiedPhone] = useState("");
+//   const [sessionChecked, setSessionChecked] = useState(false);
+
+//   const otpInputRefs = useRef<Array<HTMLInputElement | null>>([]);
+//   const profileRef = useRef<HTMLDivElement>(null);
+
+//   useEffect(() => {
+//   const handleOutsideClick = (event: MouseEvent) => {
+//     if (
+//       profileRef.current &&
+//       !profileRef.current.contains(event.target as Node)
+//     ) {
+//       setProfileMenuOpen(false);
+//     }
+//   };
+
+//   document.addEventListener(
+//     "mousedown",
+//     handleOutsideClick,
+//   );
+
+//   return () => {
+//     document.removeEventListener(
+//       "mousedown",
+//       handleOutsideClick,
+//     );
+//   };
+// }, []);
+
+//   const { customDevModal } = useSite();
+
+//   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+//   // session store data
+//  // Restore login from backend session
+// useEffect(() => {
+//   if (!API_BASE_URL) {
+//     console.error(
+//       "NEXT_PUBLIC_API_BASE_URL is not configured.",
+//     );
+
+//     setSessionChecked(true);
+//     return;
+//   }
+
+//   let componentMounted = true;
+
+//   const restoreSession = async () => {
+//     try {
+//       console.log(
+//         "Calling session endpoint:",
+//         `${API_BASE_URL}/api/auth/me`,
+//       );
+
+//       const response = await fetch(
+//         `${API_BASE_URL}/api/auth/me`,
+//         {
+//           method: "GET",
+//           credentials: "include",
+//           cache: "no-store",
+//           headers: {
+//             Accept: "application/json",
+//           },
+//         },
+//       );
+
+//       console.log("/me HTTP status:", response.status);
+
+//       const data = (await response.json()) as {
+//         status?: string;
+//         authenticated?: boolean;
+//         detail?: string;
+//         user?: {
+//           id?: number;
+//           phone?: string;
+//           name?: string | null;
+//         };
+//       };
+
+//       console.log("/me response:", data);
+
+//       if (!componentMounted) {
+//         return;
+//       }
+
+//       if (
+//         response.ok &&
+//         data.authenticated === true &&
+//         data.user &&
+//         data.user.phone
+//       ) {
+//         console.log(
+//           "Session restored for:",
+//           data.user.phone,
+//         );
+
+//         setVerifiedPhone(String(data.user.phone));
+//         setIsLoggedIn(true);
+//       } else {
+//         console.log(
+//           "Session was not restored:",
+//           data.detail,
+//         );
+
+//         setVerifiedPhone("");
+//         setIsLoggedIn(false);
+//       }
+//     } catch (error) {
+//       console.error(
+//         "Session restoration failed:",
+//         error,
+//       );
+
+//       if (componentMounted) {
+//         setVerifiedPhone("");
+//         setIsLoggedIn(false);
+//       }
+//     } finally {
+//       if (componentMounted) {
+//         setSessionChecked(true);
+//       }
+//     }
+//   };
+
+//   void restoreSession();
+
+//   return () => {
+//     componentMounted = false;
+//   };
+// }, [API_BASE_URL]);
+
+
+// // STOP BELOW
+//   const completeOtp = loginOtp.join("");
+//   const formattedPhone = `${loginPhone}`;
+
+//   const openMobileNav = () => {
+//     setMobileNavOpen(true);
+//   };
+
+//   const closeMobileNav = () => {
+//     setMobileNavOpen(false);
+//     setMobileAccOpen(false);
+//   };
+
+//   const resetLoginModal = () => {
+//     setLoginStep("phone");
+//     setLoginPhone("");
+//     setLoginOtp(Array(OTP_LENGTH).fill(""));
+//     setLoginError("");
+//     setLoginMessage("");
+//     setLoginLoading(false);
+//     setResendSeconds(0);
+//   };
+
+//   const closeLoginModal = () => {
+//     if (loginLoading) {
+//       return;
+//     }
+
+//     setLoginModalOpen(false);
+//     resetLoginModal();
+//   };
+ 
+
+//   const getApiErrorMessage = (data: unknown): string => {
+//   if (!data || typeof data !== "object") {
+//     return "Request failed.";
+//   }
+
+//   const responseData = data as {
+//     detail?: unknown;
+//     message?: unknown;
+//     error?: unknown;
+//   };
+
+//   if (typeof responseData.detail === "string") {
+//     return responseData.detail;
+//   }
+
+//   if (Array.isArray(responseData.detail)) {
+//     return responseData.detail
+//       .map((item) => {
+//         if (
+//           item &&
+//           typeof item === "object" &&
+//           "msg" in item &&
+//           typeof item.msg === "string"
+//         ) {
+//           const location =
+//             "loc" in item && Array.isArray(item.loc)
+//               ? item.loc.join(".")
+//               : "";
+
+//           return location
+//             ? `${location}: ${item.msg}`
+//             : item.msg;
+//         }
+
+//         return JSON.stringify(item);
+//       })
+//       .join(", ");
+//   }
+
+//   if (typeof responseData.message === "string") {
+//     return responseData.message;
+//   }
+
+//   if (typeof responseData.error === "string") {
+//     return responseData.error;
+//   }
+
+//   return "Request failed.";
+// };
+
+// const readApiResponse = async (
+//   response: Response,
+// ): Promise<ApiResponse> => {
+//   const contentType = response.headers.get("content-type") ?? "";
+
+//   if (!contentType.includes("application/json")) {
+//     const responseText = await response.text();
+
+//     throw new Error(
+//       responseText ||
+//         `Backend returned an invalid response (${response.status}).`,
+//     );
+//   }
+
+//   const data = (await response.json()) as ApiResponse;
+
+//   if (!response.ok) {
+//     throw new Error(getApiErrorMessage(data));
+//   }
+
+//   return data;
+// };
+
+//   const validatePhone = () => {
+//     if (!/^[6-9]\d{9}$/.test(loginPhone)) {
+//       setLoginError("Enter a valid 10-digit Indian mobile number.");
+//       return false;
+//     }
+
+//     return true;
+//   };
+
+//   const handleSendOtp = async () => {
+//     if (!validatePhone()) {
+//       return;
+//     }
+
+//     if (!API_BASE_URL) {
+//       setLoginError(
+//         "NEXT_PUBLIC_API_BASE_URL is missing from the .env.local file.",
+//       );
+//       return;
+//     }
+
+//     try {
+//       setLoginLoading(true);
+//       setLoginError("");
+//       setLoginMessage("");
+
+//       const response = await fetch(
+//         `${API_BASE_URL}/api/auth/generate-otp`,
+//         {
+//           method: "POST",
+//           headers: {
+//             "Content-Type": "application/json",
+//           },
+//           credentials: "include",
+//           body: JSON.stringify({
+//             phone: formattedPhone,
+//           }),
+//         },
+//       );
+
+//       const data = await readApiResponse(response);
+
+//       setLoginOtp(Array(OTP_LENGTH).fill(""));
+//       setLoginStep("otp");
+//       setLoginMessage(data.message || "OTP sent successfully.");
+//       setResendSeconds(
+//         typeof data.retry_after === "number"
+//           ? data.retry_after
+//           : DEFAULT_RESEND_SECONDS,
+//       );
+
+//       window.setTimeout(() => {
+//         otpInputRefs.current[0]?.focus();
+//       }, 50);
+//     } catch (error: unknown) {
+//       setLoginError(
+//         error instanceof Error
+//           ? error.message
+//           : "Unable to send OTP. Please try again.",
+//       );
+//     } finally {
+//       setLoginLoading(false);
+//     }
+//   };
+
+//   const handleVerifyOtp = async () => {
+//     if (completeOtp.length !== OTP_LENGTH) {
+//       setLoginError(`Enter the complete ${OTP_LENGTH}-digit OTP.`);
+//       return;
+//     }
+
+//     if (!API_BASE_URL) {
+//       setLoginError(
+//         "NEXT_PUBLIC_API_BASE_URL is missing from the .env.local file.",
+//       );
+//       return;
+//     }
+
+//     try {
+//       setLoginLoading(true);
+//       setLoginError("");
+//       setLoginMessage("");
+
+//       const response = await fetch(
+//         `${API_BASE_URL}/api/auth/verify-otp`,
+//         {
+//           method: "POST",
+//           headers: {
+//             "Content-Type": "application/json",
+//           },
+//           credentials: "include",
+//           body: JSON.stringify({
+//             phone: formattedPhone,
+//             otp: completeOtp,
+//           }),
+//         },
+//       );
+
+//       const data = await readApiResponse(response);
+
+      
+//       setIsLoggedIn(true);
+//       setVerifiedPhone(loginPhone);
+//       setProfileMenuOpen(false);
+//       setLoginModalOpen(false);
+//       setLoginStep("phone");
+//       setLoginOtp(Array(OTP_LENGTH).fill(""));
+//       setLoginError("");
+//       setLoginMessage("");
+//       setResendSeconds(0);
+//     } catch (error: unknown) {
+//       setLoginError(
+//         error instanceof Error
+//           ? error.message
+//           : "OTP verification failed. Please try again.",
+//       );
+
+//       setLoginOtp(Array(OTP_LENGTH).fill(""));
+
+//       window.setTimeout(() => {
+//         otpInputRefs.current[0]?.focus();
+//       }, 50);
+//     } finally {
+//       setLoginLoading(false);
+//     }
+//   };
+
+//   const handleResendOtp = async () => {
+//     if (resendSeconds > 0 || loginLoading) {
+//       return;
+//     }
+
+//     await handleSendOtp();
+//   };
+
+//   const handlePhoneChange = (
+//     event: ChangeEvent<HTMLInputElement>,
+//   ) => {
+//     const value = event.target.value
+//       .replace(/\D/g, "")
+//       .slice(0, 10);
+
+//     setLoginPhone(value);
+//     setLoginError("");
+//     setLoginMessage("");
+//   };
+
+//   const handleOtpChange = (
+//     index: number,
+//     event: ChangeEvent<HTMLInputElement>,
+//   ) => {
+//     const value = event.target.value.replace(/\D/g, "");
+
+//     if (!value) {
+//       const updatedOtp = [...loginOtp];
+//       updatedOtp[index] = "";
+
+//       setLoginOtp(updatedOtp);
+//       setLoginError("");
+//       return;
+//     }
+
+//     const digits = value
+//       .slice(0, OTP_LENGTH - index)
+//       .split("");
+
+//     const updatedOtp = [...loginOtp];
+
+//     digits.forEach((digit, offset) => {
+//       updatedOtp[index + offset] = digit;
+//     });
+
+//     setLoginOtp(updatedOtp);
+//     setLoginError("");
+
+//     const nextIndex = Math.min(
+//       index + digits.length,
+//       OTP_LENGTH - 1,
+//     );
+
+//     otpInputRefs.current[nextIndex]?.focus();
+//   };
+
+//   const handleOtpKeyDown = (
+//     index: number,
+//     event: KeyboardEvent<HTMLInputElement>,
+//   ) => {
+//     if (event.key === "Backspace") {
+//       if (loginOtp[index]) {
+//         const updatedOtp = [...loginOtp];
+//         updatedOtp[index] = "";
+//         setLoginOtp(updatedOtp);
+//         return;
+//       }
+
+//       if (index > 0) {
+//         otpInputRefs.current[index - 1]?.focus();
+//       }
+//     }
+
+//     if (event.key === "ArrowLeft" && index > 0) {
+//       otpInputRefs.current[index - 1]?.focus();
+//     }
+
+//     if (
+//       event.key === "ArrowRight" &&
+//       index < OTP_LENGTH - 1
+//     ) {
+//       otpInputRefs.current[index + 1]?.focus();
+//     }
+
+//     if (event.key === "Enter") {
+//       void handleVerifyOtp();
+//     }
+//   };
+
+//   const handleOtpPaste = (
+//     event: ClipboardEvent<HTMLDivElement>,
+//   ) => {
+//     event.preventDefault();
+
+//     const pastedOtp = event.clipboardData
+//       .getData("text")
+//       .replace(/\D/g, "")
+//       .slice(0, OTP_LENGTH);
+
+//     if (!pastedOtp) {
+//       return;
+//     }
+
+//     const updatedOtp = Array.from(
+//       { length: OTP_LENGTH },
+//       (_, index) => pastedOtp[index] ?? "",
+//     );
+
+//     setLoginOtp(updatedOtp);
+//     setLoginError("");
+
+//     const focusIndex = Math.min(
+//       pastedOtp.length,
+//       OTP_LENGTH - 1,
+//     );
+
+//     otpInputRefs.current[focusIndex]?.focus();
+//   };
+
+//   useEffect(() => {
+//     document.body.classList.toggle(
+//       "mnav-open",
+//       mobileNavOpen,
+//     );
+
+//     return () => {
+//       document.body.classList.remove("mnav-open");
+//     };
+//   }, [mobileNavOpen]);
+
+//   useEffect(() => {
+//     if (!loginModalOpen) {
+//       return;
+//     }
+
+//     const oldOverflow = document.body.style.overflow;
+//     document.body.style.overflow = "hidden";
+
+//     return () => {
+//       document.body.style.overflow = oldOverflow;
+//     };
+//   }, [loginModalOpen]);
+
+//   useEffect(() => {
+//     if (resendSeconds <= 0) {
+//       return;
+//     }
+
+//     const timer = window.setInterval(() => {
+//       setResendSeconds((current) =>
+//         Math.max(current - 1, 0),
+//       );
+//     }, 1000);
+
+//     return () => {
+//       window.clearInterval(timer);
+//     };
+//   }, [resendSeconds]);
+
+//   useEffect(() => {
+//     if (!loginModalOpen) {
+//       return;
+//     }
+
+//     const handleEscape = (event: globalThis.KeyboardEvent) => {
+//       if (event.key === "Escape") {
+//         closeLoginModal();
+//       }
+//     };
+
+//     document.addEventListener("keydown", handleEscape);
+
+//     return () => {
+//       document.removeEventListener("keydown", handleEscape);
+//     };
+//   }, [loginModalOpen, loginLoading]);
+
+//   return (
+//     <>
+//       <header>
+//         <div className="header-inner">
+//           <button
+//             type="button"
+//             className="mnav-toggle"
+//             aria-label="Open menu"
+//             aria-expanded={mobileNavOpen}
+//             onClick={openMobileNav}
+//           >
+//             <span />
+//             <span />
+//             <span />
+//           </button>
+
+//           <Link href="/" className="logo-img-link">
+//             <Image
+//               src={logo}
+//               alt="Theme Dekho"
+//               className="logo-img"
+//               priority
+//             />
+//           </Link>
+
+//           <nav>
+//             <div className="nav-item active">
+//               <Link href="/">Home</Link>
+//             </div>
+
+//             <div className="nav-item">
+//               <Link href="#">
+//                 Our Work <span className="arrow">▾</span>
+//               </Link>
+
+//               <MegaMenu />
+//             </div>
+
+//             <div className="nav-item">
+//               <Link href="#">
+//                 Custom web development{" "}
+//                 <span className="arrow">▾</span>
+//               </Link>
+
+//               <div className="simple-drop">
+//                 {customDevLinks.map((item) => (
+//                   <Link
+//                     href={item.href}
+//                     key={item.label}
+//                   >
+//                     <span className="li-dot" />
+//                     {item.label}
+//                   </Link>
+//                 ))}
+//               </div>
+//             </div>
+
+//             <div className="nav-item">
+//               <Link href="#">
+//                 Redesign WordPress Website
+//               </Link>
+//             </div>
+
+//             <div className="nav-item">
+//               <Link href="#">Contact us</Link>
+//             </div>
+//           </nav>
+
+//           <div className="header-right">
+//             <div className="phone-tag">
+//               <div className="ph-icon">📞</div>
+//               {phoneNumber.display}
+//             </div>
+
+//             {/* <button
+//               type="button"
+//               className="btn-login"
+//               onClick={() => {
+//                 setLoginModalOpen(true);
+//                 setLoginError("");
+//                 setLoginMessage("");
+//               }}
+//             >
+//               Login / Register
+//             </button> */}
+//    {!sessionChecked ? (
+//   <div className="btn-login" aria-label="Checking login">
+//     Checking...
+//   </div>
+// ) : !isLoggedIn ? (
+//   <button
+//     type="button"
+//     className="btn-login"
+//     onClick={() => {
+//       setLoginError("");
+//       setLoginMessage("");
+//       setLoginModalOpen(true);
+//     }}
+//   >
+//     Login / Register
+//   </button>
+// ) : (
+//   <div className="profile-wrap"
+//   ref={profileRef}
+//   >
+//     <button
+//       type="button"
+//       className="profile-btn"
+//       aria-expanded={profileMenuOpen}
+//       onClick={(event) => {
+//         event.stopPropagation();
+//         setProfileMenuOpen((current) => !current);
+//       }}
+//     >
+//       <span className="profile-avatar">👤</span>
+//       <span className="profile-label">My Account</span>
+//       <span className="profile-arrow">
+//         {profileMenuOpen ? "▴" : "▾"}
+//       </span>
+//     </button>
+
+//     <div
+//       className={cn(
+//         "profile-dropdown",
+//         profileMenuOpen && "open",
+//       )}
+//       aria-hidden={!profileMenuOpen}
+//     >
+//       <div className="profile-dd-header">
+//         <div className="profile-dd-avatar">👤</div>
+
+//         <div>
+//           <div className="profile-dd-name">
+//             Welcome!
+//           </div>
+
+//           <div className="profile-dd-sub">
+//             +91 {verifiedPhone}
+//           </div>
+//         </div>
+//       </div>
+
+//       <div className="profile-dd-divider" />
+
+//       <Link
+//         href="/account/profile"
+//         className="profile-dd-item"
+//         onClick={() => setProfileMenuOpen(false)}
+//       >
+//         <span>👤</span>
+//         My Profile
+//       </Link>
+
+//       <Link
+//         href="/account/enquiries"
+//         className="profile-dd-item"
+//         onClick={() => setProfileMenuOpen(false)}
+//       >
+//         <span>📋</span>
+//         My Enquiries
+//       </Link>
+
+//       <Link
+//         href="/account/saved"
+//         className="profile-dd-item"
+//         onClick={() => setProfileMenuOpen(false)}
+//       >
+//         <span>🔖</span>
+//         My Saved List
+//       </Link>
+
+//       <Link
+//         href="/account/wishlist"
+//         className="profile-dd-item"
+//         onClick={() => setProfileMenuOpen(false)}
+//       >
+//         <span>❤️</span>
+//         My Wishlist
+//       </Link>
+
+//       <div className="profile-dd-divider" />
+
+//       <button
+//         type="button"
+//         className="profile-dd-item profile-dd-logout"
+//         onClick={() => {
+//           setIsLoggedIn(false);
+//           setVerifiedPhone("");
+//           setProfileMenuOpen(false);
+//         }}
+//       >
+//         <span>🚪</span>
+//         Logout
+//       </button>
+//     </div>
+//   </div>
+// )}
+//           </div>
+//         </div>
+//       </header>
+
+//       <div
+//         className="mnav-scrim"
+//         onClick={closeMobileNav}
+//       />
+
+//       <aside
+//         className="mnav"
+//         aria-hidden={!mobileNavOpen}
+//       >
+//         <div className="mnav-head">
+//           <span className="mnav-title">Menu</span>
+
+//           <button
+//             type="button"
+//             className="mnav-close"
+//             aria-label="Close menu"
+//             onClick={closeMobileNav}
+//           >
+//             &times;
+//           </button>
+//         </div>
+
+//         <nav className="mnav-list">
+//           <Link
+//             href="/"
+//             className="mnav-link active"
+//             onClick={closeMobileNav}
+//           >
+//             Home
+//           </Link>
+
+//           <button
+//             type="button"
+//             className="mnav-acc"
+//             aria-expanded={mobileAccOpen}
+//             onClick={() =>
+//               setMobileAccOpen((current) => !current)
+//             }
+//           >
+//             Our Work <span className="mnav-chev">▾</span>
+//           </button>
+
+//           <div
+//             className={cn(
+//               "mnav-panel",
+//               mobileAccOpen && "open",
+//             )}
+//           >
+//             {mobileOurWorkLinks.map((link) => (
+//               <Link
+//                 href={link.href}
+//                 key={link.label}
+//                 onClick={closeMobileNav}
+//               >
+//                 {link.label}
+//               </Link>
+//             ))}
+//           </div>
+
+//           {!isLoggedIn ? (
+//             <button
+//               type="button"
+//               className="mnav-link"
+//               onClick={() => {
+//                 closeMobileNav();
+//                 setLoginModalOpen(true);
+//               }}
+//             >
+//               Login / Register
+//             </button>
+//           ) : (
+//             <>
+//               <Link
+//                 href="/account/profile"
+//                 className="mnav-link"
+//                 onClick={closeMobileNav}
+//               >
+//                 My Account
+//               </Link>
+
+//               <button
+//                 type="button"
+//                 className="mnav-link"
+//                 onClick={() => {
+//                   setIsLoggedIn(false);
+//                   setVerifiedPhone("");
+//                   setProfileMenuOpen(false);
+//                   closeMobileNav();
+//                 }}
+//               >
+//                 Logout
+//               </button>
+//             </>
+//           )}
+
+//           <Link href="#" className="mnav-link">
+//             Contact Us
+//           </Link>
+
+//           <Link href="#" className="mnav-link">
+//             Terms &amp; Conditions
+//           </Link>
+//         </nav>
+
+//         <div className="mnav-foot">
+//           <a
+//             className="mnav-call"
+//             href={phoneNumber.href}
+//           >
+//             📞 {phoneNumber.display}
+//           </a>
+
+//           <button
+//             type="button"
+//             className="mnav-cta"
+//             onClick={() => {
+//               closeMobileNav();
+//               customDevModal.open();
+//             }}
+//           >
+//             Get a Free Quote
+//           </button>
+//         </div>
+//       </aside>
+
+//       {loginModalOpen && (
+//         <div
+//           className="login-modal-overlay"
+//           onMouseDown={(event) => {
+//             if (event.target === event.currentTarget) {
+//               closeLoginModal();
+//             }
+//           }}
+//         >
+//           <div
+//             className="login-modal-box"
+//             role="dialog"
+//             aria-modal="true"
+//             aria-labelledby="login-modal-title"
+//           >
+//             <button
+//               type="button"
+//               className="login-modal-close"
+//               aria-label="Close login modal"
+//               onClick={closeLoginModal}
+//               disabled={loginLoading}
+//             >
+//               ×
+//             </button>
+
+//             {loginStep === "phone" && (
+//               <>
+//                 <div className="login-modal-icon">
+//                   📱
+//                 </div>
+
+//                 <h2 id="login-modal-title">
+//                   Login / Register
+//                 </h2>
+
+//                 <p className="login-modal-description">
+//                   Enter your mobile number to receive a
+//                   verification OTP.
+//                 </p>
+
+//                 <div className="login-phone-section">
+//                   <label htmlFor="login-phone">
+//                     Mobile Number
+//                   </label>
+
+//                   <div className="login-phone-input">
+//                     <span>+91</span>
+
+//                     <input
+//                       id="login-phone"
+//                       type="tel"
+//                       inputMode="numeric"
+//                       autoComplete="tel-national"
+//                       maxLength={10}
+//                       placeholder="Enter Mobile Number"
+//                       value={loginPhone}
+//                       onChange={handlePhoneChange}
+//                       onKeyDown={(event) => {
+//                         if (event.key === "Enter") {
+//                           void handleSendOtp();
+//                         }
+//                       }}
+//                       disabled={loginLoading}
+//                     />
+//                   </div>
+
+//                   <button
+//                     type="button"
+//                     className="login-send-otp"
+//                     onClick={handleSendOtp}
+//                     disabled={
+//                       loginLoading ||
+//                       loginPhone.length !== 10
+//                     }
+//                   >
+//                     {loginLoading
+//                       ? "Sending OTP..."
+//                       : "Generate OTP"}
+//                   </button>
+//                 </div>
+//               </>
+//             )}
+
+//             {loginStep === "otp" && (
+//               <>
+//                 <div className="login-modal-icon">
+//                   🔐
+//                 </div>
+
+//                 <h2 id="login-modal-title">
+//                   Verify OTP
+//                 </h2>
+
+//                 <div className="login-otp-section">
+//                   <p className="login-otp-description">
+//                     Enter the {OTP_LENGTH}-digit OTP sent to
+//                     <strong> +91 {loginPhone}</strong>
+//                   </p>
+
+//                   <button
+//                     type="button"
+//                     className="login-change-number"
+//                     onClick={() => {
+//                       setLoginStep("phone");
+//                       setLoginOtp(
+//                         Array(OTP_LENGTH).fill(""),
+//                       );
+//                       setLoginError("");
+//                       setLoginMessage("");
+//                       setResendSeconds(0);
+//                     }}
+//                     disabled={loginLoading}
+//                   >
+//                     Change mobile number
+//                   </button>
+
+//                   <label>Enter OTP</label>
+
+//                   <div
+//                     className="login-otp-boxes"
+//                     onPaste={handleOtpPaste}
+//                   >
+//                     {loginOtp.map((digit, index) => (
+//                       <input
+//                         key={index}
+//                         ref={(element) => {
+//                           otpInputRefs.current[index] =
+//                             element;
+//                         }}
+//                         type="text"
+//                         inputMode="numeric"
+//                         autoComplete={
+//                           index === 0
+//                             ? "one-time-code"
+//                             : "off"
+//                         }
+//                         maxLength={OTP_LENGTH}
+//                         className="login-otp-input"
+//                         value={digit}
+//                         aria-label={`OTP digit ${
+//                           index + 1
+//                         }`}
+//                         onChange={(event) =>
+//                           handleOtpChange(index, event)
+//                         }
+//                         onKeyDown={(event) =>
+//                           handleOtpKeyDown(index, event)
+//                         }
+//                         disabled={loginLoading}
+//                       />
+//                     ))}
+//                   </div>
+
+//                   <button
+//                     type="button"
+//                     className="login-verify-otp"
+//                     onClick={handleVerifyOtp}
+//                     disabled={
+//                       loginLoading ||
+//                       completeOtp.length !== OTP_LENGTH
+//                     }
+//                   >
+//                     {loginLoading
+//                       ? "Verifying..."
+//                       : "Verify OTP"}
+//                   </button>
+
+//                   <button
+//                     type="button"
+//                     className="login-resend-otp"
+//                     onClick={handleResendOtp}
+//                     disabled={
+//                       loginLoading || resendSeconds > 0
+//                     }
+//                   >
+//                     {loginLoading
+//                       ? "Sending..."
+//                       : resendSeconds > 0
+//                         ? `Resend OTP in ${resendSeconds}s`
+//                         : "Resend OTP"}
+//                   </button>
+
+//                   {resendSeconds > 0 && (
+//                     <p className="login-timer">
+//                       You can resend OTP after{" "}
+//                       {resendSeconds} seconds.
+//                     </p>
+//                   )}
+//                 </div>
+//               </>
+//             )}
+
+//             {loginStep === "success" && (
+//               <div className="login-success-section">
+//                 <div className="login-success-icon">
+//                   ✓
+//                 </div>
+
+//                 <h2 id="login-modal-title">
+//                   Verification successful
+//                 </h2>
+
+//                 <p className="login-modal-description">
+//                   Your mobile number has been verified.
+//                 </p>
+
+//                 <button
+//                   type="button"
+//                   className="login-send-otp"
+//                   onClick={closeLoginModal}
+//                 >
+//                   Continue
+//                 </button>
+//               </div>
+//             )}
+
+//             {loginError && (
+//               <p
+//                 className="login-error-message"
+//                 role="alert"
+//               >
+//                 {loginError}
+//               </p>
+//             )}
+
+//             {loginMessage && loginStep !== "success" && (
+//               <p
+//                 className="login-success-message"
+//                 role="status"
+//               >
+//                 {loginMessage}
+//               </p>
+//             )}
+//           </div>
+//         </div>
+//       )}
+//     </>
+//   );
+// }
+

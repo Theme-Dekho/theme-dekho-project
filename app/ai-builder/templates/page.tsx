@@ -1,10 +1,10 @@
 import Link from "next/link";
-import TopBar from "../../components/TopBar";
-import SiteFooter from "../../components/SiteFooter";
-import TemplateCard from "../../components/TemplateCard";
-import ViewMoreGate from "../../components/ViewMoreGate";
-import { industryData, templateData, templateSlug } from "../../lib/data";
-import type { IndustryKey } from "../../lib/types";
+import TopBar from "@/components/layout/Topbar";
+import SiteFooter from "@/components/ai-builder/SiteFooter";
+import TemplateCard from "@/components/ai-builder/TemplateCard";
+import ViewMoreGate from "@/components/ai-builder/ViewMoreGate";
+import { industryData, templateData, templateSlug } from "@/lib/ai-builder/data";
+import type { IndustryKey } from "@/lib/ai-builder/types";
 
 const industryKeys: IndustryKey[] = ["interior", "medical", "realestate", "other"];
 

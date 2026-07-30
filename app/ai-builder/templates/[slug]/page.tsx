@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { findTemplateBySlug, industryData, pageSlug, templateData, templateSlug } from "@/lib/ai-builder/data";
 import type { IndustryKey } from "@/lib/ai-builder/types";
-import TopBar from "@/components/layout/Topbar"
+import TopBar from "@/components/ai-builder/TopBar";
 import SiteFooter from "@/components/ai-builder/SiteFooter";
 
 export function generateStaticParams() {

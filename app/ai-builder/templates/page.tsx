@@ -1,5 +1,5 @@
 import Link from "next/link";
-import TopBar from "@/components/layout/Topbar";
+import TopBar from "@/components/ai-builder/TopBar";
 import SiteFooter from "@/components/ai-builder/SiteFooter";
 import TemplateCard from "@/components/ai-builder/TemplateCard";
 import ViewMoreGate from "@/components/ai-builder/ViewMoreGate";

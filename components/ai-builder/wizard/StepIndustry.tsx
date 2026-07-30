@@ -1,4 +1,4 @@
-import type { IndustryKey } from "@/lib/ai_builder/types";
+import type { IndustryKey } from "@/lib/ai-builder/types";
 
 interface StepIndustryProps {
   active: boolean;

@@ -2,9 +2,10 @@ import type { ProductCardData, AdBannerData } from "@/types/product";
 
 const commonPrice = { priceFrom: "₹4,999", priceTo: "₹19,999" };
 
+
 export const interiorProducts: ProductCardData[] = [
   {
-    id: "active-designs",
+    id: 1,
     image: "/images/templates.jpg",
     bgColor: "#0E1730",
     category: "Interior",
@@ -16,7 +17,7 @@ export const interiorProducts: ProductCardData[] = [
     ...commonPrice,
   },
   {
-    id: "arkin-designs",
+    id: 2,
     image: "/images/templates.jpg",
     bgColor: "#0E1A33",
     category: "Architecture",
@@ -28,7 +29,7 @@ export const interiorProducts: ProductCardData[] = [
     ...commonPrice,
   },
   {
-    id: "dlife-interiors",
+    id: 3,
     image: "/images/templates.jpg",
     bgColor: "#101B36",
     category: "Premium",
@@ -42,7 +43,7 @@ export const interiorProducts: ProductCardData[] = [
     ...commonPrice,
   },
   {
-    id: "dream-home-studio",
+    id: 4,
     image: "/images/templates.jpg",
     bgColor: "#0E1A33",
     category: "Trending",
@@ -60,7 +61,7 @@ export const interiorProducts: ProductCardData[] = [
  *  the pc-img box just shows the background color + product name as text. */
 export const healthcareProducts: ProductCardData[] = [
   {
-    id: "acuravision",
+    id: 1,
     bgColor: "#0B1730",
     category: "Eye Care",
     name: "Acuravision Eye Care",
@@ -72,7 +73,7 @@ export const healthcareProducts: ProductCardData[] = [
     ...commonPrice,
   },
   {
-    id: "amicare-hospital",
+    id: 2,
     bgColor: "#0A1830",
     category: "Hospital",
     name: "Amicare Orthopedic Hospital",
@@ -84,7 +85,7 @@ export const healthcareProducts: ProductCardData[] = [
     ...commonPrice,
   },
   {
-    id: "central-hospital",
+    id: 3,
     bgColor: "#101B36",
     category: "Premium",
     categoryVariant: "hot",
@@ -97,7 +98,7 @@ export const healthcareProducts: ProductCardData[] = [
     ...commonPrice,
   },
   {
-    id: "beheart-healthy",
+    id: 4,
     bgColor: "#0A1224",
     category: "Cardiology",
     name: "Beheart Healthy",
@@ -112,7 +113,7 @@ export const healthcareProducts: ProductCardData[] = [
 
 export const ecommerceProducts: ProductCardData[] = [
   {
-    id: "6edesign-fashion",
+    id: 1,
     image: "/images/templates.jpg",
     bgColor: "#101B36",
     category: "Fashion",
@@ -124,7 +125,7 @@ export const ecommerceProducts: ProductCardData[] = [
     ...commonPrice,
   },
   {
-    id: "baijnath-jewellers",
+    id: 2,
     image: "/images/templates.jpg",
     bgColor: "#141F38",
     category: "Jewellery",
@@ -136,7 +137,7 @@ export const ecommerceProducts: ProductCardData[] = [
     ...commonPrice,
   },
   {
-    id: "joyalukkas",
+    id: 3,
     image: "/images/templates.jpg",
     bgColor: "#0B1628",
     category: "Popular",
@@ -149,7 +150,7 @@ export const ecommerceProducts: ProductCardData[] = [
     ...commonPrice,
   },
   {
-    id: "kaya-designer-lounge",
+    id: 4,
     image: "/images/templates.jpg",
     bgColor: "#0A1224",
     category: "Fashion",
@@ -190,7 +191,7 @@ export const adBanners: Record<"interior" | "healthcare" | "ecommerce", AdBanner
   },
   ecommerce: {
     category: "ecommerce",
-    variant: "blue",
+    variant: "green",
     tag: "E-Commerce Special",
     titlePrefix: "Get Custom ",
     titleHighlight: "E-Commerce Store",

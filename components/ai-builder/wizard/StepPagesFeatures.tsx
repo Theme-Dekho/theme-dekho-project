@@ -1,4 +1,4 @@
-import type { Chip } from "@/lib/ai_builder/types";
+import type { Chip } from "@/lib/ai-builder/types";
 
 interface StepPagesFeaturesProps {
   active: boolean;

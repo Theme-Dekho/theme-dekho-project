@@ -1,6 +1,6 @@
 import type { RefObject } from "react";
-import type { Chip, IndustryInfo, IndustryKey } from "@/lib/ai_builder/types";
-import type { WizFieldError } from "@/hooks/ai_builder/useAiBuilder";
+import type { Chip, IndustryInfo, IndustryKey } from "@/lib/ai-builder/types";
+import type { WizFieldError } from "@/hooks/ai-builder/useAiBuilder";
 import WizardProgress from "./WizardProgress";
 import StepIndustry from "./StepIndustry";
 import StepSubIndustry from "./StepSubIndustry";

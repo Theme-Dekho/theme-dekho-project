@@ -192,7 +192,8 @@ import PreviewStage from "@/components/ai-builder/PreviewStage";
 import TrustRow from "@/components/ai-builder/TrustRow";
 import FabWrap from "@/components/ai-builder/FabWrap";
 import FabModal from "@/components/ai-builder/FabModal";
-import LoginModal from "@/components/ai-builder/LoginModal";
+import Header from "@/components/layout/Header";
+import { useAuth } from "@/lib/auth-context";
 import TemplatesSection from "@/components/ai-builder/TemplatesSection";
 import HowItWorks from "@/components/ai-builder/HowItWorks";
 import DemoPreview from "@/components/ai-builder/DemoPreview";
@@ -204,9 +205,12 @@ import Footer from "@/components/layout/Footer";
 
 export default function AiWebsiteBuilderPage() {
   const b = useAiBuilder();
+  const { openLoginModal } = useAuth();
 
   return (
     <>
+    <Header modalOnly/>
+
       <link
         href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap"
         rel="stylesheet"
@@ -215,9 +219,7 @@ export default function AiWebsiteBuilderPage() {
       <TopBar />
 
       <SiteHeader
-        onLoginClick={() => {
-          b.openLoginModal();
-        }}
+        onLoginClick={openLoginModal}
       />
 
       <section className="ai-hero">
@@ -346,7 +348,7 @@ export default function AiWebsiteBuilderPage() {
         onConnectExpert={b.handleConnectExpert}
       />
 
-      <LoginModal
+      {/* <LoginModal
         open={b.loginModalOpen}
         forBuild={b.loginForBuild}
         loginName={b.loginName}
@@ -363,7 +365,7 @@ export default function AiWebsiteBuilderPage() {
         onLoginOtpChange={b.setLoginOtp}
         onSendOtp={b.handleLoginSendOtp}
         onVerifyOtp={b.handleLoginVerifyOtp}
-      />
+      /> */}
 
       <TemplatesSection
         active={b.templatesActive}

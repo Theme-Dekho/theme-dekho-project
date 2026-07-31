@@ -47,10 +47,12 @@ const DEFAULT_RESEND_SECONDS = 30;
 
 interface HeaderProps {
   showNavigation?: boolean;
+  modalOnly?: boolean;
 }
 
 export default function Header({
   showNavigation = true,
+  modalOnly = false,
 }: HeaderProps) {
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [mobileAccOpen, setMobileAccOpen] = useState(false);
@@ -552,6 +554,8 @@ const readApiResponse = async (
 
   return (
     <>
+    {!modalOnly && (
+      <>
       <header>
         <div className="header-inner">
           <button
@@ -743,6 +747,8 @@ const readApiResponse = async (
           </button>
         </div>
       </aside>
+      </>
+    )}
 
       {loginModalOpen && (
         <div

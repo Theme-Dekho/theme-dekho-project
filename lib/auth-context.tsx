@@ -9,10 +9,16 @@ import {
   useState,
 } from "react";
 
+// type AuthUser = {
+//   id: number;
+//   phone: string;
+//   name: string | null;
+// };
 type AuthUser = {
   id: number;
   phone: string;
   name: string | null;
+  email: string | null;
 };
 
 // type AuthContextValue = {

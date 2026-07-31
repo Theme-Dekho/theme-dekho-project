@@ -39,6 +39,7 @@ type ApiResponse = {
     id?: number;
     phone?: string;
     name?: string | null;
+    email?: string | null;
   };
 };
 
@@ -59,6 +60,8 @@ export default function Header({
 
   // const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [loginStep, setLoginStep] = useState<LoginStep>("phone");
+  const [loginName, setLoginName] = useState("");
+  const [loginEmail, setLoginEmail] = useState("");
   const [loginPhone, setLoginPhone] = useState("");
   const [loginOtp, setLoginOtp] = useState<string[]>(
     Array(OTP_LENGTH).fill(""),
@@ -194,6 +197,41 @@ const readApiResponse = async (
   return data;
 };
 
+  const validateName = () => {
+  const trimmedName = loginName.trim();
+
+  if (trimmedName.length < 2) {
+    setLoginError("Enter your full name.");
+    return false;
+  }
+
+  if (!/^[a-zA-Z\s.'-]+$/.test(trimmedName)) {
+    setLoginError("Enter a valid full name.");
+    return false;
+  }
+
+  return true;
+};
+
+  const validateEmail = () => {
+  const trimmedEmail = loginEmail.trim();
+
+  if (!trimmedEmail) {
+    setLoginError("Enter your email address.");
+    return false;
+  }
+
+  const emailPattern =
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  if (!emailPattern.test(trimmedEmail)) {
+    setLoginError("Enter a valid email address.");
+    return false;
+  }
+
+  return true;
+};
+
   const validatePhone = () => {
     if (!/^[6-9]\d{9}$/.test(loginPhone)) {
       setLoginError("Enter a valid 10-digit Indian mobile number.");
@@ -204,6 +242,14 @@ const readApiResponse = async (
   };
 
   const handleSendOtp = async () => {
+    if (!validateName()) {
+      return;
+    }
+
+    if (!validateEmail()) {
+      return;
+    }
+
     if (!validatePhone()) {
       return;
     }
@@ -326,10 +372,16 @@ const readApiResponse = async (
             "Content-Type": "application/json",
           },
           credentials: "include",
+          // body: JSON.stringify({
+          //   phone: formattedPhone,
+          //   otp: completeOtp,
+          // }),
           body: JSON.stringify({
-            phone: formattedPhone,
-            otp: completeOtp,
-          }),
+          name: loginName.trim(),
+          email: loginEmail.trim().toLowerCase(),
+          phone: formattedPhone,
+          otp: completeOtp,
+        }),
         },
       );
 
@@ -348,6 +400,7 @@ const readApiResponse = async (
         id: data.user.id,
         phone: data.user.phone,
         name: data.user.name ?? null,
+        email: data.user.email ?? null,
       });
       // setLoginModalOpen(false);
       closeGlobalLoginModal();
@@ -381,6 +434,27 @@ const readApiResponse = async (
     }
 
     await handleSendOtp();
+  };
+
+  const handleNameChange = (
+    event: ChangeEvent<HTMLInputElement>,
+  ) => {
+    setLoginName(event.target.value);
+    setLoginError("");
+    setLoginMessage("");
+  };
+
+  const handleEmailChange = (
+    event: ChangeEvent<HTMLInputElement>,
+  ) => {
+    setLoginEmail(
+      event.target.value
+        .trimStart()
+        .toLowerCase(),
+    );
+
+    setLoginError("");
+    setLoginMessage("");
   };
 
   const handlePhoneChange = (
@@ -790,12 +864,67 @@ const readApiResponse = async (
                   verification OTP.
                 </p>
 
-                <div className="login-phone-section">
+                {/* <div className="login-phone-section">
                   <label htmlFor="login-phone">
                     Mobile Number
-                  </label>
+                  </label> */}
+                  <div className="login-phone-section">
+                    <label htmlFor="login-name">
+                      Full Name
+                    </label>
 
-                  <div className="login-phone-input">
+                    <div className="login-text-input">
+                      <input
+                        id="login-name"
+                        type="text"
+                        autoComplete="name"
+                        maxLength={100}
+                        placeholder="Enter your full name"
+                        value={loginName}
+                        onChange={handleNameChange}
+                        disabled={loginLoading}
+                      />
+                    </div>
+
+                    <label htmlFor="login-email">
+                      Email Address
+                    </label>
+
+                    <div className="login-text-input">
+                      <input
+                        id="login-email"
+                        type="email"
+                        inputMode="email"
+                        autoComplete="email"
+                        maxLength={254}
+                        placeholder="Enter your email address"
+                        value={loginEmail}
+                        onChange={handleEmailChange}
+                        disabled={loginLoading}
+                      />
+                    </div>
+
+                    {/* <label htmlFor="login-phone">
+                      Mobile Number
+                    </label> */}
+
+                    <div className="login-phone-input">
+                      <span>+91</span>
+
+                      <input
+                        id="login-phone"
+                        type="tel"
+                        inputMode="numeric"
+                        autoComplete="tel-national"
+                        maxLength={10}
+                        placeholder="Enter Mobile Number"
+                        value={loginPhone}
+                        onChange={handlePhoneChange}
+                        disabled={loginLoading}
+                      />
+                    </div>
+
+                  {/* <div className="login-phone-input">
                     <span>+91</span>
 
                     <input
@@ -814,14 +943,22 @@ const readApiResponse = async (
                       }}
                       disabled={loginLoading}
                     />
-                  </div>
+                  </div> */}
 
                   <button
                     type="button"
                     className="login-send-otp"
                     onClick={handleSendOtp}
+                    // disabled={
+                    //   loginLoading ||
+                    //   loginPhone.length !== 10
+                    // }
                     disabled={
                       loginLoading ||
+                      loginName.trim().length < 2 ||
+                      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+                        loginEmail.trim(),
+                      ) ||
                       loginPhone.length !== 10
                     }
                   >

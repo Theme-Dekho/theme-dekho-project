@@ -22,7 +22,7 @@ import { useSite } from "@/lib/site-context";
 import { useAuth } from "@/lib/auth-context";
 import { trackEvent } from "@/lib/analytics/trackEvent";
 import AuthControls from "@/components/auth/AuthControls";
-
+import WishlistDrawer from "@/components/account/WishlistDrawer";
 import logo from "@/public/images/logo.jpg";
 
 type LoginStep = "phone" | "otp" | "success";
@@ -717,6 +717,8 @@ const readApiResponse = async (
           </div>
         </div>
       </header>
+
+      <WishlistDrawer />
 
       <div
         className="mnav-scrim"

@@ -19,10 +19,31 @@ import ReviewsModal from "@/components/modal/ReviewsModal";
 import SavedListDrawer from "@/components/modal/SavedListDrawer";
 import SaveToast from "@/components/modal/SaveToast";
 import QuoteModal from "@/components/modal/QuoteModal";
-import { interiorProducts, healthcareProducts, ecommerceProducts, adBanners } from "@/constants/product";
+import {healthcareProducts, ecommerceProducts, adBanners } from "@/constants/product";
+import { interiorProducts} from "@/constants/interior-products";
 import type { CategoryFilter } from "@/types/category";
 import { cn } from "@/lib/utils";
 import AnalyticsTestButton from "@/components/Temp";
+import type { Product, ProductCardData} from "@/types/product";
+
+const toHomeProductCard = (
+  product: Product,
+): ProductCardData => {
+  return {
+    id: product.id,
+    slug: product.slug,
+    name: product.name,
+    category: product.subCategoryLabel,
+    priceFrom: product.priceDisplay,
+    priceTo: product.priceDisplay,
+    rating: Number(product.rating),
+    reviewCount: Number(product.sold),
+    sold: Number(product.sold),
+    previewUrl: product.previewUrl,
+    previewName: product.name,
+    image: product.img,
+  };
+};
 
 export default function HomePage() {
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>("all");
@@ -58,7 +79,9 @@ export default function HomePage() {
                   Explore Interior Portfolio
               </Link>
             </div>
-            <ProductGrid products={interiorProducts} sectionLabel="Our Interior Work" />
+            {/* <ProductGrid products={interiorProducts} sectionLabel="Our Interior Work" /> */}
+            {/* <ProductGrid products={interiorProducts.slice(0, 4)} sectionLabel="Our Interior Work"/> */}
+            <ProductGrid products={interiorProducts.slice(0, 4).map(toHomeProductCard)}sectionLabel="Our Interior Work"/>
           </div>
         </section>
         <div className="divider" />

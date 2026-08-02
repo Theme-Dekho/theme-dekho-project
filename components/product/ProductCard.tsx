@@ -3,6 +3,7 @@ import type { MouseEvent } from "react";
 import type { ProductCardData } from "@/types/product";
 import { useSite } from "@/lib/site-context";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/lib/auth-context";
 
 const addonFeatures = ["AI Chat Bot", "CRM", "Price Calculator", "BOQ"];
 
@@ -13,8 +14,8 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, sectionLabel }: ProductCardProps) {
-  const { isSaved, toggleSave, openReviewsModal, openPreviewModal, showToast, priceInfoModal } =
-    useSite();
+  const { isSaved, toggleSave, openReviewsModal, openPreviewModal, showToast, priceInfoModal } = useSite();
+  const { isLoggedIn, openLoginModal} = useAuth();  
 
   const saved = isSaved(product.name);
 
@@ -49,7 +50,19 @@ export default function ProductCard({ product, sectionLabel }: ProductCardProps)
       showToast("🔗 Link copied to clipboard!");
     }
   };
+  
+  const handleWishlist = (
+    event: MouseEvent<HTMLButtonElement>,
+  ) => {
+    event.stopPropagation();
 
+    if (!isLoggedIn) {
+      openLoginModal();
+      return;
+    }
+
+    toggleSave(product.name, sectionLabel);
+  };
   return (
     <div className="product-card">
       <div className="pc-img" style={{ background: product.bgColor }}>
@@ -115,7 +128,14 @@ export default function ProductCard({ product, sectionLabel }: ProductCardProps)
             <span className="det-arrow">&#9654;</span>Get Details
           </a>
 
-          <button className={cn("pc-save", saved && "saved")} onClick={() => toggleSave(product.name, sectionLabel)}>
+          {/* <button className={cn("pc-save", saved && "saved")} onClick={() => toggleSave(product.name, sectionLabel)}> */}
+          <button type="button" className={cn("pc-save", saved && "saved",)}onClick={handleWishlist}
+                aria-label={
+                  saved
+                    ? `Remove ${product.name} from wishlist`
+                    : `Add ${product.name} to wishlist`
+                }
+              >
             {saved ? (
               <svg width="16" height="18" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path

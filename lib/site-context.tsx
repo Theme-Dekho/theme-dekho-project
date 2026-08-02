@@ -1,9 +1,18 @@
 "use client";
 
+// import {
+//   createContext,
+//   useCallback,
+//   useContext,
+//   useRef,
+//   useState,
+//   type ReactNode,
+// } from "react";
 import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useRef,
   useState,
   type ReactNode,
@@ -22,46 +31,90 @@ export interface ReviewsModalProduct {
   reviewCount: number;
 }
 
+
 interface SiteContextValue {
   // Saved list ("bookmark for later")
   savedItems: SavedItem[];
   isSaved: (name: string) => boolean;
   toggleSave: (name: string, label: string) => void;
   removeSaved: (id: number) => void;
-
+  
   // Toast
   toastMessage: string | null;
   showToast: (message: string) => void;
-
+  
   // Quote enquiry modal (product-specific "Get Details" / saved-list "Get Quote")
   quoteModalOpen: boolean;
   quoteProductName: string;
   openQuoteModal: (productName: string) => void;
   closeQuoteModal: () => void;
-
+  
   // Reviews modal
   reviewsModalOpen: boolean;
   reviewsProduct: ReviewsModalProduct | null;
   openReviewsModal: (product: ReviewsModalProduct) => void;
   closeReviewsModal: () => void;
-
+  
   // Live preview modal
   previewModalOpen: boolean;
   previewUrl: string;
   previewTitle: string;
   openPreviewModal: (url: string, title: string) => void;
   closePreviewModal: () => void;
-
+  
   // Simple (payload-less) modals
   priceInfoModal: ReturnType<typeof useModal>;
   customQuoteModal: ReturnType<typeof useModal>;
   savedDrawer: ReturnType<typeof useModal>;
 }
 
+const SAVED_ITEMS_STORAGE_KEY = "theme-dekho-wishlist";
 const SiteContext = createContext<SiteContextValue | null>(null);
 
 export function SiteProvider({ children }: { children: ReactNode }) {
+  const [wishlistLoaded, setWishlistLoaded] = useState(false);
   const [savedItems, setSavedItems] = useState<SavedItem[]>([]);
+  
+useEffect(() => {
+  const storedItems = localStorage.getItem(
+    SAVED_ITEMS_STORAGE_KEY,
+  );
+
+  if (storedItems) {
+    try {
+      const parsedItems = JSON.parse(
+        storedItems,
+      ) as SavedItem[];
+
+      if (Array.isArray(parsedItems)) {
+        setSavedItems(parsedItems);
+      }
+    } catch (error) {
+      console.error(
+        "Failed to load wishlist items:",
+        error,
+      );
+
+      localStorage.removeItem(
+        SAVED_ITEMS_STORAGE_KEY,
+      );
+    }
+  }
+
+  setWishlistLoaded(true);
+}, []);
+
+useEffect(() => {
+  if (!wishlistLoaded) {
+    return;
+  }
+
+  localStorage.setItem(
+    SAVED_ITEMS_STORAGE_KEY,
+    JSON.stringify(savedItems),
+  );
+}, [savedItems, wishlistLoaded]);
+
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 

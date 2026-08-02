@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useState } from "react";
-
 import { useAuth } from "@/lib/auth-context";
+import { useSite } from "@/lib/site-context";
 import { cn } from "@/lib/utils";
 
 type AuthControlsProps = {
@@ -21,6 +21,11 @@ export default function AuthControls({
     sessionChecked,
     logout,
   } = useAuth();
+
+  const {
+  savedItems,
+  savedDrawer,
+} = useSite();
 
   const [profileMenuOpen, setProfileMenuOpen] =
     useState(false);
@@ -148,14 +153,32 @@ export default function AuthControls({
           My Saved List
         </Link>
 
-        <Link
+        {/* <Link
           href="/account/wishlist"
           className="profile-dd-item"
           onClick={() => setProfileMenuOpen(false)}
         >
           <span>❤️</span>
           My Wishlist
-        </Link>
+        </Link> */}
+        <button
+          type="button"
+          className="profile-dd-item"
+          onClick={() => {
+            setProfileMenuOpen(false);
+            savedDrawer.open();
+          }}
+        >
+          <span>❤️</span>
+
+          <span>My Wishlist</span>
+
+          {savedItems.length > 0 && (
+            <span className="dd-badge">
+              {savedItems.length}
+            </span>
+          )}
+        </button>
 
         <div className="profile-dd-divider" />
 

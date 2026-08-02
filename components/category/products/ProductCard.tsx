@@ -3,6 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { Product } from "@/types/product";
+import { useAuth } from "@/lib/auth-context";
+import { useSite } from "@/lib/site-context";
 
 interface ProductCardProps {
   product: Product;
@@ -11,6 +13,25 @@ interface ProductCardProps {
 export default function ProductCard({
   product,
 }: ProductCardProps) {
+  const { isLoggedIn, openLoginModal} = useAuth();
+  const { isSaved, toggleSave} = useSite();
+  const saved = isSaved(product.name);
+  // const handleWishlist = () => {if (!isLoggedIn) {openLoginModal();
+  //   return;
+  //   }
+  //     // Wishlist save logic will be added next.
+  //   };
+  const handleWishlist = () => {
+    if (!isLoggedIn) {
+      openLoginModal();
+      return;
+    }
+
+    toggleSave(
+      product.name,
+      product.subCategoryLabel,
+    );
+  };
   return (
     <article className="pcard">
       <div className="pcard-img">
@@ -118,13 +139,97 @@ export default function ProductCard({
             Get Details
           </Link>
 
-          <button
+          {/* <button
             type="button"
-            className="card-save"
-            aria-label={`Save ${product.name}`}
-            title="Save for later"
+            // className="card-save"
+            className={ saved ? "card-save saved" : "card-save"}
+            // aria-label={`Save ${product.name}`}
+            aria-label={ saved ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
+            // title="Save for later"
+            title={ saved ? "Remove from wishlist" : "Add to wishlist"}
+            onClick={handleWishlist}
           >
             <BookmarkIcon />
+          </button> */}
+          <button
+            type="button"
+            className={
+              saved
+                ? "pc-save saved"
+                : "pc-save"
+            }
+            aria-label={
+              saved
+                ? `Remove ${product.name} from wishlist`
+                : `Add ${product.name} to wishlist`
+            }
+            onClick={handleWishlist}
+          >
+            {saved ? (
+              <svg
+                width="16"
+                height="18"
+                viewBox="0 0 16 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <path
+                  d="M2 2C2 0.895 2.895 0 4 0H12C13.105 0 14 0.895 14 2V19L8 15.5L2 19V2Z"
+                  fill="currentColor"
+                />
+
+                <line
+                  x1="4"
+                  y1="9"
+                  x2="12"
+                  y2="9"
+                  stroke="white"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                />
+              </svg>
+            ) : (
+              <svg
+                width="16"
+                height="18"
+                viewBox="0 0 16 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <path
+                  d="M2 2C2 0.895 2.895 0 4 0H12C13.105 0 14 0.895 14 2V19L8 15.5L2 19V2Z"
+                  fill="currentColor"
+                />
+
+                <line
+                  x1="8"
+                  y1="5"
+                  x2="8"
+                  y2="13"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+
+                <line
+                  x1="4"
+                  y1="9"
+                  x2="12"
+                  y2="9"
+                  stroke="white"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+              </svg>
+            )}
+
+            <span className="save-tooltip">
+              {saved
+                ? "Remove from Wishlist"
+                : "Add to Wishlist"}
+            </span>
           </button>
 
           <button
@@ -141,22 +246,22 @@ export default function ProductCard({
   );
 }
 
-function BookmarkIcon() {
-  return (
-    <svg
-      width="15"
-      height="17"
-      viewBox="0 0 16 20"
-      fill="none"
-      aria-hidden="true"
-    >
-      <path
-        d="M2 2C2 0.895 2.895 0 4 0H12C13.105 0 14 0.895 14 2V19L8 15.5L2 19V2Z"
-        fill="currentColor"
-      />
-    </svg>
-  );
-}
+// function BookmarkIcon() {
+//   return (
+//     <svg
+//       width="15"
+//       height="17"
+//       viewBox="0 0 16 20"
+//       fill="none"
+//       aria-hidden="true"
+//     >
+//       <path
+//         d="M2 2C2 0.895 2.895 0 4 0H12C13.105 0 14 0.895 14 2V19L8 15.5L2 19V2Z"
+//         fill="currentColor"
+//       />
+//     </svg>
+//   );
+// }
 
 function ShareIcon() {
   return (

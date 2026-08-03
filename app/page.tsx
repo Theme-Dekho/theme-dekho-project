@@ -16,7 +16,6 @@ import CTABand from "@/components/sections/CTABand";
 import PriceInfoModal from "@/components/modal/PriceInfoModal";
 import CustomQuoteModal from "@/components/modal/CustomQuoteModel";
 import ReviewsModal from "@/components/modal/ReviewsModal";
-import SavedListDrawer from "@/components/modal/SavedListDrawer";
 import SaveToast from "@/components/modal/SaveToast";
 import QuoteModal from "@/components/modal/QuoteModal";
 import {healthcareProducts, ecommerceProducts, adBanners } from "@/constants/product";
@@ -147,7 +146,6 @@ export default function HomePage() {
       <CustomQuoteModal />
       <ReviewsModal />
       <PreviewModal />
-      <SavedListDrawer />
       <SaveToast />
       <QuoteModal />
     </>

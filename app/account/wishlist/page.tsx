@@ -58,17 +58,22 @@ export default function WishlistPage() {
                 key={item.id}
                 className="wishlist-item"
               >
-                <div>
+                <Link
+                  href={`/products/${item.slug}`}
+                  className="wishlist-item-link"
+                >
                   <span className="wishlist-item-label">
                     {item.label}
                   </span>
 
                   <h2>{item.name}</h2>
-                </div>
+                </Link>
 
                 <button
                   type="button"
-                  onClick={() => removeSaved(item.id)}
+                  onClick={() => {
+                    void removeSaved(item.productId);
+                  }}
                   aria-label={`Remove ${item.name} from wishlist`}
                 >
                   Remove

@@ -18,12 +18,47 @@ import {
   type ReactNode,
 } from "react";
 import { useModal } from "@/hooks/useModal";
+import { useAuth } from "@/lib/auth-context";
 
+// export interface SavedItem {
+//   id: number;
+//   name: string;
+//   label: string;
+// }
 export interface SavedItem {
   id: number;
+  productId: string;
+  slug: string;
   name: string;
-  label: string;
+  label: string | null;
+  image: string | null;
+  createdAt: string;
 }
+
+export interface WishlistProductInput {
+  productId: string;
+  slug: string;
+  name: string;
+  label?: string | null;
+  image?: string | null;
+}
+
+interface WishlistApiItem {
+  id: number;
+  product_id: string;
+  product_slug: string;
+  product_name: string;
+  product_label: string | null;
+  product_image: string | null;
+  created_at: string;
+}
+
+interface WishlistApiResponse {
+  items: WishlistApiItem[];
+  count: number;
+}
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export interface ReviewsModalProduct {
   name: string;
@@ -35,9 +70,12 @@ export interface ReviewsModalProduct {
 interface SiteContextValue {
   // Saved list ("bookmark for later")
   savedItems: SavedItem[];
-  isSaved: (name: string) => boolean;
-  toggleSave: (name: string, label: string) => void;
-  removeSaved: (id: number) => void;
+  // isSaved: (name: string) => boolean;
+  // toggleSave: (name: string, label: string) => void;
+  // removeSaved: (id: number) => void;
+  isSaved: (productId: string) => boolean;
+  toggleSave: (product: WishlistProductInput) => Promise<void>;
+  removeSaved: (productId: string) => Promise<void>;
   
   // Toast
   toastMessage: string | null;
@@ -68,52 +106,118 @@ interface SiteContextValue {
   savedDrawer: ReturnType<typeof useModal>;
 }
 
-const SAVED_ITEMS_STORAGE_KEY = "theme-dekho-wishlist";
+// const SAVED_ITEMS_STORAGE_KEY = "theme-dekho-wishlist";
+  const mapWishlistItem = (item: WishlistApiItem): SavedItem => {
+    return {
+      id: item.id,
+      productId: item.product_id,
+      slug: item.product_slug,
+      name: item.product_name,
+      label: item.product_label,
+      image: item.product_image,
+      createdAt: item.created_at,
+    };
+  };
+
 const SiteContext = createContext<SiteContextValue | null>(null);
 
 export function SiteProvider({ children }: { children: ReactNode }) {
-  const [wishlistLoaded, setWishlistLoaded] = useState(false);
+  // const [wishlistLoaded, setWishlistLoaded] = useState(false);
   const [savedItems, setSavedItems] = useState<SavedItem[]>([]);
+  const {isLoggedIn, sessionChecked,} = useAuth();
   
+// useEffect(() => {
+//   const storedItems = localStorage.getItem(
+//     SAVED_ITEMS_STORAGE_KEY,
+//   );
+
+//   if (storedItems) {
+//     try {
+//       const parsedItems = JSON.parse(
+//         storedItems,
+//       ) as SavedItem[];
+
+//       if (Array.isArray(parsedItems)) {
+//         setSavedItems(parsedItems);
+//       }
+//     } catch (error) {
+//       console.error(
+//         "Failed to load wishlist items:",
+//         error,
+//       );
+
+//       localStorage.removeItem(
+//         SAVED_ITEMS_STORAGE_KEY,
+//       );
+//     }
+//   }
+
+//   setWishlistLoaded(true);
+// }, []);
+
+// useEffect(() => {
+//   if (!wishlistLoaded) {
+//     return;
+//   }
+
+//   localStorage.setItem(
+//     SAVED_ITEMS_STORAGE_KEY,
+//     JSON.stringify(savedItems),
+//   );
+// }, [savedItems, wishlistLoaded]);
+
 useEffect(() => {
-  const storedItems = localStorage.getItem(
-    SAVED_ITEMS_STORAGE_KEY,
-  );
+  const loadWishlist = async () => {
+    if (!sessionChecked) {
+      return;
+    }
 
-  if (storedItems) {
+    if (!isLoggedIn) {
+      setSavedItems([]);
+      return;
+    }
+
+    if (!API_BASE_URL) {
+      console.error(
+        "NEXT_PUBLIC_API_BASE_URL is missing.",
+      );
+      return;
+    }
+
     try {
-      const parsedItems = JSON.parse(
-        storedItems,
-      ) as SavedItem[];
+      const response = await fetch(
+        `${API_BASE_URL}/api/wishlist`,
+        {
+          method: "GET",
+          credentials: "include",
+          cache: "no-store",
+        },
+      );
 
-      if (Array.isArray(parsedItems)) {
-        setSavedItems(parsedItems);
+      if (!response.ok) {
+        throw new Error(
+          `Wishlist request failed: ${response.status}`,
+        );
       }
+
+      const data =
+        (await response.json()) as WishlistApiResponse;
+
+      setSavedItems(
+        data.items.map(mapWishlistItem),
+      );
     } catch (error) {
       console.error(
-        "Failed to load wishlist items:",
+        "Failed to load wishlist:",
         error,
       );
 
-      localStorage.removeItem(
-        SAVED_ITEMS_STORAGE_KEY,
-      );
+      setSavedItems([]);
     }
-  }
+  };
 
-  setWishlistLoaded(true);
-}, []);
-
-useEffect(() => {
-  if (!wishlistLoaded) {
-    return;
-  }
-
-  localStorage.setItem(
-    SAVED_ITEMS_STORAGE_KEY,
-    JSON.stringify(savedItems),
-  );
-}, [savedItems, wishlistLoaded]);
+  void loadWishlist();
+}, [isLoggedIn, sessionChecked]);
 
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
@@ -138,29 +242,228 @@ useEffect(() => {
     toastTimer.current = setTimeout(() => setToastMessage(null), 2800);
   }, []);
 
+  // const isSaved = useCallback(
+  //   (name: string) => savedItems.some((i) => i.name === name),
+  //   [savedItems]
+  // );
   const isSaved = useCallback(
-    (name: string) => savedItems.some((i) => i.name === name),
-    [savedItems]
+    (productId: string) =>
+      savedItems.some(
+        (item) =>
+          item.productId === productId,
+      ),
+    [savedItems],
   );
 
+  // const toggleSave = useCallback(
+  //   (name: string, label: string) => {
+  //     setSavedItems((prev) => {
+  //       const already = prev.some((i) => i.name === name);
+  //       if (already) {
+  //         showToast(`❌ "${name}" removed from saved`);
+  //         return prev.filter((i) => i.name !== name);
+  //       }
+  //       showToast(`🔖 "${name}" saved!`);
+  //       return [...prev, { id: Date.now(), name, label }];
+  //     });
+  //   },
+  //   [showToast]
+  // );
+  // const toggleSave = useCallback(
+  //   async (
+  //     product: WishlistProductInput,
+  //   ) => {
+  //     console.log(
+  //       "Wishlist API integration pending:",
+  //       product,
+  //     );
+  //   },
+  //   [],
+  // );
   const toggleSave = useCallback(
-    (name: string, label: string) => {
-      setSavedItems((prev) => {
-        const already = prev.some((i) => i.name === name);
-        if (already) {
-          showToast(`❌ "${name}" removed from saved`);
-          return prev.filter((i) => i.name !== name);
+    async (
+      product: WishlistProductInput,
+    ) => {
+      if (!API_BASE_URL) {
+        console.error(
+          "NEXT_PUBLIC_API_BASE_URL is missing.",
+        );
+        return;
+      }
+
+      const alreadySaved = savedItems.some(
+        (item) =>
+          item.productId === product.productId,
+      );
+
+      try {
+        if (alreadySaved) {
+          const response = await fetch(
+            `${API_BASE_URL}/api/wishlist/${encodeURIComponent(
+              product.productId,
+            )}`,
+            {
+              method: "DELETE",
+              credentials: "include",
+            },
+          );
+
+          if (!response.ok) {
+            throw new Error(
+              `Wishlist removal failed: ${response.status}`,
+            );
+          }
+
+          setSavedItems((previousItems) =>
+            previousItems.filter(
+              (item) =>
+                item.productId !== product.productId,
+            ),
+          );
+
+          showToast(
+            `❌ "${product.name}" removed from wishlist`,
+          );
+
+          return;
         }
-        showToast(`🔖 "${name}" saved!`);
-        return [...prev, { id: Date.now(), name, label }];
-      });
+
+        const response = await fetch(
+          `${API_BASE_URL}/api/wishlist`,
+          {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              product_id: product.productId,
+              product_slug: product.slug,
+              product_name: product.name,
+              product_label:
+                product.label ?? null,
+              product_image:
+                product.image ?? null,
+            }),
+          },
+        );
+
+        if (!response.ok) {
+          throw new Error(
+            `Wishlist save failed: ${response.status}`,
+          );
+        }
+
+        const data =
+          (await response.json()) as WishlistApiItem;
+
+        setSavedItems((previousItems) => {
+          const exists = previousItems.some(
+            (item) =>
+              item.productId === data.product_id,
+          );
+
+          if (exists) {
+            return previousItems;
+          }
+
+          return [
+            mapWishlistItem(data),
+            ...previousItems,
+          ];
+        });
+
+        showToast(
+          `🔖 "${product.name}" added to wishlist`,
+        );
+      } catch (error) {
+        console.error(
+          "Wishlist update failed:",
+          error,
+        );
+
+        showToast(
+          "Unable to update wishlist. Please try again.",
+        );
+      }
     },
-    [showToast]
+    [
+      savedItems,
+      showToast,
+    ],
   );
 
-  const removeSaved = useCallback((id: number) => {
-    setSavedItems((prev) => prev.filter((i) => i.id !== id));
-  }, []);
+  // const removeSaved = useCallback((id: number) => {
+  //   setSavedItems((prev) => prev.filter((i) => i.id !== id));
+  // }, []);
+  // const removeSaved = useCallback(
+  //   async (productId: string) => {
+  //     console.log(
+  //       "Wishlist removal pending:",
+  //       productId,
+  //     );
+  //   },
+  //   [],
+  // );
+  const removeSaved = useCallback(
+    async (productId: string) => {
+      if (!API_BASE_URL) {
+        console.error(
+          "NEXT_PUBLIC_API_BASE_URL is missing.",
+        );
+        return;
+      }
+
+      const savedItem = savedItems.find(
+        (item) =>
+          item.productId === productId,
+      );
+
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/api/wishlist/${encodeURIComponent(
+            productId,
+          )}`,
+          {
+            method: "DELETE",
+            credentials: "include",
+          },
+        );
+
+        if (!response.ok) {
+          throw new Error(
+            `Wishlist removal failed: ${response.status}`,
+          );
+        }
+
+        setSavedItems((previousItems) =>
+          previousItems.filter(
+            (item) =>
+              item.productId !== productId,
+          ),
+        );
+
+        showToast(
+          savedItem
+            ? `❌ "${savedItem.name}" removed from wishlist`
+            : "Product removed from wishlist",
+        );
+      } catch (error) {
+        console.error(
+          "Failed to remove wishlist item:",
+          error,
+        );
+
+        showToast(
+          "Unable to remove wishlist item. Please try again.",
+        );
+      }
+    },
+    [
+      savedItems,
+      showToast,
+    ],
+  );
 
   const openQuoteModal = useCallback((productName: string) => {
     setQuoteProductName(productName);

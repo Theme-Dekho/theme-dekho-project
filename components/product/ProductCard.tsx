@@ -16,53 +16,80 @@ interface ProductCardProps {
 export default function ProductCard({ product, sectionLabel }: ProductCardProps) {
   const { isSaved, toggleSave, openReviewsModal, openPreviewModal, showToast, priceInfoModal } = useSite();
   const { isLoggedIn, openLoginModal} = useAuth();  
-
-  const saved = isSaved(product.name);
-
+  
   const handlePreview = () => {
     openPreviewModal(product.previewUrl, product.previewName ?? product.name);
   };
-
-  // const handleReviews = (e: React.MouseEvent) => {
-  const handleReviews = (e: MouseEvent<HTMLElement>) => {
-    e.stopPropagation();
-    openReviewsModal({ name: product.name, rating: product.rating, reviewCount: product.reviewCount });
-  };
-
-  // const handleShare = async (e: React.MouseEvent) => {
-  const handleShare = async (
-  e: MouseEvent<HTMLButtonElement>,
-) => {
-    e.stopPropagation();
-    const shareData = {
-      title: product.name,
-      text: `Check out "${product.name}" ${product.priceFrom} – ${product.priceTo} on Theme Dekho!`,
-      url: "https://themedekho.com/",
-    };
-    if (navigator.share) {
-      try {
-        await navigator.share(shareData);
-      } catch {
-        /* user cancelled — no-op */
-      }
-    } else {
-      await navigator.clipboard.writeText(`${shareData.text}\n${shareData.url}`);
-      showToast("🔗 Link copied to clipboard!");
-    }
-  };
   
-  const handleWishlist = (
-    event: MouseEvent<HTMLButtonElement>,
-  ) => {
-    event.stopPropagation();
+  // const handleReviews = (e: React.MouseEvent) => {
+    const handleReviews = (e: MouseEvent<HTMLElement>) => {
+      e.stopPropagation();
+      openReviewsModal({ name: product.name, rating: product.rating, reviewCount: product.reviewCount });
+    };
+    
+    // const handleShare = async (e: React.MouseEvent) => {
+      const handleShare = async (
+        e: MouseEvent<HTMLButtonElement>,
+      ) => {
+        e.stopPropagation();
+        const shareData = {
+          title: product.name,
+          text: `Check out "${product.name}" ${product.priceFrom} – ${product.priceTo} on Theme Dekho!`,
+          url: "https://themedekho.com/",
+        };
+        if (navigator.share) {
+          try {
+            await navigator.share(shareData);
+          } catch {
+            /* user cancelled — no-op */
+          }
+        } else {
+          await navigator.clipboard.writeText(`${shareData.text}\n${shareData.url}`);
+          showToast("🔗 Link copied to clipboard!");
+        }
+      };
+      
+      // const handleWishlist = (
+        //   event: MouseEvent<HTMLButtonElement>,
+        // ) => {
+          //   event.stopPropagation();
+          
+          //   if (!isLoggedIn) {
+            //     openLoginModal();
+            //     return;
+            //   }
+            
+            //   // toggleSave(product.name, sectionLabel);
+            //   await toggleSave({
+              //     productId: product.id,
+              //     slug: product.slug ?? product.id,
+              //     name: product.name,
+              //     label: sectionLabel,
+              //     image: product.image ?? null,
+              //   });
+              // };
+  const productId = String(product.id ?? product.slug ?? product.name,);
+  const productSlug = String(product.slug ?? product.id ?? product.name,);
+  const saved = isSaved(productId);
+  const handleWishlist = async (
+  event: MouseEvent<HTMLButtonElement>,
+) => {
+  event.stopPropagation();
 
-    if (!isLoggedIn) {
-      openLoginModal();
-      return;
-    }
+  if (!isLoggedIn) {
+    openLoginModal();
+    return;
+  }
 
-    toggleSave(product.name, sectionLabel);
-  };
+  await toggleSave({
+    productId,
+    slug: productSlug,
+    name: product.name,
+    label: sectionLabel,
+    image: product.image ?? null,
+  });
+}; 
+
   return (
     <div className="product-card">
       <div className="pc-img" style={{ background: product.bgColor }}>
@@ -129,13 +156,21 @@ export default function ProductCard({ product, sectionLabel }: ProductCardProps)
           </a>
 
           {/* <button className={cn("pc-save", saved && "saved")} onClick={() => toggleSave(product.name, sectionLabel)}> */}
-          <button type="button" className={cn("pc-save", saved && "saved",)}onClick={handleWishlist}
+          {/* <button type="button" className={cn("pc-save", saved && "saved",)}onClick={handleWishlist}
                 aria-label={
                   saved
                     ? `Remove ${product.name} from wishlist`
                     : `Add ${product.name} to wishlist`
                 }
-              >
+              > */}
+            <button type="button" className={cn("pc-save", saved && "saved",)}
+                  onClick={handleWishlist}
+                  aria-label={
+                    saved
+                      ? `Remove ${product.name} from wishlist`
+                      : `Add ${product.name} to wishlist`
+                  }
+                >  
             {saved ? (
               <svg width="16" height="18" viewBox="0 0 16 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path

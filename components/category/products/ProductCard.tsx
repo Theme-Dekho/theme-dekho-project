@@ -15,23 +15,24 @@ export default function ProductCard({
 }: ProductCardProps) {
   const { isLoggedIn, openLoginModal} = useAuth();
   const { isSaved, toggleSave} = useSite();
-  const saved = isSaved(product.name);
-  // const handleWishlist = () => {if (!isLoggedIn) {openLoginModal();
-  //   return;
-  //   }
-  //     // Wishlist save logic will be added next.
-  //   };
-  const handleWishlist = () => {
+  const productId = String(product.id ?? product.slug ?? product.name);
+  const productSlug = String(product.slug ?? product.id ?? product.name);
+  const saved = isSaved(productId);
+  const handleWishlist = async () => {
     if (!isLoggedIn) {
       openLoginModal();
       return;
     }
 
-    toggleSave(
-      product.name,
-      product.subCategoryLabel,
-    );
+    await toggleSave({
+      productId,
+      slug: productSlug,
+      name: product.name,
+      label: product.subCategoryLabel,
+      image: product.img ?? null,
+    });
   };
+
   return (
     <article className="pcard">
       <div className="pcard-img">
@@ -124,13 +125,6 @@ export default function ProductCard({
         </div>
 
         <div className="pcard-actions">
-          {/* <button
-            type="button"
-            className="btn-buy"
-          >
-            <span aria-hidden="true">▶</span>
-            Get Details
-          </button> */}
            <Link
               href={`/products/${product.slug}`}
               className="btn-buy"
@@ -139,18 +133,6 @@ export default function ProductCard({
             Get Details
           </Link>
 
-          {/* <button
-            type="button"
-            // className="card-save"
-            className={ saved ? "card-save saved" : "card-save"}
-            // aria-label={`Save ${product.name}`}
-            aria-label={ saved ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
-            // title="Save for later"
-            title={ saved ? "Remove from wishlist" : "Add to wishlist"}
-            onClick={handleWishlist}
-          >
-            <BookmarkIcon />
-          </button> */}
           <button
             type="button"
             className={
@@ -245,23 +227,6 @@ export default function ProductCard({
     </article>
   );
 }
-
-// function BookmarkIcon() {
-//   return (
-//     <svg
-//       width="15"
-//       height="17"
-//       viewBox="0 0 16 20"
-//       fill="none"
-//       aria-hidden="true"
-//     >
-//       <path
-//         d="M2 2C2 0.895 2.895 0 4 0H12C13.105 0 14 0.895 14 2V19L8 15.5L2 19V2Z"
-//         fill="currentColor"
-//       />
-//     </svg>
-//   );
-// }
 
 function ShareIcon() {
   return (

@@ -7,6 +7,7 @@ import ProductHero from "@/components/product/ProductHero";
 import { productDetails } from "@/constants/product-details";
 import ProductSpecifications from "@/components/product/ProductSpecifications";
 import ProductReviews from "@/components/product/ProductReviews";
+import QuoteModal from "@/components/modal/QuoteModal";
 
 import "@/styles/product-detail.css";
 
@@ -53,6 +54,7 @@ export default async function ProductPage({
       </main>
 
       <Footer />
+      <QuoteModal />
     </>
   );
 }

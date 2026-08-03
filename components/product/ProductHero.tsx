@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
-
+import { useSite } from "@/lib/site-context";
 import type { ProductDetail } from "@/constants/product-details";
 
 interface ProductHeroProps {
@@ -16,6 +16,8 @@ export default function ProductHero({
   const [activeImage, setActiveImage] = useState(
     product.mainImage,
   );
+
+  const {openQuoteModal} = useSite();
 
   return (
     <>
@@ -111,12 +113,6 @@ export default function ProductHero({
 
               <strong>{product.rating}</strong>
 
-              {/* <button
-                type="button"
-                className="product-review-count"
-              >
-                {product.reviewCount} reviews
-              </button> */}
               <a
                 href="#customer-reviews"
                 className="product-review-count"
@@ -152,6 +148,9 @@ export default function ProductHero({
                 <button
                   type="button"
                   className="product-quote-button"
+                  onClick={() => {
+                    openQuoteModal(product.name);
+                  }}
                 >
                   Get Free Quote
                 </button>

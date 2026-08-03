@@ -67,17 +67,20 @@ export default function WishlistDrawer() {
                 key={item.id}
                 className="wishlist-drawer-item"
               >
-                <div>
-                  <span>
-                    {item.label}
-                  </span>
-
+                <Link
+                  href={`/products/${item.slug}`}
+                  onClick={savedDrawer.close}
+                  className="wishlist-drawer-product-link"
+                >
+                  <span>{item.label}</span>
                   <h3>{item.name}</h3>
-                </div>
+                </Link>
 
                 <button
                   type="button"
-                  onClick={() => removeSaved(item.id)}
+                  onClick={() => {
+                    void removeSaved(item.productId);
+                  }}
                   aria-label={`Remove ${item.name} from wishlist`}
                 >
                   Remove

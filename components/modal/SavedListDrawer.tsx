@@ -51,7 +51,7 @@ export default function SavedListDrawer() {
                     </button>
                   </div>
                 </div>
-                <button className="saved-item-remove" onClick={() => removeSaved(item.id)} title="Remove">
+                <button className="saved-item-remove" onClick={() => removeSaved(item.productId)} title="Remove">
                   ✕
                 </button>
               </div>

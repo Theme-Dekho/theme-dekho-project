@@ -450,6 +450,21 @@ nav > .nav-item > a .arrow {
   cursor: pointer;
 }
 
+/* .wishlist-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  z-index: 9999;
+
+  display: flex;
+  flex-direction: column;
+
+  width: min(420px, 100%);
+  height: 100vh;
+
+  background: #ffffff;
+  box-shadow: -12px 0 40px rgba(15, 23, 42, 0.18);
+} */
 .wishlist-drawer {
   position: fixed;
   top: 0;
@@ -461,6 +476,8 @@ nav > .nav-item > a .arrow {
 
   width: min(420px, 100%);
   height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
 
   background: #ffffff;
   box-shadow: -12px 0 40px rgba(15, 23, 42, 0.18);
@@ -520,10 +537,13 @@ nav > .nav-item > a .arrow {
   font-weight: 700;
 }
 
-.wishlist-drawer-body {
+.wishlist-drawer-body,
+.wishlist-drawer-list {
   flex: 1;
+  min-height: 0;
   overflow-y: auto;
   padding: 18px;
+  overscroll-behavior: contain;
 }
 
 .wishlist-drawer-item {
@@ -608,6 +628,126 @@ nav > .nav-item > a .arrow {
   font-size: 13px;
   font-weight: 800;
   text-decoration: none;
+}
+
+.wishlist-drawer-body::-webkit-scrollbar,
+.wishlist-drawer-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.wishlist-drawer-body::-webkit-scrollbar-track,
+.wishlist-drawer-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.wishlist-drawer-body::-webkit-scrollbar-thumb,
+.wishlist-drawer-list::-webkit-scrollbar-thumb {
+  background: #c3d3e2;
+  border-radius: 999px;
+}
+
+.wishlist-drawer-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.wishlist-details-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 34px;
+  padding: 7px 10px;
+
+  border: 1px solid #c3d3e2;
+  border-radius: 7px;
+  background: #f3f6fd;
+  color: #0f172a;
+
+  font-size: 11px;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.wishlist-details-button:hover {
+  border-color: #1b4de4;
+  background: #eef3ff;
+  color: #1b4de4;
+}
+
+.wishlist-remove-button {
+  min-height: 34px;
+  padding: 7px 10px;
+
+  border: 1px solid #ffb3b3;
+  border-radius: 7px;
+  background: #fff0f0;
+  color: #cc2222;
+
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.wishlist-remove-button:hover {
+  border-color: #cc2222;
+  background: #ffdede;
+}
+
+.auth-loading {
+  opacity: 0.65;
+  cursor: default;
+  pointer-events: none;
+}
+
+.enquiry-drawer-item {
+  align-items: flex-start;
+}
+
+.enquiry-drawer-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.enquiry-phone-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 34px;
+  height: 34px;
+
+  border: 1px solid #a9dcc6;
+  border-radius: 8px;
+  background: #e7f5ef;
+
+  text-decoration: none;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+.enquiry-remove-button {
+  min-height: 34px;
+  padding: 7px 10px;
+
+  border: 1px solid #ffb3b3;
+  border-radius: 7px;
+  background: #fff0f0;
+  color: #cc2222;
+
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.enquiry-remove-button:hover {
+  border-color: #cc2222;
+  background: #ffdede;
 }
 
 /* PROFILE DROPDOWN */

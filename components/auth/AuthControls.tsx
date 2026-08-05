@@ -25,6 +25,8 @@ export default function AuthControls({
   const {
   savedItems,
   savedDrawer,
+  enquiryItems,
+  enquiryDrawer,
 } = useSite();
 
   const [profileMenuOpen, setProfileMenuOpen] =
@@ -32,20 +34,34 @@ export default function AuthControls({
 
   const verifiedPhone = user?.phone ?? "";
 
-  if (!sessionChecked) {
-    return (
-      <div
-        className={mobile ? "mnav-link" : "btn-login"}
-        aria-hidden="true"
-        style={{
-          visibility: "hidden",
-          pointerEvents: "none",
-        }}
-      >
-        Login / Register
-      </div>
-    );
-  }
+  // if (!sessionChecked) {
+  //   return (
+  //     <div
+  //       className={mobile ? "mnav-link" : "btn-login"}
+  //       aria-hidden="true"
+  //       style={{
+  //         visibility: "hidden",
+  //         pointerEvents: "none",
+  //       }}
+  //     >
+  //       Login / Register
+  //     </div>
+  //   );
+  // }
+if (!sessionChecked) {
+  return (
+    <div
+      className={
+        mobile
+          ? "mnav-link auth-loading"
+          : "btn-login auth-loading"
+      }
+      aria-live="polite"
+    >
+      Checking account...
+    </div>
+  );
+}  
 
   if (!isLoggedIn) {
     return (
@@ -135,32 +151,27 @@ export default function AuthControls({
           My Profile
         </Link>
 
-        <Link
-          href="/account/enquiries"
+
+        <button
+          type="button"
           className="profile-dd-item"
-          onClick={() => setProfileMenuOpen(false)}
+          onClick={() => {
+            setProfileMenuOpen(false);
+            enquiryDrawer.open();
+          }}
         >
           <span>📋</span>
-          My Enquiries
-        </Link>
 
-        <Link
-          href="/account/saved"
-          className="profile-dd-item"
-          onClick={() => setProfileMenuOpen(false)}
-        >
-          <span>🔖</span>
-          My Saved List
-        </Link>
+          <span>My Enquiries</span>
 
-        {/* <Link
-          href="/account/wishlist"
-          className="profile-dd-item"
-          onClick={() => setProfileMenuOpen(false)}
-        >
-          <span>❤️</span>
-          My Wishlist
-        </Link> */}
+          {enquiryItems.length > 0 && (
+            <span className="dd-badge">
+              {enquiryItems.length}
+            </span>
+          )}
+        </button>
+
+
         <button
           type="button"
           className="profile-dd-item"

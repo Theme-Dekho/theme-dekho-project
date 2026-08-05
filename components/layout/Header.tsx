@@ -23,6 +23,7 @@ import { useAuth } from "@/lib/auth-context";
 import { trackEvent } from "@/lib/analytics/trackEvent";
 import AuthControls from "@/components/auth/AuthControls";
 import WishlistDrawer from "@/components/account/WishlistDrawer";
+import EnquiryDrawer from "@/components/account/EnquiryDrawer";
 import logo from "@/public/images/logo.jpg";
 
 type LoginStep = "phone" | "otp" | "success";
@@ -58,7 +59,6 @@ export default function Header({
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [mobileAccOpen, setMobileAccOpen] = useState(false);
 
-  // const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [loginStep, setLoginStep] = useState<LoginStep>("phone");
   const [loginName, setLoginName] = useState("");
   const [loginEmail, setLoginEmail] = useState("");
@@ -75,7 +75,6 @@ export default function Header({
   const otpInputRefs = useRef<Array<HTMLInputElement | null>>([]);
 
   const { customQuoteModal } = useSite();
-  // const { setAuthenticatedUser } = useAuth();
   const {
   loginModalOpen,
   openLoginModal,
@@ -106,14 +105,6 @@ export default function Header({
     setResendSeconds(0);
   };
 
-  // const closeLoginModal = () => {
-  //   if (loginLoading) {
-  //     return;
-  //   }
-
-  //   setLoginModalOpen(false);
-  //   resetLoginModal();
-  // };
   const closeLoginModal = () => {
   if (loginLoading) {
     return;
@@ -280,35 +271,6 @@ const readApiResponse = async (
         },
       );
 
-      // const data = await readApiResponse(response);
-
-      // setLoginOtp(Array(OTP_LENGTH).fill(""));
-      // setLoginStep("otp");
-      // setLoginMessage(data.message || "OTP sent successfully.");
-      // setResendSeconds(
-      //   typeof data.retry_after === "number"
-      //     ? data.retry_after
-      //     : DEFAULT_RESEND_SECONDS,
-      // );
-      // const data = await readApiResponse(response);
-
-      // setLoginOtp(Array(OTP_LENGTH).fill(""));
-      // setLoginStep("otp");
-      // setLoginMessage(data.message || "OTP sent successfully.");
-      // setResendSeconds(
-      //   typeof data.retry_after === "number"
-      //     ? data.retry_after
-      //     : DEFAULT_RESEND_SECONDS,
-      // );
-
-      // void trackEvent({
-      //   eventName: "otp_requested",
-      //   elementName: "login-generate-otp-button",
-      //   metadata: {
-      //     delivery_channel: "whatsapp",
-      //     otp_length: OTP_LENGTH,
-      //   },
-      // });
 
       const data = await readApiResponse(response);
 
@@ -372,10 +334,6 @@ const readApiResponse = async (
             "Content-Type": "application/json",
           },
           credentials: "include",
-          // body: JSON.stringify({
-          //   phone: formattedPhone,
-          //   otp: completeOtp,
-          // }),
           body: JSON.stringify({
           name: loginName.trim(),
           email: loginEmail.trim().toLowerCase(),
@@ -706,9 +664,6 @@ const readApiResponse = async (
 
             <AuthControls
               onLoginClick={() => {
-                // setLoginError("");
-                // setLoginMessage("");
-                // setLoginModalOpen(true);
                 resetLoginModal();
                 openLoginModal();
               }}
@@ -719,6 +674,7 @@ const readApiResponse = async (
       </header>
 
       <WishlistDrawer />
+      <EnquiryDrawer />
 
       <div
         className="mnav-scrim"
@@ -783,10 +739,6 @@ const readApiResponse = async (
           <AuthControls
             mobile
             onLoginClick={() => {
-              // closeMobileNav();
-              // setLoginError("");
-              // setLoginMessage("");
-              // setLoginModalOpen(true);
                   closeMobileNav();
                   resetLoginModal();
                   openLoginModal();
@@ -926,26 +878,6 @@ const readApiResponse = async (
                       />
                     </div>
 
-                  {/* <div className="login-phone-input">
-                    <span>+91</span>
-
-                    <input
-                      id="login-phone"
-                      type="tel"
-                      inputMode="numeric"
-                      autoComplete="tel-national"
-                      maxLength={10}
-                      placeholder="Enter Mobile Number"
-                      value={loginPhone}
-                      onChange={handlePhoneChange}
-                      onKeyDown={(event) => {
-                        if (event.key === "Enter") {
-                          void handleSendOtp();
-                        }
-                      }}
-                      disabled={loginLoading}
-                    />
-                  </div> */}
 
                   <button
                     type="button"

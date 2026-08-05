@@ -15,6 +15,8 @@ const websiteTypes = [
   "Other",
 ];
 
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 export default function CustomQuoteModal() {
   const { customQuoteModal } = useSite();
 
@@ -22,6 +24,7 @@ export default function CustomQuoteModal() {
   const [whatsappNumber, setWhatsappNumber] = useState("");
   const [websiteType, setWebsiteType] = useState("");
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     if (!customQuoteModal.isOpen) {
@@ -43,7 +46,7 @@ export default function CustomQuoteModal() {
     };
   }, [customQuoteModal]);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     if (!businessName.trim()) {
@@ -60,27 +63,68 @@ export default function CustomQuoteModal() {
       setError("Please select the type of website.");
       return;
     }
+    
+    if (!API_BASE_URL) {
+      setError(
+        "NEXT_PUBLIC_API_BASE_URL is missing.",
+      );
+      return;
+    }
 
-    setError("");
+    if (isSubmitting) {
+      return;
+    }
 
-    const quoteData = {
-      businessName: businessName.trim(),
-      whatsappNumber,
-      websiteType,
-    };
+    
+    try {
+        setIsSubmitting(true);
+        setError("");
 
-    console.log("Quote request:", quoteData);
+        const response = await fetch(
+          `${API_BASE_URL}/api/quote-requests`,
+          {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              business_name: businessName.trim(),
+              whatsapp_number: whatsappNumber,
+              website_type: websiteType,
+            }),
+          },
+        );
 
-    // Call your backend API here.
-    // await fetch("/api/quote", {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    //   body: JSON.stringify(quoteData),
-    // });
+        const data = await response.json();
 
-    customQuoteModal.close();
+        if (!response.ok) {
+          throw new Error(
+            data.detail ||
+              data.message ||
+              "Unable to submit quote request.",
+          );
+        }
+
+        alert(
+          "Free quote request submitted successfully.",
+        );
+
+        setBusinessName("");
+        setWhatsappNumber("");
+        setWebsiteType("");
+
+        customQuoteModal.close();
+      } catch (error: unknown) {
+        setError(
+          error instanceof Error
+            ? error.message
+            : "Unable to submit quote request.",
+        );
+      } finally {
+        setIsSubmitting(false);
+      }
+  
   }
 
   function handleNumberChange(value: string) {
@@ -180,10 +224,17 @@ export default function CustomQuoteModal() {
             </p>
           )}
 
-          <button type="submit" className="quote-submit-button">
-            <span aria-hidden="true">🚀</span>
-            Get Free Quote Now
-          </button>
+          <button
+              type="submit"
+              className="quote-submit-button"
+              disabled={isSubmitting}
+            >
+              <span aria-hidden="true">🚀</span>
+
+              {isSubmitting
+                ? "Submitting..."
+                : "Get Free Quote Now"}
+            </button>
         </form>
 
         <p className="quote-modal-note">

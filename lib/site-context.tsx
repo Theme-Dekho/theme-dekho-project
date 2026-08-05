@@ -1,13 +1,5 @@
 "use client";
 
-// import {
-//   createContext,
-//   useCallback,
-//   useContext,
-//   useRef,
-//   useState,
-//   type ReactNode,
-// } from "react";
 import {
   createContext,
   useCallback,
@@ -20,11 +12,7 @@ import {
 import { useModal } from "@/hooks/useModal";
 import { useAuth } from "@/lib/auth-context";
 
-// export interface SavedItem {
-//   id: number;
-//   name: string;
-//   label: string;
-// }
+
 export interface SavedItem {
   id: number;
   productId: string;
@@ -58,6 +46,41 @@ interface WishlistApiResponse {
   count: number;
 }
 
+export interface EnquiryItem {
+  id: number;
+  productId: string;
+  slug: string;
+  productName: string;
+  customerName: string;
+  email: string;
+  phone: string;
+  city: string | null;
+  selectedAddons: string[];
+  message: string | null;
+  status: string;
+  createdAt: string;
+}
+
+interface EnquiryApiItem {
+  id: number;
+  product_id: string;
+  product_slug: string;
+  product_name: string;
+  customer_name: string;
+  email: string;
+  phone: string;
+  city: string | null;
+  selected_addons: string[] | null;
+  message: string | null;
+  status: string;
+  created_at: string;
+}
+
+interface EnquiryApiResponse {
+  items: EnquiryApiItem[];
+  count: number;
+}
+
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export interface ReviewsModalProduct {
@@ -68,11 +91,7 @@ export interface ReviewsModalProduct {
 
 
 interface SiteContextValue {
-  // Saved list ("bookmark for later")
   savedItems: SavedItem[];
-  // isSaved: (name: string) => boolean;
-  // toggleSave: (name: string, label: string) => void;
-  // removeSaved: (id: number) => void;
   isSaved: (productId: string) => boolean;
   toggleSave: (product: WishlistProductInput) => Promise<void>;
   removeSaved: (productId: string) => Promise<void>;
@@ -86,7 +105,13 @@ interface SiteContextValue {
   quoteProductName: string;
   openQuoteModal: (productName: string) => void;
   closeQuoteModal: () => void;
-  
+
+  //Enquiry
+  enquiryItems: EnquiryItem[];
+  refreshEnquiries: () => Promise<void>;
+  enquiryDrawer: ReturnType<typeof useModal>;
+  removeEnquiry: (enquiryId: number) => Promise<void>;
+
   // Reviews modal
   reviewsModalOpen: boolean;
   reviewsProduct: ReviewsModalProduct | null;
@@ -119,52 +144,35 @@ interface SiteContextValue {
     };
   };
 
+// Enquiry
+  const mapEnquiryItem = (
+    item: EnquiryApiItem,
+  ): EnquiryItem => {
+    return {
+      id: item.id,
+      productId: item.product_id,
+      slug: item.product_slug,
+      productName: item.product_name,
+      customerName: item.customer_name,
+      email: item.email,
+      phone: item.phone,
+      city: item.city,
+      selectedAddons: item.selected_addons ?? [],
+      message: item.message,
+      status: item.status,
+      createdAt: item.created_at,
+    };
+  };  
+
 const SiteContext = createContext<SiteContextValue | null>(null);
 
 export function SiteProvider({ children }: { children: ReactNode }) {
   // const [wishlistLoaded, setWishlistLoaded] = useState(false);
   const [savedItems, setSavedItems] = useState<SavedItem[]>([]);
+  const [enquiryItems, setEnquiryItems] = useState<EnquiryItem[]>([]);
   const {isLoggedIn, sessionChecked,} = useAuth();
+  const enquiryDrawer = useModal();
   
-// useEffect(() => {
-//   const storedItems = localStorage.getItem(
-//     SAVED_ITEMS_STORAGE_KEY,
-//   );
-
-//   if (storedItems) {
-//     try {
-//       const parsedItems = JSON.parse(
-//         storedItems,
-//       ) as SavedItem[];
-
-//       if (Array.isArray(parsedItems)) {
-//         setSavedItems(parsedItems);
-//       }
-//     } catch (error) {
-//       console.error(
-//         "Failed to load wishlist items:",
-//         error,
-//       );
-
-//       localStorage.removeItem(
-//         SAVED_ITEMS_STORAGE_KEY,
-//       );
-//     }
-//   }
-
-//   setWishlistLoaded(true);
-// }, []);
-
-// useEffect(() => {
-//   if (!wishlistLoaded) {
-//     return;
-//   }
-
-//   localStorage.setItem(
-//     SAVED_ITEMS_STORAGE_KEY,
-//     JSON.stringify(savedItems),
-//   );
-// }, [savedItems, wishlistLoaded]);
 
 useEffect(() => {
   const loadWishlist = async () => {
@@ -219,6 +227,7 @@ useEffect(() => {
   void loadWishlist();
 }, [isLoggedIn, sessionChecked]);
 
+
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
@@ -242,10 +251,7 @@ useEffect(() => {
     toastTimer.current = setTimeout(() => setToastMessage(null), 2800);
   }, []);
 
-  // const isSaved = useCallback(
-  //   (name: string) => savedItems.some((i) => i.name === name),
-  //   [savedItems]
-  // );
+
   const isSaved = useCallback(
     (productId: string) =>
       savedItems.some(
@@ -255,31 +261,7 @@ useEffect(() => {
     [savedItems],
   );
 
-  // const toggleSave = useCallback(
-  //   (name: string, label: string) => {
-  //     setSavedItems((prev) => {
-  //       const already = prev.some((i) => i.name === name);
-  //       if (already) {
-  //         showToast(`❌ "${name}" removed from saved`);
-  //         return prev.filter((i) => i.name !== name);
-  //       }
-  //       showToast(`🔖 "${name}" saved!`);
-  //       return [...prev, { id: Date.now(), name, label }];
-  //     });
-  //   },
-  //   [showToast]
-  // );
-  // const toggleSave = useCallback(
-  //   async (
-  //     product: WishlistProductInput,
-  //   ) => {
-  //     console.log(
-  //       "Wishlist API integration pending:",
-  //       product,
-  //     );
-  //   },
-  //   [],
-  // );
+
   const toggleSave = useCallback(
     async (
       product: WishlistProductInput,
@@ -393,18 +375,101 @@ useEffect(() => {
     ],
   );
 
-  // const removeSaved = useCallback((id: number) => {
-  //   setSavedItems((prev) => prev.filter((i) => i.id !== id));
-  // }, []);
-  // const removeSaved = useCallback(
-  //   async (productId: string) => {
-  //     console.log(
-  //       "Wishlist removal pending:",
-  //       productId,
-  //     );
-  //   },
-  //   [],
-  // );
+  const refreshEnquiries = useCallback(async () => {
+    if (!sessionChecked || !isLoggedIn) {
+      setEnquiryItems([]);
+      return;
+    }
+
+    if (!API_BASE_URL) {
+      console.error(
+        "NEXT_PUBLIC_API_BASE_URL is missing.",
+      );
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/enquiries`,
+        {
+          method: "GET",
+          credentials: "include",
+          cache: "no-store",
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          `Enquiries request failed: ${response.status}`,
+        );
+      }
+
+      const data =
+        (await response.json()) as EnquiryApiResponse;
+
+      setEnquiryItems(
+        data.items.map(mapEnquiryItem),
+      );
+    } catch (error) {
+      console.error(
+        "Failed to load enquiries:",
+        error,
+      );
+
+      setEnquiryItems([]);
+    }
+  }, [isLoggedIn, sessionChecked]);
+
+  useEffect(() => {
+  void refreshEnquiries();
+}, [refreshEnquiries]);
+
+  const removeEnquiry = useCallback(
+    async (enquiryId: number) => {
+      if (!API_BASE_URL) {
+        console.error(
+          "NEXT_PUBLIC_API_BASE_URL is missing.",
+        );
+        return;
+      }
+
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/api/enquiries/${enquiryId}`,
+          {
+            method: "DELETE",
+            credentials: "include",
+          },
+        );
+
+        if (!response.ok) {
+          throw new Error(
+            `Enquiry deletion failed: ${response.status}`,
+          );
+        }
+
+        setEnquiryItems((previousItems) =>
+          previousItems.filter(
+            (item) => item.id !== enquiryId,
+          ),
+        );
+
+        showToast("Enquiry removed successfully.");
+      } catch (error) {
+        console.error(
+          "Failed to delete enquiry:",
+          error,
+        );
+
+        showToast(
+          "Unable to remove enquiry. Please try again.",
+        );
+      }
+    },
+    [showToast],
+  );
+
+
   const removeSaved = useCallback(
     async (productId: string) => {
       if (!API_BASE_URL) {
@@ -492,12 +557,20 @@ useEffect(() => {
     isSaved,
     toggleSave,
     removeSaved,
+
+    enquiryItems,
+    refreshEnquiries,
+    removeEnquiry,
+    enquiryDrawer,
+
     toastMessage,
     showToast,
+
     quoteModalOpen,
     quoteProductName,
     openQuoteModal,
     closeQuoteModal,
+
     reviewsModalOpen,
     reviewsProduct,
     openReviewsModal,

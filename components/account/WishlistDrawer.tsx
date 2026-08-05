@@ -76,7 +76,7 @@ export default function WishlistDrawer() {
                   <h3>{item.name}</h3>
                 </Link>
 
-                <button
+                {/* <button
                   type="button"
                   onClick={() => {
                     void removeSaved(item.productId);
@@ -84,19 +84,55 @@ export default function WishlistDrawer() {
                   aria-label={`Remove ${item.name} from wishlist`}
                 >
                   Remove
-                </button>
+                </button> */}
+                <div className="wishlist-drawer-actions">
+                  <Link
+                    href={`/products/${item.slug}`}
+                    className="wishlist-details-button"
+                    onClick={savedDrawer.close}
+                  >
+                    Get Details
+                  </Link>
+
+                  {/* <button
+                    type="button"
+                    className="wishlist-remove-button"
+                    onClick={() => {
+                      void removeSaved(item.productId);
+                    }}
+                    aria-label={`Remove ${item.name} from wishlist`}
+                  >
+                    Remove
+                  </button> */}
+                  <button
+                    type="button"
+                    className="wishlist-remove-button"
+                    onClick={() => {
+                      const confirmed = window.confirm(
+                        `Remove "${item.name}" from your wishlist?`,
+                      );
+
+                      if (confirmed) {
+                        void removeSaved(item.productId);
+                      }
+                    }}
+                    aria-label={`Remove ${item.name} from wishlist`}
+                  >
+                    Remove
+                  </button>
+                </div>
               </article>
             ))
           )}
         </div>
 
         <div className="wishlist-drawer-footer">
-          <Link
+          {/* <Link
             href="/account/wishlist"
             onClick={savedDrawer.close}
           >
             View Full Wishlist
-          </Link>
+          </Link> */}
         </div>
       </aside>
     </>

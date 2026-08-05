@@ -152,7 +152,7 @@ export default function ProductHero({
                     openQuoteModal(product.name);
                   }}
                 >
-                  Get Free Quote
+                  Get Enquiry
                 </button>
 
                 <a

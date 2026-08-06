@@ -21,6 +21,7 @@ import { cn } from "@/lib/utils";
 import { useSite } from "@/lib/site-context";
 import { useAuth } from "@/lib/auth-context";
 import { trackEvent } from "@/lib/analytics/trackEvent";
+import AuthModal from "@/components/auth/AuthModal";
 import AuthControls from "@/components/auth/AuthControls";
 import WishlistDrawer from "@/components/account/WishlistDrawer";
 import EnquiryDrawer from "@/components/account/EnquiryDrawer";
@@ -777,286 +778,29 @@ const readApiResponse = async (
       </aside>
       </>
     )}
+    
+      {/* changes made */}
+      <AuthModal
+        isOpen={loginModalOpen}
+        onClose={closeLoginModal}
+        onAuthenticated={(data) => {
+          if (
+            !data.user?.id ||
+            !data.user.phone
+          ) {
+            return;
+          }
 
-      {loginModalOpen && (
-        <div
-          className="login-modal-overlay"
-          onMouseDown={(event) => {
-            if (event.target === event.currentTarget) {
-              closeLoginModal();
-            }
-          }}
-        >
-          <div
-            className="login-modal-box"
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="login-modal-title"
-          >
-            <button
-              type="button"
-              className="login-modal-close"
-              aria-label="Close login modal"
-              onClick={closeLoginModal}
-              disabled={loginLoading}
-            >
-              ×
-            </button>
+          setAuthenticatedUser({
+            id: Number(data.user.id),
+            phone: data.user.phone,
+            name: data.user.name ?? null,
+            email: data.user.email ?? null,
+          });
 
-            {loginStep === "phone" && (
-              <>
-                <div className="login-modal-icon">
-                  📱
-                </div>
-
-                <h2 id="login-modal-title">
-                  Login / Register
-                </h2>
-
-                <p className="login-modal-description">
-                  Enter your mobile number to receive a
-                  verification OTP.
-                </p>
-
-                {/* <div className="login-phone-section">
-                  <label htmlFor="login-phone">
-                    Mobile Number
-                  </label> */}
-                  <div className="login-phone-section">
-                    <label htmlFor="login-name">
-                      Full Name
-                    </label>
-
-                    <div className="login-text-input">
-                      <input
-                        id="login-name"
-                        type="text"
-                        autoComplete="name"
-                        maxLength={100}
-                        placeholder="Enter your full name"
-                        value={loginName}
-                        onChange={handleNameChange}
-                        disabled={loginLoading}
-                      />
-                    </div>
-
-                    <label htmlFor="login-email">
-                      Email Address
-                    </label>
-
-                    <div className="login-text-input">
-                      <input
-                        id="login-email"
-                        type="email"
-                        inputMode="email"
-                        autoComplete="email"
-                        maxLength={254}
-                        placeholder="Enter your email address"
-                        value={loginEmail}
-                        onChange={handleEmailChange}
-                        disabled={loginLoading}
-                      />
-                    </div>
-
-                    {/* <label htmlFor="login-phone">
-                      Mobile Number
-                    </label> */}
-
-                    <div className="login-phone-input">
-                      <span>+91</span>
-
-                      <input
-                        id="login-phone"
-                        type="tel"
-                        inputMode="numeric"
-                        autoComplete="tel-national"
-                        maxLength={10}
-                        placeholder="Enter Mobile Number"
-                        value={loginPhone}
-                        onChange={handlePhoneChange}
-                        disabled={loginLoading}
-                      />
-                    </div>
-
-
-                  <button
-                    type="button"
-                    className="login-send-otp"
-                    onClick={handleSendOtp}
-                    // disabled={
-                    //   loginLoading ||
-                    //   loginPhone.length !== 10
-                    // }
-                    disabled={
-                      loginLoading ||
-                      loginName.trim().length < 2 ||
-                      !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-                        loginEmail.trim(),
-                      ) ||
-                      loginPhone.length !== 10
-                    }
-                  >
-                    {loginLoading
-                      ? "Sending OTP..."
-                      : "Generate OTP"}
-                  </button>
-                </div>
-              </>
-            )}
-
-            {loginStep === "otp" && (
-              <>
-                <div className="login-modal-icon">
-                  🔐
-                </div>
-
-                <h2 id="login-modal-title">
-                  Verify OTP
-                </h2>
-
-                <div className="login-otp-section">
-                  <p className="login-otp-description">
-                    Enter the {OTP_LENGTH}-digit OTP sent to
-                    <strong> +91 {loginPhone}</strong>
-                  </p>
-
-                  <button
-                    type="button"
-                    className="login-change-number"
-                    onClick={() => {
-                      setLoginStep("phone");
-                      setLoginOtp(
-                        Array(OTP_LENGTH).fill(""),
-                      );
-                      setLoginError("");
-                      setLoginMessage("");
-                      setResendSeconds(0);
-                    }}
-                    disabled={loginLoading}
-                  >
-                    Change mobile number
-                  </button>
-
-                  <label>Enter OTP</label>
-
-                  <div
-                    className="login-otp-boxes"
-                    onPaste={handleOtpPaste}
-                  >
-                    {loginOtp.map((digit, index) => (
-                      <input
-                        key={index}
-                        ref={(element) => {
-                          otpInputRefs.current[index] =
-                            element;
-                        }}
-                        type="text"
-                        inputMode="numeric"
-                        autoComplete={
-                          index === 0
-                            ? "one-time-code"
-                            : "off"
-                        }
-                        maxLength={OTP_LENGTH}
-                        className="login-otp-input"
-                        value={digit}
-                        aria-label={`OTP digit ${
-                          index + 1
-                        }`}
-                        onChange={(event) =>
-                          handleOtpChange(index, event)
-                        }
-                        onKeyDown={(event) =>
-                          handleOtpKeyDown(index, event)
-                        }
-                        disabled={loginLoading}
-                      />
-                    ))}
-                  </div>
-
-                  <button
-                    type="button"
-                    className="login-verify-otp"
-                    onClick={handleVerifyOtp}
-                    disabled={
-                      loginLoading ||
-                      completeOtp.length !== OTP_LENGTH
-                    }
-                  >
-                    {loginLoading
-                      ? "Verifying..."
-                      : "Verify OTP"}
-                  </button>
-
-                  <button
-                    type="button"
-                    className="login-resend-otp"
-                    onClick={handleResendOtp}
-                    disabled={
-                      loginLoading || resendSeconds > 0
-                    }
-                  >
-                    {loginLoading
-                      ? "Sending..."
-                      : resendSeconds > 0
-                        ? `Resend OTP in ${resendSeconds}s`
-                        : "Resend OTP"}
-                  </button>
-
-                  {resendSeconds > 0 && (
-                    <p className="login-timer">
-                      You can resend OTP after{" "}
-                      {resendSeconds} seconds.
-                    </p>
-                  )}
-                </div>
-              </>
-            )}
-
-            {loginStep === "success" && (
-              <div className="login-success-section">
-                <div className="login-success-icon">
-                  ✓
-                </div>
-
-                <h2 id="login-modal-title">
-                  Verification successful
-                </h2>
-
-                <p className="login-modal-description">
-                  Your mobile number has been verified.
-                </p>
-
-                <button
-                  type="button"
-                  className="login-send-otp"
-                  onClick={closeLoginModal}
-                >
-                  Continue
-                </button>
-              </div>
-            )}
-
-            {loginError && (
-              <p
-                className="login-error-message"
-                role="alert"
-              >
-                {loginError}
-              </p>
-            )}
-
-            {loginMessage && loginStep !== "success" && (
-              <p
-                className="login-success-message"
-                role="status"
-              >
-                {loginMessage}
-              </p>
-            )}
-          </div>
-        </div>
-      )}
+          closeGlobalLoginModal();
+        }}
+      />
     </>
   );
 }

@@ -29,8 +29,8 @@ export default function AuthControls({
   enquiryDrawer,
 } = useSite();
 
-  const [profileMenuOpen, setProfileMenuOpen] =
-    useState(false);
+  const [profileMenuOpen, setProfileMenuOpen] = useState(false);
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   const verifiedPhone = user?.phone ?? "";
 
@@ -196,15 +196,54 @@ if (!sessionChecked) {
         <button
           type="button"
           className="profile-dd-item profile-dd-logout"
+          // onClick={() => {
+          //   setProfileMenuOpen(false);
+          //   void logout();
+          // }}
           onClick={() => {
-            setProfileMenuOpen(false);
-            void logout();
-          }}
+          setProfileMenuOpen(false);
+          setShowLogoutConfirm(true);
+        }}
         >
           <span>🚪</span>
           Logout
         </button>
       </div>
+
+      {showLogoutConfirm && (
+        <div className="logout-confirm-overlay">
+          <div className="logout-confirm-modal">
+            <h3>Confirm Logout</h3>
+
+            <p>
+              Are you sure you want to logout?
+            </p>
+
+            <div className="logout-confirm-actions">
+              <button
+                type="button"
+                className="logout-cancel-btn"
+                onClick={() => {
+                  setShowLogoutConfirm(false);
+                }}
+              >
+                Cancel
+              </button>
+
+              <button
+                type="button"
+                className="logout-confirm-btn"
+                onClick={() => {
+                  setShowLogoutConfirm(false);
+                  void logout();
+                }}
+              >
+                Logout
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

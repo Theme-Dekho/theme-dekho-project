@@ -5,7 +5,8 @@ import "@/styles/AuthModal.css";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
-type AuthMode = "login" | "register";
+type AuthMode = "login" | "register" | "forgot-password";
+type ForgotPasswordStep = "phone" | "otp" | "reset";
 type RegisterStep = "form" | "otp";
 
 export type AuthResponse = {
@@ -61,7 +62,11 @@ export default function AuthModal({
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [forgotPasswordStep, setForgotPasswordStep] = useState<ForgotPasswordStep>("phone");
   const [otp, setOtp] = useState("");
 
   const [error, setError] = useState("");
@@ -78,7 +83,11 @@ export default function AuthModal({
     setEmail("");
     setPhone("");
     setPassword("");
+    setNewPassword("");
+    setConfirmNewPassword("");
+    setForgotPasswordStep("phone");
     setShowPassword(false);
+    setShowConfirmPassword(false);
     setOtp("");
     setError("");
     setMessage("");
@@ -220,6 +229,218 @@ export default function AuthModal({
       setIsSubmitting(false);
     }
   };
+
+  // Forget Password
+  const handleForgotPasswordOtp = async (
+    event: FormEvent<HTMLFormElement>,
+  ) => {
+    event.preventDefault();
+
+    if (!validatePhone()) {
+      return;
+    }
+
+    if (!API_BASE_URL) {
+      setError("NEXT_PUBLIC_API_BASE_URL is missing.");
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      setError("");
+      setMessage("");
+
+      const response = await fetch(
+        `${API_BASE_URL}/api/auth/forgot-password`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            phone: sanitizedPhone,
+          }),
+        },
+      );
+
+      const data = await parseResponse<{
+        message?: string;
+      }>(
+        response,
+        "Unable to send password reset OTP.",
+      );
+
+      setMessage(
+        data.message ||
+          "Password reset OTP sent successfully.",
+      );
+
+      setForgotPasswordStep("otp");
+
+      console.log("Forgot password OTP sent");
+    } catch (err: unknown) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Unable to send password reset OTP.",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+
+  const handleResetPassword = async (
+    event: FormEvent<HTMLFormElement>,
+  ) => {
+    event.preventDefault();
+
+    if (newPassword.length < 8) {
+      setError("Password must be at least 8 characters.");
+      return;
+    }
+
+    if (!/[A-Z]/.test(newPassword)) {
+      setError(
+        "Password must contain at least one uppercase letter.",
+      );
+      return;
+    }
+
+    if (!/[a-z]/.test(newPassword)) {
+      setError(
+        "Password must contain at least one lowercase letter.",
+      );
+      return;
+    }
+
+    if (!/\d/.test(newPassword)) {
+      setError(
+        "Password must contain at least one number.",
+      );
+      return;
+    }
+
+    if (newPassword !== confirmNewPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    if (!API_BASE_URL) {
+      setError("NEXT_PUBLIC_API_BASE_URL is missing.");
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      setError("");
+      setMessage("");
+
+      const response = await fetch(
+        `${API_BASE_URL}/api/auth/reset-password`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            phone: sanitizedPhone,
+            new_password: newPassword,
+          }),
+        },
+      );
+
+      const data = await parseResponse<{
+        message?: string;
+      }>(
+        response,
+        "Unable to reset password.",
+      );
+
+      setMessage(
+        data.message || "Password reset successfully.",
+      );
+
+      setPassword("");
+      setNewPassword("");
+      setConfirmNewPassword("");
+      setOtp("");
+
+      setMode("login");
+      setForgotPasswordStep("phone");
+    } catch (err: unknown) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Unable to reset password.",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+
+  const handleVerifyResetOtp = async (
+    event: FormEvent<HTMLFormElement>,
+  ) => {
+    event.preventDefault();
+
+    if (!otp.trim()) {
+      setError("Enter the OTP.");
+      return;
+    }
+
+    if (!API_BASE_URL) {
+      setError("NEXT_PUBLIC_API_BASE_URL is missing.");
+      return;
+    }
+
+    try {
+      setIsSubmitting(true);
+      setError("");
+      setMessage("");
+
+      const response = await fetch(
+        `${API_BASE_URL}/api/auth/verify-reset-otp`,
+        {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            phone: sanitizedPhone,
+            otp: otp.trim(),
+          }),
+        },
+      );
+
+      const data = await parseResponse<{
+        message?: string;
+      }>(
+        response,
+        "Unable to verify reset OTP.",
+      );
+
+      setMessage(
+        data.message ||
+          "OTP verified successfully.",
+      );
+
+      setForgotPasswordStep("reset");
+    } catch (err: unknown) {
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Unable to verify reset OTP.",
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+  
 
   const handleVerifyOtp = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -451,6 +672,19 @@ export default function AuthModal({
                   </button>
                 </div>
 
+                {/* Forget Password */}
+                <button
+                  type="button"
+                  className="auth-forgot-password"
+                  onClick={() => {
+                  setMode("forgot-password");
+                  setError("");
+                  setMessage("");
+                }}
+                >
+                  Forgot password?
+                </button>
+
               {error && <p className="login-error-message">{error}</p>}
 
               <button
@@ -463,6 +697,387 @@ export default function AuthModal({
             </form>
           </>
         )}
+
+        {/* Forget Password Module */}
+
+        {/* {mode === "forgot-password" && (
+            <>
+
+              <p className="auth-modal-description">
+                Enter your registered mobile number.
+                We will send an OTP to verify your identity.
+              </p>
+
+              <form
+                className="auth-modal-form"
+                onSubmit={handleForgotPasswordOtp}
+              >
+                <label htmlFor="forgot-phone">
+                  Mobile number
+                </label>
+
+                <div className="auth-phone-field">
+                  <span>+91</span>
+
+                  <input
+                    ref={phoneRef}
+                    id="forgot-phone"
+                    type="tel"
+                    inputMode="numeric"
+                    autoComplete="tel-national"
+                    placeholder="Enter 10-digit number"
+                    value={phone}
+                    onChange={handlePhoneChange}
+                    maxLength={10}
+                  />
+                </div>
+
+                {error && (
+                  <p className="login-error-message">
+                    {error}
+                  </p>
+                )}
+                <button
+                  type="submit"
+                  className="login-send-otp"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Sending OTP..." : "Send OTP"}
+                </button>
+
+                <button
+                  type="button"
+                  className="auth-modal-secondary"
+                  onClick={() => {
+                    setMode("login");
+                    setError("");
+                    setMessage("");
+                  }}
+                >
+                  Back to Login
+                </button>
+              </form>
+            </>
+          )} */}
+        {mode === "forgot-password" && (
+          <>
+            {forgotPasswordStep === "phone" && (
+              <>
+                <p className="auth-modal-description">
+                  Enter your registered mobile number.
+                  We will send an OTP to verify your identity.
+                </p>
+
+                <form
+                  className="auth-modal-form"
+                  onSubmit={handleForgotPasswordOtp}
+                >
+                  <label htmlFor="forgot-phone">
+                    Mobile number
+                  </label>
+
+                  <div className="auth-phone-field">
+                    <span>+91</span>
+
+                    <input
+                      ref={phoneRef}
+                      id="forgot-phone"
+                      type="tel"
+                      inputMode="numeric"
+                      autoComplete="tel-national"
+                      placeholder="Enter 10-digit number"
+                      value={phone}
+                      onChange={handlePhoneChange}
+                      maxLength={10}
+                    />
+                  </div>
+
+                  {error && (
+                    <p className="login-error-message">
+                      {error}
+                    </p>
+                  )}
+
+                  {message && (
+                    <p className="login-success-message">
+                      {message}
+                    </p>
+                  )}
+
+                  <button
+                    type="submit"
+                    className="login-send-otp"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? "Sending OTP..." : "Send OTP"}
+                  </button>
+
+                  <button
+                    type="button"
+                    className="auth-modal-secondary"
+                    onClick={() => {
+                      setMode("login");
+                      setForgotPasswordStep("phone");
+                      setOtp("");
+                      setError("");
+                      setMessage("");
+                    }}
+                  >
+                    Back to Login
+                  </button>
+                </form>
+              </>
+            )}
+
+            {forgotPasswordStep === "otp" && (
+              <>
+                <p className="auth-modal-description">
+                  Enter the OTP sent to +91 {sanitizedPhone}.
+                </p>
+
+                <form
+                  className="auth-modal-form"
+                  onSubmit={handleVerifyResetOtp}
+                >
+                  <label htmlFor="forgot-password-otp">
+                    OTP
+                  </label>
+
+                  <input
+                    id="forgot-password-otp"
+                    type="text"
+                    inputMode="numeric"
+                    autoComplete="one-time-code"
+                    placeholder="Enter OTP"
+                    value={otp}
+                    onChange={(event) => {
+                      setOtp(
+                        event.target.value
+                          .replace(/\D/g, "")
+                          .slice(0, 6),
+                      );
+                      setError("");
+                    }}
+                    maxLength={6}
+                  />
+
+                  {error && (
+                    <p className="login-error-message">
+                      {error}
+                    </p>
+                  )}
+
+                  {message && (
+                    <p className="login-success-message">
+                      {message}
+                    </p>
+                  )}
+
+                  <button
+                    type="submit"
+                    className="login-send-otp"
+                    disabled={isSubmitting}
+                  >
+                    {isSubmitting ? "Verifying..." : "Verify OTP"}
+                  </button>
+
+                  <button
+                    type="button"
+                    className="auth-modal-secondary"
+                    onClick={() => {
+                      setForgotPasswordStep("phone");
+                      setOtp("");
+                      setError("");
+                      setMessage("");
+                    }}
+                  >
+                    Change Mobile Number
+                  </button>
+                </form>
+              </>
+            )}
+
+            {forgotPasswordStep === "reset" && (
+            <>
+              <p className="auth-modal-description">
+                Enter your new password.
+              </p>
+
+              <form
+                className="auth-modal-form"
+                onSubmit={handleResetPassword}
+              >
+                <label htmlFor="new-password">
+                  New Password
+                </label>
+
+                <div className="auth-password-field">
+                  <input
+                    id="new-password"
+                    type={showPassword ? "text" : "password"}
+                    autoComplete="new-password"
+                    placeholder="Enter new password"
+                    value={newPassword}
+                    onChange={(event) => {
+                      setNewPassword(event.target.value);
+                      setError("");
+                    }}
+                  />
+
+                  <button
+                    type="button"
+                    className="auth-password-toggle"
+                    onClick={() =>
+                      setShowPassword((current) => !current)
+                    }
+                    aria-label={
+                      showPassword
+                        ? "Hide password"
+                        : "Show password"
+                    }
+                    aria-pressed={showPassword}
+                  >
+                    {showPassword ? (
+                      <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M3 3l18 18" />
+                        <path d="M10.6 10.6a2 2 0 002.8 2.8" />
+                        <path d="M9.9 4.2A10.7 10.7 0 0112 4c5 0 8.5 4 9 8a9.7 9.7 0 01-2.1 4.4" />
+                        <path d="M6.2 6.2C4.3 7.5 3.2 9.6 3 12c.5 4 4 8 9 8a10 10 0 004.1-.9" />
+                      </svg>
+                    ) : (
+                      <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
+                        <circle cx="12" cy="12" r="3" />
+                      </svg>
+                    )}
+                  </button>
+                </div>
+
+                <label htmlFor="confirm-new-password">
+                  Confirm New Password
+                </label>
+
+                {/* <input
+                  id="confirm-new-password"
+                  type="password"
+                  autoComplete="new-password"
+                  placeholder="Confirm new password"
+                  value={confirmNewPassword}
+                  onChange={(event) => {
+                    setConfirmNewPassword(event.target.value);
+                    setError("");
+                  }}
+                /> */}
+                <div className="auth-password-field">
+                  <input
+                    id="confirm-new-password"
+                    type={showConfirmPassword ? "text" : "password"}
+                    autoComplete="new-password"
+                    placeholder="Confirm new password"
+                    value={confirmNewPassword}
+                    onChange={(event) => {
+                      setConfirmNewPassword(event.target.value);
+                      setError("");
+                    }}
+                  />
+
+                  <button
+                    type="button"
+                    className="auth-password-toggle"
+                    onClick={() =>
+                      setShowConfirmPassword((current) => !current)
+                    }
+                    aria-label={
+                      showConfirmPassword
+                        ? "Hide confirm password"
+                        : "Show confirm password"
+                    }
+                    aria-pressed={showConfirmPassword}
+                  >
+                    {showConfirmPassword ? (
+                      <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M3 3l18 18" />
+                        <path d="M10.6 10.6a2 2 0 002.8 2.8" />
+                        <path d="M9.9 4.2A10.7 10.7 0 0112 4c5 0 8.5 4 9 8a9.7 9.7 0 01-2.1 4.4" />
+                        <path d="M6.2 6.2C4.3 7.5 3.2 9.6 3 12c.5 4 4 8 9 8a10 10 0 004.1-.9" />
+                      </svg>
+                    ) : (
+                      <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z" />
+                        <circle cx="12" cy="12" r="3" />
+                      </svg>
+                    )}
+                  </button>
+                </div>
+
+                {error && (
+                  <p className="login-error-message">
+                    {error}
+                  </p>
+                )}
+
+                {message && (
+                  <p className="login-success-message">
+                    {message}
+                  </p>
+                )}
+
+                <button
+                  type="submit"
+                  className="login-send-otp"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting
+                    ? "Updating Password..."
+                    : "Update Password"}
+                </button>
+              </form>
+            </>
+          )}
+          </>
+        )}  
+
+          {/* marking  */}
 
         {mode === "register" && registerStep === "form" && (
           <>

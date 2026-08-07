@@ -196,6 +196,22 @@
   pointer-events: none;
 }
 
+/* Forget Password */
+.auth-forgot-password {
+  justify-self: end;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #2563eb;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.auth-forgot-password:hover {
+  text-decoration: underline;
+}
+
 .login-send-otp {
   min-height: 40px;
   border: 0;

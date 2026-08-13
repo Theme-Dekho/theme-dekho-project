@@ -290,7 +290,7 @@ export const categoryData: Record<string, CategoryPageData> = {
   {
     key: "all",
     label: "All Designs",
-    count: 32,
+    count: 36,
   },
   {
     key: "hospital",
@@ -317,11 +317,6 @@ export const categoryData: Record<string, CategoryPageData> = {
     label: "IVF Center",
     count: 4,
   },
-  // {
-  //   key: "physiotherapy",
-  //   label: "Physiotherapy",
-  //   count: 4,
-  // },
   {
     key: "doctor",
     label: "Doctor",

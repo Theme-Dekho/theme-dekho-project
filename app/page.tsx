@@ -18,8 +18,9 @@ import CustomQuoteModal from "@/components/modal/CustomQuoteModel";
 import ReviewsModal from "@/components/modal/ReviewsModal";
 import SaveToast from "@/components/modal/SaveToast";
 import QuoteModal from "@/components/modal/QuoteModal";
-import {healthcareProducts, ecommerceProducts, adBanners } from "@/constants/product";
+import {ecommerceProducts, adBanners } from "@/constants/product";
 import { interiorProducts} from "@/constants/interior-products";
+import { healthcareCategoryProducts} from "@/constants/healthcare-products";
 import type { CategoryFilter } from "@/types/category";
 import { cn } from "@/lib/utils";
 import AnalyticsTestButton from "@/components/Temp";
@@ -185,7 +186,13 @@ export default function HomePage() {
                 Explore Healthcare Portfolio &rarr;
               </Link>
             </div>
-            <ProductGrid products={healthcareProducts} sectionLabel="Our Healthcare Work" scrollable />
+            {/* <ProductGrid products={healthcareProducts} sectionLabel="Our Healthcare Work" scrollable /> */}
+            <ProductGrid
+              products={healthcareCategoryProducts
+                .slice(0, 4)
+                .map(toHomeProductCard)}
+              sectionLabel="Our Healthcare Work"
+            />
           </div>
         </section>
         <div className="divider" />

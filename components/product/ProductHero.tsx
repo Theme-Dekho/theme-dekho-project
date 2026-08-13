@@ -21,7 +21,7 @@ export default function ProductHero({
 
   return (
     <>
-      <div className="product-breadcrumb-wrap">
+      {/* <div className="product-breadcrumb-wrap">
         <nav
           className="product-breadcrumb"
           aria-label="Breadcrumb"
@@ -38,7 +38,7 @@ export default function ProductHero({
 
           <strong>{product.name}</strong>
         </nav>
-      </div>
+      </div> */}
 
       <section className="product-hero-section">
         <div className="product-hero-inner">

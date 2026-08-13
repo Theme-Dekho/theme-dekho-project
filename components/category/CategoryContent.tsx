@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-
+import { useEffect, useMemo, useState} from "react";
 import ProductGrid from "@/components/category/products/ProductGrid";
 import type { Product } from "@/types/product";
 // import { interiorProducts } from "@/constants/interior-products";
@@ -28,7 +23,7 @@ interface PriceFilterProps {
 }
 
 const INITIAL_PRODUCT_COUNT = 3;
-const LOAD_MORE_COUNT = 3;
+const LOAD_MORE_COUNT = 6;
 
 export default function CategoryContent({
   categoryName,
@@ -319,7 +314,7 @@ export default function CategoryContent({
               className="btn-load"
               onClick={handleLoadMore}
             >
-              Load More Templates
+              Load More Portfolios
             </button>
           </div>
         )}

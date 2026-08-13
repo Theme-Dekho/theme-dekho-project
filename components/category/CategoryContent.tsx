@@ -7,8 +7,9 @@ import {
 } from "react";
 
 import ProductGrid from "@/components/category/products/ProductGrid";
-import { interiorProducts } from "@/constants/interior-products";
-
+import type { Product } from "@/types/product";
+// import { interiorProducts } from "@/constants/interior-products";
+import { useRouter, useSearchParams } from "next/navigation";
 import type { SubCategory } from "@/types/category";
 import type {
   SortOption,
@@ -18,6 +19,7 @@ import type {
 interface CategoryContentProps {
   categoryName: string;
   subcategories: SubCategory[];
+  products: Product[];
 }
 
 interface PriceFilterProps {
@@ -31,9 +33,16 @@ const LOAD_MORE_COUNT = 3;
 export default function CategoryContent({
   categoryName,
   subcategories,
+  products,
 }: CategoryContentProps) {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  
+  const initialSubcategory =
+  searchParams.get("subcategory") ?? "all";
+
   const [selectedSubcategory, setSelectedSubcategory] =
-    useState("all");
+  useState(initialSubcategory);
 
   const [maximumPrice, setMaximumPrice] =
     useState(50000);
@@ -49,8 +58,9 @@ export default function CategoryContent({
     setVisibleProductCount,
   ] = useState(INITIAL_PRODUCT_COUNT);
 
+
   const filteredProducts = useMemo(() => {
-    const matchingProducts = interiorProducts.filter(
+    const matchingProducts = products.filter(
       (product) => {
         const subcategoryMatches =
           selectedSubcategory === "all" ||
@@ -120,6 +130,31 @@ export default function CategoryContent({
     );
   };
 
+  const handleSubcategoryChange = (subcategory: string) => {
+    setSelectedSubcategory(subcategory);
+
+    if (subcategory === "all") {
+      // router.push(window.location.pathname);
+      router.push(window.location.pathname, { scroll: false });
+      return;
+    }
+
+    // router.push(
+    //   `${window.location.pathname}?subcategory=${subcategory}`
+    // );
+    router.push(
+      `${window.location.pathname}?subcategory=${subcategory}`,
+      { scroll: false }
+    );
+  };
+
+  useEffect(() => {
+  const subcategory =
+    searchParams.get("subcategory") ?? "all";
+
+  setSelectedSubcategory(subcategory);
+}, [searchParams]);
+
   return (
     <section
       className="main-wrap"
@@ -149,10 +184,13 @@ export default function CategoryContent({
                         : "subcat-item"
                     }
                     aria-pressed={active}
+                    // onClick={() =>
+                    //   setSelectedSubcategory(
+                    //     subcategory.key,
+                    //   )
+                    // }
                     onClick={() =>
-                      setSelectedSubcategory(
-                        subcategory.key,
-                      )
+                      handleSubcategoryChange(subcategory.key)
                     }
                   >
                     <span>

@@ -2,12 +2,17 @@
 
 import { useState } from "react";
 import CategoryStrip from "@/components/navigation/CategoryStrip";
-import SubCategoryStrip from "@/components/navigation/SubCategoryStrip";
+// import SubCategoryStrip from "@/components/navigation/SubCategoryStrip";
 import type { CategoryFilter } from "@/types/category";
 
+// interface ProductFiltersProps {
+//   activeCategory: CategoryFilter;
+//   onCategoryChange: (cat: CategoryFilter) => void;
+// }
 interface ProductFiltersProps {
   activeCategory: CategoryFilter;
   onCategoryChange: (cat: CategoryFilter) => void;
+  showSubCategories?: boolean;
 }
 
 /**
@@ -15,13 +20,14 @@ interface ProductFiltersProps {
  * search-box state (the top-level category selection itself is lifted to
  * the page so the product sections below can react to it).
  */
-export default function ProductFilters({ activeCategory, onCategoryChange }: ProductFiltersProps) {
+// export default function ProductFilters({ activeCategory, onCategoryChange }: ProductFiltersProps) {
+export default function ProductFilters({ activeCategory, onCategoryChange, showSubCategories = true}: ProductFiltersProps) {
   const [searchTerm, setSearchTerm] = useState("");
-  const [activeSub, setActiveSub] = useState("All");
+  // const [activeSub, setActiveSub] = useState("All");
 
   const handleCategorySelect = (cat: CategoryFilter) => {
     onCategoryChange(cat);
-    setActiveSub("All");
+    // setActiveSub("All");
 
     // Smooth-scroll to the relevant section, mirroring the original
     // `filterCat()` scroll offsets (130px for "all", 175px for a specific category).
@@ -47,11 +53,18 @@ export default function ProductFilters({ activeCategory, onCategoryChange }: Pro
         searchTerm={searchTerm}
         onSearchChange={setSearchTerm}
       />
-      <SubCategoryStrip
+      {/* <SubCategoryStrip
         category={activeCategory === "all" ? null : activeCategory}
         activeSub={activeSub}
         onSelectSub={setActiveSub}
-      />
+      /> */}
+      {/* {showSubCategories && (
+        <SubCategoryStrip
+          category={activeCategory === "all" ? null : activeCategory}
+          activeSub={activeSub}
+          onSelectSub={setActiveSub}
+        />
+      )} */}
     </>
   );
 }

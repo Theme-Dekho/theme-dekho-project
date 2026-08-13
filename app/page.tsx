@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Topbar from "@/components/layout/Topbar";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -33,8 +33,10 @@ const toHomeProductCard = (
     slug: product.slug,
     name: product.name,
     category: product.subCategoryLabel,
-    priceFrom: product.priceDisplay,
-    priceTo: product.priceDisplay,
+    // priceFrom: product.priceDisplay,
+    // priceTo: product.priceDisplay,
+    priceFrom: "₹4,999",
+    priceTo: "₹19,999",
     rating: Number(product.rating),
     reviewCount: Number(product.sold),
     sold: Number(product.sold),
@@ -46,8 +48,65 @@ const toHomeProductCard = (
 
 export default function HomePage() {
   const [activeCategory, setActiveCategory] = useState<CategoryFilter>("all");
+  const [scrollCategory, setScrollCategory] = useState<CategoryFilter>("all");
 
   const show = (cat: CategoryFilter) => activeCategory === "all" || activeCategory === cat;
+  useEffect(() => {
+    const handleScroll = () => {
+      // If user manually selected a category,
+      // don't override it with scroll detection.
+      if (activeCategory !== "all") {
+        setScrollCategory(activeCategory);
+        return;
+      }
+
+      const interior =
+        document.querySelector<HTMLElement>(
+          'section[data-cat="interior"]'
+        );
+
+      const healthcare =
+        document.querySelector<HTMLElement>(
+          'section[data-cat="healthcare"]'
+        );
+
+      const ecommerce =
+        document.querySelector<HTMLElement>(
+          'section[data-cat="ecommerce"]'
+        );
+
+      const triggerPoint = 220;
+
+      if (
+        ecommerce &&
+        ecommerce.getBoundingClientRect().top <= triggerPoint
+      ) {
+        setScrollCategory("ecommerce");
+      } else if (
+        healthcare &&
+        healthcare.getBoundingClientRect().top <= triggerPoint
+      ) {
+        setScrollCategory("healthcare");
+      } else if (
+        interior &&
+        interior.getBoundingClientRect().top <= triggerPoint
+      ) {
+        setScrollCategory("interior");
+      } else {
+        setScrollCategory("all");
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, {
+      passive: true,
+    });
+
+    handleScroll();
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [activeCategory]);
 
   return (
     <>
@@ -58,7 +117,24 @@ export default function HomePage() {
       <main>
         <Hero />
 
-        <ProductFilters activeCategory={activeCategory} onCategoryChange={setActiveCategory} />
+        {/* <ProductFilters activeCategory={activeCategory} onCategoryChange={setActiveCategory} /> */}
+        {/* <ProductFilters
+          activeCategory={
+            activeCategory === "all"
+              ? scrollCategory
+              : activeCategory
+          }
+          onCategoryChange={setActiveCategory}
+        /> */}
+        <ProductFilters
+          activeCategory={
+            activeCategory === "all"
+              ? scrollCategory
+              : activeCategory
+          }
+          onCategoryChange={setActiveCategory}
+          showSubCategories={activeCategory !== "all"}
+        />
 
         {/* INTERIOR */}
         <section className={cn("section", "sec-orange", !show("interior") && "is-hidden")} id="templates" data-cat="interior">
@@ -75,7 +151,7 @@ export default function HomePage() {
                   href="/categories/interior-architecture"
                   className="view-all"
               >
-                  Explore Interior Portfolio
+                  Explore Interior Portfolio &rarr;
               </Link>
             </div>
             {/* <ProductGrid products={interiorProducts} sectionLabel="Our Interior Work" /> */}
@@ -99,9 +175,15 @@ export default function HomePage() {
                   Websites we&apos;ve built for hospitals, clinics, dental, eye care &amp; medical tourism practices.
                 </div>
               </div>
-              <a href="#" className="view-all">
+              {/* <a href="#" className="view-all">
                 Explore Healthcare Portfolio &rarr;
-              </a>
+              </a> */}
+              <Link
+                href="/categories/healthcare"
+                className="view-all"
+              >
+                Explore Healthcare Portfolio &rarr;
+              </Link>
             </div>
             <ProductGrid products={healthcareProducts} sectionLabel="Our Healthcare Work" scrollable />
           </div>
@@ -122,9 +204,15 @@ export default function HomePage() {
                   High-converting stores we&apos;ve built for Fashion, Jewellery, Electronics &amp; Grocery brands.
                 </div>
               </div>
-              <a href="#" className="view-all">
+              {/* <a href="#" className="view-all">
                 Explore Store Portfolio &rarr;
-              </a>
+              </a> */}
+              <Link
+                href="/categories/ecommerce"
+                className="view-all"
+              >
+                Explore Store Portfolio &rarr;
+              </Link>
             </div>
             <ProductGrid products={ecommerceProducts} sectionLabel="Our E-Commerce Work" />
           </div>

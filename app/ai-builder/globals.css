@@ -5,15 +5,16 @@
    additions (--mono, list/image resets) are kept below the shared block.
    ============================================================ */
 
-*,
-*::before,
-*::after {
+.ai-builder-page,
+.ai-builder-page *,
+.ai-builder-page *::before,
+.ai-builder-page *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-:root {
+.ai-builder-page  {
   /* ── Project Studio palette ──
      blue  #155DFD  PRIMARY CTA / links / accents  (white text, 4.9:1)
      band  #0169DC  filled feature / CTA bands
@@ -85,11 +86,11 @@
   --mono: "JetBrains Mono", monospace;
 }
 
-html {
+.ai-builder-page {
   scroll-behavior: smooth;
 }
 
-body {
+.ai-builder-page {
   font-family: var(--font);
   color: var(--text);
   background: var(--white);
@@ -104,13 +105,29 @@ body {
 /* ── DISPLAY TYPE ── headings use Sora, tighter tracking for editorial weight
    (same treatment as the homepage; selector list adapted to this app's
    actual heading/number-bearing classes). */
-h1, h2, h3, h4,
-.logo-text, .ai-hero h1, .section-title, .tpl-title, .tpl-detail-title,
-.tpl-price, .step-num, .stat-row strong, .demo-body h2, .cta-banner h2,
-.pv-card h3, .gate-card h3, .wiz-label {
+.ai-builder-page h1,
+.ai-builder-page h2,
+.ai-builder-page h3,
+.ai-builder-page h4,
+.ai-builder-page .logo-text,
+.ai-builder-page .ai-hero h1,
+.ai-builder-page .section-title,
+.ai-builder-page .tpl-title,
+.ai-builder-page .tpl-detail-title,
+.ai-builder-page .tpl-price,
+.ai-builder-page .step-num,
+.ai-builder-page .stat-row strong,
+.ai-builder-page .demo-body h2,
+.ai-builder-page .cta-banner h2,
+.ai-builder-page .pv-card h3,
+.ai-builder-page .gate-card h3,
+.ai-builder-page .wiz-label {
   font-family: var(--font-display);
 }
-h1, h2, h3, .ai-hero h1 {
+.ai-builder-page h1,
+.ai-builder-page h2,
+.ai-builder-page h3,
+.ai-builder-page .ai-hero h1 {
   letter-spacing: -0.025em;
 }
 
@@ -122,19 +139,19 @@ h1, h2, h3, .ai-hero h1 {
   font-variant-numeric: tabular-nums lining-nums;
 }
 
-a {
+.ai-builder-page a {
   color: inherit;
   text-decoration: none;
   transition: color 0.2s;
 }
-ul {
+.ai-builder-page ul {
   list-style: none;
 }
-img {
+.ai-builder-page img {
   max-width: 100%;
   display: block;
 }
-button {
+.ai-builder-page button {
   font-family: var(--font);
   cursor: pointer;
 }
@@ -145,12 +162,12 @@ button {
 .is-hidden {
   display: none !important;
 }
-.topbar {
+.ai-builder-page .topbar {
   background: var(--dark);
   padding: 10px 0;
   position: relative;
 }
-.topbar .inner {
+.ai-builder-page .topbar .inner {
   justify-content: space-between;
   align-items: center;
   max-width: 1260px;
@@ -158,15 +175,15 @@ button {
   padding: 0 40px;
   display: flex;
 }
-.topbar span,
-.topbar a {
+.ai-builder-page .topbar span,
+.ai-builder-page .topbar a {
   color: #ffffffbf;
   font-size: 12.5px;
 }
-.topbar a {
+.ai-builder-page .topbar a {
   font-weight: 500;
 }
-.topbar a:hover {
+.ai-builder-page .topbar a:hover {
   color: var(--orange);
 }
 .ai-badge-topbar {
@@ -181,7 +198,7 @@ button {
   display: inline-flex;
   color: #fff !important;
 }
-header {
+.ai-builder-page header {
   background: var(--white);
   z-index: 100;
   border-bottom: 3px solid #0000;
@@ -190,7 +207,7 @@ header {
   top: 0;
   box-shadow: 0 2px 16px #00000012;
 }
-.header-inner {
+.ai-builder-page .header-inner {
   justify-content: space-between;
   align-items: center;
   gap: 16px;
@@ -200,7 +217,7 @@ header {
   padding: 0 24px;
   display: flex;
 }
-.logo-text {
+.ai-builder-page .logo-text {
   color: var(--dark);
   align-items: center;
   gap: 8px;
@@ -208,18 +225,18 @@ header {
   font-weight: 800;
   display: flex;
 }
-.logo-text .dot {
+.ai-builder-page .logo-text .dot {
   color: var(--orange);
 }
-.main-nav {
+.ai-builder-page .main-nav {
   align-items: center;
   gap: 6px;
   display: flex;
 }
-.nav-dropdown {
+.ai-builder-page .nav-dropdown {
   position: relative;
 }
-.nav-dropdown-toggle {
+.ai-builder-page .nav-dropdown-toggle {
   color: var(--text);
   border-radius: var(--radius-sm);
   background: 0 0;
@@ -307,7 +324,7 @@ header {
   gap: 14px;
   display: flex;
 }
-.btn {
+.ai-builder-page .btn {
   border: none;
   border-radius: 9px;
   justify-content: center;
@@ -522,11 +539,11 @@ header {
   transform: translateY(-1px);
   box-shadow: 0 10px 28px #1b4de473;
 }
-.ai-trust-row {
+.ai-builder-page .ai-trust-row {
   flex-wrap: wrap;
   justify-content: center;
   gap: 28px;
-  margin-top: 30px;
+  margin-top: 20px;
   display: flex;
 }
 .ai-trust-row div {
@@ -540,8 +557,8 @@ header {
   color: #fff;
   font-weight: 700;
 }
-#aiWizard {
-  margin-top: 40px;
+.ai-builder-page #aiWizard {
+  margin-top: 24px;
 }
 .wizard-progress {
   flex-wrap: wrap;
@@ -1383,12 +1400,12 @@ select.wiz-select.invalid {
 .tpl-templates-section.active {
   display: block;
 }
-.tpl-header {
+.ai-builder-page .tpl-header {
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: flex-end;
   gap: 16px;
-  margin-bottom: 36px;
+  margin-bottom: 24px;
   display: flex;
 }
 .tpl-eyebrow {
@@ -1662,8 +1679,8 @@ select.wiz-select.invalid {
 .tpl-filter-pill-active:hover {
   color: #fff;
 }
-.tpl-pages-included {
-  margin-top: 48px;
+.ai-builder-page .tpl-pages-included {
+  margin-top: 28px;
 }
 .tpl-detail-grid {
   grid-template-columns: 1.1fr 1fr;
@@ -1724,7 +1741,11 @@ select.wiz-select.invalid {
   padding: 80px 24px;
 }
 .ai-builder-page .ai-section {
-  padding: 80px 24px;
+  padding: 74px 24px;
+}
+
+.ai-builder-page .section + .section {
+  margin-top: 100px;
 }
 
 .ai-section-inner {
@@ -1745,18 +1766,18 @@ select.wiz-select.invalid {
   font-size: 12.5px;
   font-weight: 700;
 }
-.section-title {
+.ai-builder-page .section-title {
   color: var(--dark);
   text-align: center;
   letter-spacing: -0.4px;
   font-size: 32px;
   font-weight: 800;
 }
-.section-sub {
+.ai-builder-page .section-sub {
   color: var(--muted);
   text-align: center;
   max-width: 560px;
-  margin: 12px auto 0;
+  margin: 8px auto 0;
   font-size: 15.5px;
 }
 .steps-wrap {
@@ -2196,11 +2217,17 @@ select.wiz-select.invalid {
   margin-bottom: 26px;
   font-size: 14.5px;
 }
-footer {
+
+/* .ai-builder-page footer {
   background: var(--dark2);
   text-align: center;
-  padding: 48px 24px 30px;
-}
+  padding: 36px 24px 24px;
+} */
+.ai-builder-page footer {
+  background: var(--dark2);
+  padding: 36px 24px 24px;
+} 
+
 footer p {
   color: #fff6;
   font-size: 12.5px;
@@ -2211,14 +2238,45 @@ footer a {
 footer a:hover {
   color: var(--orange);
 }
-.footer-links-grid {
+.ai-builder-page .footer-inner {
+  max-width: 1260px;
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+.ai-builder-page .footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.ai-builder-page .btn-login {
+  padding: 10px 18px;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  transition:
+    border-color 0.2s ease,
+    color 0.2s ease,
+    background 0.2s ease;
+}
+
+.ai-builder-page .btn-login:hover {
+  border-color: var(--orange);
+  color: #000;
+  background: var(--orange-light);
+}
+
+/* .footer-links-grid {
   text-align: left;
   grid-template-columns: repeat(4, 1fr);
   gap: 32px;
   max-width: 1100px;
   margin: 0 auto 40px;
   display: grid;
-}
+} */
 .footer-col h4 {
   color: #ffffff59;
   letter-spacing: 0.08em;
@@ -2300,7 +2358,7 @@ footer a:hover {
     padding: 10px 16px;
     font-size: 13px;
   }
-  .ai-hero {
+  .ai-builder-page .ai-hero {
     padding: 48px 16px 60px;
   }
   .ai-hero h1 {

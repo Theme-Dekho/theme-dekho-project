@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import type { MouseEvent } from "react";
 import type { ProductCardData } from "@/types/product";
 import { useSite } from "@/lib/site-context";
@@ -151,9 +152,16 @@ export default function ProductCard({ product, sectionLabel }: ProductCardProps)
         </div>
 
         <div className="pc-actions">
-          <a className="pc-details" href="/product-page">
+          {/* <a className="pc-details" href="/product-page">
             <span className="det-arrow">&#9654;</span>Get Details
-          </a>
+          </a> */}
+          <Link
+            className="pc-details"
+            href={`/products/${productSlug}`}
+          >
+            <span className="det-arrow">&#9654;</span>
+            Get Details
+          </Link>
 
           {/* <button className={cn("pc-save", saved && "saved")} onClick={() => toggleSave(product.name, sectionLabel)}> */}
           {/* <button type="button" className={cn("pc-save", saved && "saved",)}onClick={handleWishlist}

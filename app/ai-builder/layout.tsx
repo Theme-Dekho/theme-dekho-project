@@ -39,10 +39,14 @@ export default function AIBuilderLayout({
   children: React.ReactNode;
 }) {
   return (
+    // <div
+    //   className="min-h-full flex flex-col"
+    //   suppressHydrationWarning
+    // >
     <div
-      className="min-h-full flex flex-col"
+      className="ai-builder-page min-h-full flex flex-col"
       suppressHydrationWarning
-    >
+    >  
       <main className="flex-1">
         {children}
       </main>

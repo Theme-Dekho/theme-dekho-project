@@ -10,7 +10,7 @@ export default function MegaMenu() {
     <div className="mega-drop">
       {/* Colored top bar */}
       <div className="mega-drop-bar">
-        {megaMenuBar.map((item) => (
+        {/* {megaMenuBar.map((item) => (
           <div className="mega-drop-bar-item" key={item.title}>
             <div className="bar-icon-box">{item.icon}</div>
             <div className="bar-text">
@@ -19,7 +19,39 @@ export default function MegaMenu() {
             </div>
             <span className="bar-arrow">›</span>
           </div>
-        ))}
+        ))} */}
+        {megaMenuBar.map((item) =>
+          item.href ? (
+            <Link
+              href={item.href}
+              className="mega-drop-bar-item"
+              key={item.title}
+            >
+              <div className="bar-icon-box">{item.icon}</div>
+
+              <div className="bar-text">
+                <div className="bar-text-title">{item.title}</div>
+                <div className="bar-text-count">{item.count}</div>
+              </div>
+
+              <span className="bar-arrow">›</span>
+            </Link>
+          ) : (
+            <div
+              className="mega-drop-bar-item"
+              key={item.title}
+            >
+              <div className="bar-icon-box">{item.icon}</div>
+
+              <div className="bar-text">
+                <div className="bar-text-title">{item.title}</div>
+                <div className="bar-text-count">{item.count}</div>
+              </div>
+
+              <span className="bar-arrow">›</span>
+            </div>
+          )
+        )}
       </div>
 
       {/* Links body */}
@@ -28,10 +60,10 @@ export default function MegaMenu() {
           <div className="mega-col" key={i}>
             <ul>
               {col.links.map((link) => (
-                <li key={link}>
-                  <Link href="#">
+                <li key={link.href + link.label}>
+                  <Link href={link.href}>
                     <span className="li-dot" />
-                    {link}
+                    {link.label}
                   </Link>
                 </li>
               ))}

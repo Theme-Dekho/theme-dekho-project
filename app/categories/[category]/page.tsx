@@ -158,6 +158,8 @@ import { notFound } from "next/navigation";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import FeatureStrip from "@/components/category/FeatureStrip";
+import { interiorProducts } from "@/constants/interior-products";
+import { healthcareCategoryProducts } from "@/constants/healthcare-products";
 
 import CategoryBreadcrumb from "@/components/category/CategoryBreadcrumb";
 import CategoryHero from "@/components/category/CategoryHero";
@@ -177,6 +179,7 @@ export async function generateMetadata({
 }: CategoryPageProps): Promise<Metadata> {
   const { category } = await params;
   const currentCategory = categoryData[category];
+
 
   if (!currentCategory) {
     return {
@@ -201,6 +204,13 @@ export default async function CategoryPage({
     notFound();
   }
 
+ const products =
+  category === "interior-architecture"
+    ? interiorProducts
+    : category === "healthcare"
+      ? healthcareCategoryProducts
+      : [];
+
   return (
     <>
     <Header showNavigation={false}/>
@@ -214,6 +224,7 @@ export default async function CategoryPage({
       <CategoryContent
         categoryName={currentCategory.name}
         subcategories={currentCategory.subcategories}
+        products={products}
        />
     </main>
 

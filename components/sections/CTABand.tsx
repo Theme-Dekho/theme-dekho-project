@@ -18,23 +18,30 @@ export default function CTABand() {
           <p>Tell us your requirements — we&apos;ll build it from scratch. WordPress, Shopify, E-commerce &amp; more.</p>
         </div>
         <div className="cta-form">
-          <input
+          {/* <input
             className="cta-input"
             type="text"
             placeholder="Your name"
             value={name}
             onChange={(e) => setName(e.target.value)}
-          />
-          <input
+          /> */}
+          {/* <input
             className="cta-input"
             type="tel"
             placeholder="Your phone number"
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
-          />
-          <button className="cta-submit" onClick={customQuoteModal.open}>
+          /> */}
+          {/* <button className="cta-submit" onClick={customQuoteModal.open}>
             Free Quote &rarr;
-          </button>
+          </button> */}
+          <button
+              type="button"
+              className="cta-submit"
+              onClick={customQuoteModal.open}
+            >
+              Free Quote &rarr;
+            </button>
         </div>
       </div>
     </div>

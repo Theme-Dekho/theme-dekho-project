@@ -98,10 +98,10 @@ export const footerColumns = [
     title: "Categories",
     links: ["E-Commerce", "Medical Healthcare", "Interior & Architect", "Real Estate", "Tour & Travels", "Jewelry Store"],
   },
-  {
-    title: "Best Sellers",
-    links: ["Dream Home Studio", "Evergreen Design", "Decorpot", "Design Cafe", "Central Hospital", "Showcase Renovation"],
-  },
+  // {
+  //   title: "Best Sellers",
+  //   links: ["Dream Home Studio", "Evergreen Design", "Decorpot", "Design Cafe", "Central Hospital", "Showcase Renovation"],
+  // },
 ];
 
 export const reviewsData = [

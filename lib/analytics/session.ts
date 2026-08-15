@@ -1,4 +1,5 @@
-const VISITOR_SESSION_KEY = "visitor_session_id";
+// const VISITOR_SESSION_KEY = "visitor_session_id";
+const VISITOR_SESSION_KEY = "theme_dekho_visitor_id";
 
 function generateSessionId(): string {
   if (

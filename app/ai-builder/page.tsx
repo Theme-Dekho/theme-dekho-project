@@ -27,8 +27,17 @@ import Footer from "@/components/layout/Footer";
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export default function AiWebsiteBuilderPage() {
-  const b = useAiBuilder();
-  const { openLoginModal } = useAuth();
+  const {
+    isLoggedIn,
+    sessionChecked,
+    openLoginModal,
+  } = useAuth();
+
+  const b = useAiBuilder({
+    isLoggedIn,
+    sessionChecked,
+    openAuthModal: openLoginModal,
+  });
 
   
 useEffect(() => {
@@ -202,19 +211,16 @@ useEffect(() => {
           {b.buildActive && (
             <BuildStage
               buildFillActive={b.buildFillActive}
-              buildDuration={b.buildDuration}
-              buildStepsTotal={b.buildStepsTotal}
-              buildStepsDone={b.buildStepsDone}
-              floatItems={b.floatItems}
             />
           )}
 
           {b.previewActive && (
-            <PreviewStage
+           <PreviewStage
               previewStageRef={b.previewStageRef}
               previewUrl={b.previewUrl}
               previewHeadline={b.previewHeadline}
               previewDesc={b.previewDesc}
+              generatedWebsite={b.generatedWebsite}
             />
           )}
 

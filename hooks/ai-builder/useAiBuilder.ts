@@ -1,13 +1,23 @@
 import { useEffect, useRef, useState } from "react";
 import { industryData, templateData, TOTAL_STEPS } from "@/lib/ai-builder/data";
 import { isValidPhone } from "@/lib/ai-builder/utils";
-import type { Chip, FabPanel, FloatItem, IndustryKey } from "@/lib/ai-builder/types";
+import type { Chip, FabPanel, IndustryKey } from "@/lib/ai-builder/types";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
 export type WizFieldError = "industry" | "subIndustry" | "pages" | "bizName" | "bizPhone" | null;
 
-let floatItemId = 0;
+type UseAiBuilderOptions = {
+  isLoggedIn: boolean;
+  sessionChecked: boolean;
+  openAuthModal: () => void;
+};
 
-export function useAiBuilder() {
+
+export function useAiBuilder({
+  isLoggedIn,
+  sessionChecked,
+  openAuthModal,
+}: UseAiBuilderOptions) {
   const [step, setStep] = useState(1);
   const [industryKey, setIndustryKey] = useState<IndustryKey | "">("");
   const [subIndustry, setSubIndustry] = useState("");
@@ -27,11 +37,8 @@ export function useAiBuilder() {
   const [wizardVisible, setWizardVisible] = useState(true);
 
   const [buildActive, setBuildActive] = useState(false);
+  const [generatedWebsite, setGeneratedWebsite] = useState<any | null>(null);
   const [buildFillActive, setBuildFillActive] = useState(false);
-  const [buildDuration, setBuildDuration] = useState(0);
-  const [buildStepsTotal, setBuildStepsTotal] = useState(0);
-  const [buildStepsDone, setBuildStepsDone] = useState(0);
-  const [floatItems, setFloatItems] = useState<FloatItem[]>([]);
 
   const [previewActive, setPreviewActive] = useState(false);
   const [previewUrl, setPreviewUrl] = useState("yourbusiness.themedekho.com");
@@ -62,19 +69,6 @@ export function useAiBuilder() {
 
   const [templatesActive, setTemplatesActive] = useState(false);
   const [templatesKey, setTemplatesKey] = useState<IndustryKey>("other");
-
-  const [loginModalOpen, setLoginModalOpen] = useState(false);
-  const [loginName, setLoginName] = useState("");
-  const [loginPhone, setLoginPhone] = useState("");
-  const [loginOtp, setLoginOtp] = useState("");
-  const [loginOtpRowVisible, setLoginOtpRowVisible] = useState(false);
-  const [loginSendOtpLabel, setLoginSendOtpLabel] = useState("Send OTP");
-  const [loginSendOtpDisabled, setLoginSendOtpDisabled] = useState(false);
-  const [loginVerifyLabel, setLoginVerifyLabel] = useState("Verify");
-  const [loginError, setLoginError] = useState("");
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [loggedInName, setLoggedInName] = useState("");
-  const [loginForBuild, setLoginForBuild] = useState(false);
 
   const logoInputRef = useRef<HTMLInputElement>(null);
   const bizAttachInputRef = useRef<HTMLInputElement>(null);
@@ -185,11 +179,20 @@ export function useAiBuilder() {
   function handleWizNext() {
     if (!canProceed(step)) return;
     if (step === 2) populatePagesFeatures();
+
     if (step === TOTAL_STEPS) {
-      if (!loggedIn) {
-        openLoginModal(true);
+      if (!sessionChecked) {
+        setWizNavError(
+          "Checking your login session. Please try again.",
+        );
         return;
       }
+
+      if (!isLoggedIn) {
+        openAuthModal();
+        return;
+      }
+
       startBuild();
       return;
     }
@@ -200,84 +203,157 @@ export function useAiBuilder() {
     setStep((s) => s - 1);
   }
 
-  function startBuild() {
-    setWizardVisible(false);
-    setBuildActive(true);
-    setBuildFillActive(false);
-    setFloatItems([]);
-
-    const checkedPages = pages.filter((p) => p.checked);
-    const checkedFeatures = features.filter((f) => f.checked);
-    const items = [
-      ...checkedPages.map((p) => "📄 " + p.label),
-      ...checkedFeatures.map((f) => "⚙️ " + f.label),
-      "🎨 Choosing colour palette",
-      "🖋️ Writing content with AI",
-      "📱 Optimising for mobile",
-    ];
-    for (let i = items.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [items[i], items[j]] = [items[j], items[i]];
+  async function startBuild() {
+    if (!API_BASE_URL) {
+      setWizNavError(
+        "AI website service is not configured.",
+      );
+      return;
     }
 
-    const stepGap = 320;
-    const totalTime = items.length * stepGap + 1600;
-    setBuildDuration(totalTime);
-    setBuildStepsTotal(items.length);
-    setBuildStepsDone(0);
-    requestAnimationFrame(() => setBuildFillActive(true));
+    const selectedPages = pages
+      .filter((page) => page.checked)
+      .map((page) => page.label);
 
-    items.forEach((label, idx) => {
-      addTimeout(() => {
-        const id = ++floatItemId;
-        const left = Math.random() * 65 + 5;
-        const top = Math.random() * 60 + 5;
-        setFloatItems((prev) => [...prev, { id, label, left, top }]);
-        setBuildStepsDone((n) => n + 1);
-        addTimeout(() => {
-          setFloatItems((prev) => prev.filter((it) => it.id !== id));
-        }, 2700);
-      }, idx * stepGap);
+    const selectedFeatures = features
+      .filter((feature) => feature.checked)
+      .map((feature) => feature.label);
+
+    const industry =
+      industryKey
+        ? industryData[industryKey]
+        : industryData.other;
+
+    setWizNavError("");
+    setWizardVisible(false);
+    setPreviewActive(false);
+
+
+    setBuildFillActive(false);
+    setBuildActive(true);
+
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setBuildFillActive(true);
+      });
     });
 
-    addTimeout(() => {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/ai-websites`,
+        {
+          method: "POST",
+
+          credentials: "include",
+
+          headers: {
+            "Content-Type":
+              "application/json",
+          },
+
+          body: JSON.stringify({
+            source_page: "ai_builder",
+
+            industry: industry.label,
+
+            sub_industry: subIndustry,
+
+            selected_pages:
+              selectedPages,
+
+            selected_features:
+              selectedFeatures,
+
+            business_name:
+              bizName.trim(),
+
+            business_phone:
+              bizPhone.trim(),
+
+            business_email:
+              bizEmail.trim() || null,
+
+            business_address:
+              bizAddress.trim() || null,
+
+            business_description:
+              bizExtra.trim() || null,
+          }),
+        },
+      );
+
+      const data =
+        await response.json();
+
+      if (!response.ok) {
+        setBuildActive(false);
+        setBuildFillActive(false);
+        setWizardVisible(true);
+
+        setWizNavError(
+          data.detail ??
+            "AI website generation failed.",
+        );
+
+        return;
+      }
+
+      setGeneratedWebsite(data);
+
       setBuildActive(false);
-      showPreview();
-    }, totalTime + 300);
+      setBuildFillActive(false);
+
+      setPreviewUrl(
+        data.generated_url ??
+          "Website generated",
+      );
+
+      setPreviewHeadline(
+        `${data.business_name} website is ready`,
+      );
+
+      setPreviewDesc(
+        "Your AI-generated website has been created successfully.",
+      );
+
+      setPreviewActive(true);
+
+      setFabReady(true);
+
+      setExpertName(
+        bizName.trim(),
+      );
+
+      setExpertPhone(
+        bizPhone.trim(),
+      );
+
+      renderTemplates(
+        industryKey || "other",
+      );
+
+      addTimeout(() => {
+        previewStageRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+      }, 0);
+    } catch (error) {
+      console.error(
+        "AI website generation error:",
+        error,
+      );
+
+      setBuildActive(false);
+      setBuildFillActive(false);
+      setWizardVisible(true);
+
+      setWizNavError(
+        "Unable to generate website. Please try again.",
+      );
+    }
   }
 
-  function showPreview() {
-    const nameVal = bizName.trim() || "Your Business";
-    const slug = nameVal.toLowerCase().replace(/[^a-z0-9]+/g, "");
-    const data = industryKey ? industryData[industryKey] : industryData.other;
-    const checkedPagesCount = pages.filter((p) => p.checked).length;
-    const checkedFeaturesCount = features.filter((f) => f.checked).length;
-
-    setPreviewUrl(slug + ".themedekho.com");
-    setPreviewHeadline('"' + nameVal + '" is ready');
-    setPreviewDesc(
-      "AI created " +
-        checkedPagesCount +
-        " pages and " +
-        checkedFeaturesCount +
-        " features for your " +
-        data.label.toLowerCase() +
-        " website — complete with copy, layout, and a matching colour palette."
-    );
-
-    setPreviewActive(true);
-
-    // Mobile number was already verified via OTP during login before the build
-    // started, so the preview unlocks immediately with no second gate.
-    setFabReady(true);
-    setExpertName(bizName.trim());
-    setExpertPhone(bizPhone.trim());
-    renderTemplates(industryKey || "other");
-
-    addTimeout(() => {
-      previewStageRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-    }, 0);
-  }
 
   function renderTemplates(key: IndustryKey) {
     setTemplatesKey(key);
@@ -288,64 +364,6 @@ export function useAiBuilder() {
     setActivePanel(panel);
     setModalOpen(true);
     setFabOpen(false);
-  }
-
-  function openLoginModal(forBuild: boolean = false) {
-    setLoginModalOpen(true);
-    setLoginForBuild(forBuild);
-    setLoginName("");
-    setLoginPhone("");
-    setLoginOtp("");
-    setLoginOtpRowVisible(false);
-    setLoginSendOtpLabel("Send OTP");
-    setLoginSendOtpDisabled(false);
-    setLoginVerifyLabel("Verify");
-    setLoginError("");
-  }
-
-  function closeLoginModal() {
-    setLoginModalOpen(false);
-  }
-
-  function handleLoginSendOtp() {
-    if (!loginName.trim()) {
-      setLoginError("Please enter your name.");
-      return;
-    }
-    if (!isValidPhone(loginPhone)) {
-      setLoginError("Please enter a valid 10-digit phone number.");
-      return;
-    }
-    setLoginError("");
-    setLoginSendOtpLabel("Sending...");
-    setLoginSendOtpDisabled(true);
-    addTimeout(() => {
-      setLoginSendOtpLabel("OTP Sent ✓");
-      setLoginOtpRowVisible(true);
-    }, 900);
-  }
-
-  function handleLoginVerifyOtp() {
-    if (loginOtp.trim().length < 4) {
-      setLoginError("Please enter the OTP sent to your phone.");
-      return;
-    }
-    setLoginError("");
-    setLoginVerifyLabel("Verifying...");
-    addTimeout(() => {
-      setLoggedIn(true);
-      setLoggedInName(loginName.trim());
-      setLoginModalOpen(false);
-      if (loginForBuild) {
-        setLoginForBuild(false);
-        startBuild();
-      }
-    }, 900);
-  }
-
-  function handleLogout() {
-    setLoggedIn(false);
-    setLoggedInName("");
   }
 
   function handleDownloadCode() {
@@ -450,7 +468,9 @@ export function useAiBuilder() {
   function handleResetToWizard() {
     setWizardVisible(true);
     setBuildActive(false);
+    setBuildFillActive(false);
     setPreviewActive(false);
+    setGeneratedWebsite(null);
     setFabReady(false);
     setFabOpen(false);
     setModalOpen(false);
@@ -481,12 +501,9 @@ export function useAiBuilder() {
     wizNavError,
     wizFieldError,
     wizardVisible,
+    generatedWebsite,
     buildActive,
     buildFillActive,
-    buildDuration,
-    buildStepsTotal,
-    buildStepsDone,
-    floatItems,
     previewActive,
     previewUrl,
     previewHeadline,
@@ -512,19 +529,6 @@ export function useAiBuilder() {
     currentIndustry,
     templateInfo,
 
-    loginModalOpen,
-    loginForBuild,
-    loginName,
-    loginPhone,
-    loginOtp,
-    loginOtpRowVisible,
-    loginSendOtpLabel,
-    loginSendOtpDisabled,
-    loginVerifyLabel,
-    loginError,
-    loggedIn,
-    loggedInName,
-
     logoInputRef,
     bizAttachInputRef,
     changeFileInputRef,
@@ -544,9 +548,6 @@ export function useAiBuilder() {
     setChangeRequestText,
     setExpertName,
     setExpertPhone,
-    setLoginName,
-    setLoginPhone,
-    setLoginOtp,
 
     handleIndustryChange,
     togglePage,
@@ -564,10 +565,5 @@ export function useAiBuilder() {
     handleSubmitChange,
     handleConnectExpert,
     handleResetToWizard,
-    openLoginModal,
-    closeLoginModal,
-    handleLoginSendOtp,
-    handleLoginVerifyOtp,
-    handleLogout,
   };
 }

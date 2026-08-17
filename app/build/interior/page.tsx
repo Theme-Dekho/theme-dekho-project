@@ -9,6 +9,7 @@ import { useEffect, useRef, useState } from "react";
 import AuthControls from "@/components/auth/AuthControls";
 import AuthModal from "@/components/auth/AuthModal";
 import { useAuth } from "@/lib/auth-context";
+import { trackEvent } from "@/lib/analytics/trackEvent";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -34,6 +35,8 @@ export default function InteriorBuilderPage() {
 
   const [isBuilding, setIsBuilding] = useState(false);
   const [buildProgress, setBuildProgress] = useState(0);
+  const [generatedWebsite, setGeneratedWebsite] = useState<any | null>(null);
+  const [previewOpen, setPreviewOpen] = useState(false);
   const [visitorId, setVisitorId] = useState("");
 
   const [pages, setPages] = useState([
@@ -87,6 +90,16 @@ export default function InteriorBuilderPage() {
         return;
         }
 
+          void trackEvent({
+            eventName: "form_started",
+            pageUrl: window.location.pathname,
+            elementName: "business_info_form",
+            metadata: {
+              industry: "interior",
+              sub_industry: subIndustry,
+            },
+          });
+
         setCurrentStep(4);
         return;
     }
@@ -126,7 +139,20 @@ export default function InteriorBuilderPage() {
         return;
       }
 
+      // if (!isLoggedIn) {
+      //   setLoginModalOpen(true);
+      //   return;
+      // }
       if (!isLoggedIn) {
+        void trackEvent({
+          eventName: "button_clicked",
+          pageUrl: window.location.pathname,
+          elementName: "login_modal_opened",
+          metadata: {
+            source: "website_generation",
+          },
+        });
+
         setLoginModalOpen(true);
         return;
       }
@@ -151,84 +177,147 @@ export default function InteriorBuilderPage() {
 
 
     // added New Func
-    const startBuild = () => {
+    // const startBuild = () => {
+    //   setWizardError("");
+    //   setIsBuilding(true);
+    //   setBuildProgress(0);
+
+    //   let progress = 0;
+
+    //   const interval = window.setInterval(() => {
+    //     progress += 5;
+
+    //     if (progress >= 100) {
+    //       progress = 100;
+    //       window.clearInterval(interval);
+    //     }
+
+    //     setBuildProgress(progress);
+    //   }, 150);
+    // };
+    const startBuild = async () => {
+      if (!API_BASE_URL) {
+        setWizardError(
+          "AI website service is not configured.",
+        );
+        return;
+      }
+
       setWizardError("");
       setIsBuilding(true);
-      setBuildProgress(0);
+      setBuildProgress(10);
 
-      let progress = 0;
+      void trackEvent({
+        eventName: "website_generation_started",
+        pageUrl: window.location.pathname,
+        elementName: "ai_website_generation",
+        metadata: {
+          source: "build_interior",
+          industry: "interior",
+          sub_industry: subIndustry,
+        },
+      });
 
-      const interval = window.setInterval(() => {
-        progress += 5;
+      try {
+        const response = await fetch(
+          `${API_BASE_URL}/api/ai-websites`,
+          {
+            method: "POST",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              source_page: "build_interior",
 
-        if (progress >= 100) {
-          progress = 100;
-          window.clearInterval(interval);
+              industry: "Interior & Architecture",
+
+              sub_industry: subIndustry,
+
+              selected_pages: pages,
+              selected_features: features,
+
+              business_name: businessName.trim(),
+              business_phone: businessPhone,
+
+              business_email:
+                businessEmail.trim() || null,
+
+              business_address:
+                businessAddress.trim() || null,
+
+              business_description:
+                businessDescription.trim() || null,
+            }),
+          },
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          setIsBuilding(false);
+
+          void trackEvent({
+            eventName: "website_generation_failed",
+            pageUrl: window.location.pathname,
+            elementName: "ai_website_generation",
+            metadata: {
+              source: "build_interior",
+              status: response.status,
+            },
+          });
+
+          setWizardError(
+            data.detail ??
+              "AI website generation failed.",
+          );
+
+          return;
         }
 
-        setBuildProgress(progress);
-      }, 150);
+        setBuildProgress(100);
+        setGeneratedWebsite(data);
+        setIsBuilding(false);
+
+        console.log(
+          "Generated AI website:",
+          data,
+        );
+
+        void trackEvent({
+          eventName: "website_generation_completed",
+          pageUrl: window.location.pathname,
+          elementName: "ai_website_generation",
+          metadata: {
+            source: "build_interior",
+            generation_id: data.id,
+          },
+        });
+      } catch (error) {
+        console.error(
+          "AI website generation error:",
+          error,
+        );
+
+        setIsBuilding(false);
+
+        setWizardError(
+          "Unable to generate website. Please try again.",
+        );
+
+        void trackEvent({
+          eventName: "website_generation_failed",
+          pageUrl: window.location.pathname,
+          elementName: "ai_website_generation",
+          metadata: {
+            source: "build_interior",
+            reason: "network_error",
+          },
+        });
+      }
     };
 
-    // Users Attribution
-  //   useEffect(() => {
-  //   const params = new URLSearchParams(window.location.search);
 
-  //   const attributionData = {
-  //     landing_category: "interior",
-  //     landing_page: window.location.pathname,
-  //     utm_source: params.get("utm_source") ?? "",
-  //     utm_medium: params.get("utm_medium") ?? "",
-  //     utm_campaign: params.get("utm_campaign") ?? "",
-  //     utm_content: params.get("utm_content") ?? "",
-  //   };
-
-  //   setAttribution({
-  //     landingCategory: attributionData.landing_category,
-  //     landingPage: attributionData.landing_page,
-  //     utmSource: attributionData.utm_source,
-  //     utmMedium: attributionData.utm_medium,
-  //     utmCampaign: attributionData.utm_campaign,
-  //     utmContent: attributionData.utm_content,
-  //   });
-
-  //   if (!API_BASE_URL) {
-  //     console.error(
-  //       "NEXT_PUBLIC_API_BASE_URL is not configured."
-  //     );
-  //     return;
-  //   }
-
-  //   const saveAttribution = async () => {
-  //     try {
-  //       const response = await fetch(
-  //         `${API_BASE_URL}/api/attribution`,
-  //         {
-  //           method: "POST",
-  //           credentials: "include",
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //           },
-  //           body: JSON.stringify(attributionData),
-  //         }
-  //       );
-
-  //       const data = await response.json();
-
-  //       console.log(
-  //         "Attribution save response:",
-  //         data
-  //       );
-  //     } catch (error) {
-  //       console.error(
-  //         "Failed to save attribution:",
-  //         error
-  //       );
-  //     }
-  //   };
-
-  //   void saveAttribution();
-  // }, []);
   useEffect(() => {
     const params = new URLSearchParams(
       window.location.search
@@ -289,12 +378,27 @@ setVisitorId(storedVisitorId);
           }
         );
 
+        // const data = await response.json();
+
+        // console.log(
+        //   "Attribution save response:",
+        //   data
+        // );
         const data = await response.json();
 
-        console.log(
-          "Attribution save response:",
-          data
-        );
+          if (!response.ok) {
+            console.error(
+              "Attribution save failed:",
+              response.status,
+              data
+            );
+            return;
+          }
+
+          console.log(
+            "Attribution saved successfully:",
+            data
+          );
       } catch (error) {
         console.error(
           "Failed to save attribution:",
@@ -380,17 +484,287 @@ setVisitorId(storedVisitorId);
             No coding, no designers, no waiting. Tell our AI about your
             interior studio — it drafts your pages, picks a premium layout,
             and writes your content instantly.
-            </p>  
+            </p>
+
+            {/* {generatedWebsite?.generated_content && (
+              <div className="generated-preview-shell">
+                {(() => {
+                  const website =
+                    generatedWebsite.generated_content;
+
+                  const theme = website.theme ?? {};
+                  const generatedPages =
+                    website.pages ?? [];
+
+                  return (
+                    <main
+                      style={{
+                        minHeight: "100vh",
+                        background:
+                          theme.secondary_color ||
+                          "#ffffff",
+                        color:
+                          theme.primary_color ||
+                          "#111111",
+                        fontFamily:
+                          theme.font_style ||
+                          "Arial, sans-serif",
+                      }}
+                    >
+                      <header
+                        style={{
+                          padding: "20px 6%",
+                          background:
+                            theme.primary_color ||
+                            "#111827",
+                          color: "#ffffff",
+                          display: "flex",
+                          justifyContent:
+                            "space-between",
+                          alignItems: "center",
+                          gap: "24px",
+                          flexWrap: "wrap",
+                        }}
+                      >
+                        <div>
+                          <strong
+                            style={{
+                              fontSize: "24px",
+                            }}
+                          >
+                            {website.business_name}
+                          </strong>
+
+                          {website.tagline && (
+                            <div
+                              style={{
+                                marginTop: "4px",
+                                fontSize: "13px",
+                                opacity: 0.85,
+                              }}
+                            >
+                              {website.tagline}
+                            </div>
+                          )}
+                        </div>
+
+                        <nav
+                          style={{
+                            display: "flex",
+                            gap: "18px",
+                            flexWrap: "wrap",
+                          }}
+                        >
+                          {generatedPages.map(
+                            (page: any) => (
+                              <a
+                                key={page.slug}
+                                href={`#${page.slug}`}
+                                style={{
+                                  color: "#ffffff",
+                                  textDecoration: "none",
+                                }}
+                              >
+                                {page.page_name}
+                              </a>
+                            ),
+                          )}
+                        </nav>
+                      </header>
+
+                      {generatedPages.map(
+                        (
+                          page: any,
+                          pageIndex: number,
+                        ) => (
+                          <section
+                            key={page.slug}
+                            id={page.slug}
+                            style={{
+                              padding: "70px 8%",
+                              background:
+                                pageIndex % 2 === 0
+                                  ? "#ffffff"
+                                  : theme.secondary_color ||
+                                    "#f8fafc",
+                            }}
+                          >
+                            <div
+                              style={{
+                                maxWidth: "1100px",
+                                margin: "0 auto",
+                              }}
+                            >
+                              <h1
+                                style={{
+                                  fontSize: "40px",
+                                  marginBottom: "40px",
+                                }}
+                              >
+                                {page.page_name}
+                              </h1>
+
+                              {page.sections?.map(
+                                (
+                                  section: any,
+                                  sectionIndex: number,
+                                ) => (
+                                  <div
+                                    key={`${page.slug}-${sectionIndex}`}
+                                    style={{
+                                      marginBottom:
+                                        "48px",
+                                    }}
+                                  >
+                                    {section.heading && (
+                                      <h2>
+                                        {
+                                          section.heading
+                                        }
+                                      </h2>
+                                    )}
+
+                                    {section.subheading && (
+                                      <p>
+                                        {
+                                          section.subheading
+                                        }
+                                      </p>
+                                    )}
+
+                                    {section.content && (
+                                      <p>
+                                        {
+                                          section.content
+                                        }
+                                      </p>
+                                    )}
+
+                                    {section.cta_text && (
+                                      <button
+                                        type="button"
+                                        style={{
+                                          marginTop:
+                                            "20px",
+                                          padding:
+                                            "12px 22px",
+                                          border: "none",
+                                          borderRadius:
+                                            "6px",
+                                          background:
+                                            theme.accent_color ||
+                                            theme.primary_color ||
+                                            "#2563eb",
+                                          color:
+                                            "#ffffff",
+                                          cursor:
+                                            "pointer",
+                                        }}
+                                      >
+                                        {
+                                          section.cta_text
+                                        }
+                                      </button>
+                                    )}
+                                  </div>
+                                ),
+                              )}
+                            </div>
+                          </section>
+                        ),
+                      )}
+
+                      <footer
+                        style={{
+                          padding: "40px 8%",
+                          background:
+                            theme.primary_color ||
+                            "#111827",
+                          color: "#ffffff",
+                        }}
+                      >
+                        <h3>
+                          {website.business_name}
+                        </h3>
+
+                        {website.phone && (
+                          <p>
+                            Phone: {website.phone}
+                          </p>
+                        )}
+
+                        {website.email && (
+                          <p>
+                            Email: {website.email}
+                          </p>
+                        )}
+
+                        {website.address && (
+                          <p>
+                            Address: {website.address}
+                          </p>
+                        )}
+                      </footer>
+                    </main>
+                  );
+                })()}
+              </div>
+            )}   */}
 
           {/* =========================
               WIZARD
           ========================= */}
-          {!isBuilding && (
+          {/* {!isBuilding && (
             <div className="ai-wizard">
 
-            {/* =========================
-                PROGRESS
-            ========================= */}
+              {!generatedWebsite ? (
+                  <>
+                  </>
+                ) : (
+                  <div
+                    style={{
+                      textAlign: "center",
+                      padding: "48px 24px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        fontSize: "48px",
+                        marginBottom: "16px",
+                      }}
+                    >
+                      ✅
+                    </div>
+
+                    <h2
+                      style={{
+                        marginBottom: "12px",
+                      }}
+                    >
+                      Your website is ready
+                    </h2>
+
+                    <p
+                      style={{
+                        marginBottom: "24px",
+                        opacity: 0.8,
+                      }}
+                    >
+                      Your AI-generated website has been created successfully.
+                    </p>
+
+                    <button
+                      type="button"
+                      className="btn btn-wiz-next"
+                      onClick={() => {
+                        setPreviewOpen(true);
+                      }}
+                    >
+                      👁 Preview Website
+                    </button>
+                  </div>
+                )}
+
             <div className="wizard-progress">
 
               <div
@@ -448,9 +822,6 @@ setVisitorId(storedVisitorId);
               </div>
             </div>
 
-            {/* =========================
-                STEP 1
-            ========================= */}
             {currentStep === 1 && (
               <div className="wizard-panel active">
                 <div className="wiz-card">
@@ -477,9 +848,7 @@ setVisitorId(storedVisitorId);
               </div>
             )}
 
-            {/* =========================
-                STEP 2
-            ========================= */}
+           
             {currentStep === 2 && (
               <div className="wizard-panel active">
                 <div className="wiz-card">
@@ -496,7 +865,19 @@ setVisitorId(storedVisitorId);
                       className="wiz-select"
                       value={subIndustry}
                       onChange={(event) => {
-                        setSubIndustry(event.target.value);
+                        const value = event.target.value;
+
+                        setSubIndustry(value);
+
+                        void trackEvent({
+                          eventName: "subcategory_selected",
+                          pageUrl: window.location.pathname,
+                          elementName: "sub_industry",
+                          metadata: {
+                            value,
+                            industry: "interior",
+                          },
+                        });
                       }}
                     >
                       <option
@@ -531,16 +912,10 @@ setVisitorId(storedVisitorId);
               </div>
             )}
 
-            {/* =========================
-                STEP 3
-            ========================= */}
             {currentStep === 3 && (
               <div className="wizard-panel active">
                 <div className="wiz-card">
 
-                  {/* =========================
-                      PAGES
-                  ========================= */}
                   <div className="wiz-block">
                     <span className="wiz-label">
                       Pages for your website
@@ -559,11 +934,23 @@ setVisitorId(storedVisitorId);
                             <input
                                 type="checkbox"
                                 checked
-                                onChange={() => {
-                                setPages((current) =>
-                                    current.filter((item) => item !== page)
+                               onChange={() => {
+                                const updatedPages = pages.filter(
+                                  (item) => item !== page
                                 );
-                                }}
+
+                                setPages(updatedPages);
+
+                                void trackEvent({
+                                  eventName: "button_clicked",
+                                  pageUrl: window.location.pathname,
+                                  elementName: "page_removed",
+                                  metadata: {
+                                    page,
+                                    remaining_pages: updatedPages,
+                                  },
+                                });
+                              }}
                             />
 
                             <span className="tick">
@@ -575,7 +962,6 @@ setVisitorId(storedVisitorId);
                       ))}
                     </div>
 
-                    {/* ADD CUSTOM PAGE */}
                     <div className="add-chip-form">
                       <input
                         type="text"
@@ -596,6 +982,10 @@ setVisitorId(storedVisitorId);
                             return;
                           }
 
+                          if (pages.includes(value)) {
+                            return;
+                          }
+
                           setPages((current) => {
                             if (current.includes(value)) {
                               return current;
@@ -607,6 +997,15 @@ setVisitorId(storedVisitorId);
                             ];
                           });
 
+                           void trackEvent({
+                            eventName: "button_clicked",
+                            pageUrl: window.location.pathname,
+                            elementName: "custom_page_added",
+                            metadata: {
+                              page: value,
+                            },
+                          });
+
                           setCustomPage("");
                         }}
                       >
@@ -615,9 +1014,6 @@ setVisitorId(storedVisitorId);
                     </div>
                   </div>
 
-                  {/* =========================
-                      FEATURES
-                  ========================= */}
                   <div className="wiz-block">
                     <span className="wiz-label">
                       Website features
@@ -637,9 +1033,21 @@ setVisitorId(storedVisitorId);
                                 type="checkbox"
                                 checked
                                 onChange={() => {
-                                setFeatures((current) =>
-                                    current.filter((item) => item !== feature)
-                                );
+                                  const updatedFeatures = features.filter(
+                                    (item) => item !== feature
+                                  );
+
+                                  setFeatures(updatedFeatures);
+
+                                  void trackEvent({
+                                    eventName: "button_clicked",
+                                    pageUrl: window.location.pathname,
+                                    elementName: "feature_removed",
+                                    metadata: {
+                                      feature,
+                                      remaining_features: updatedFeatures,
+                                    },
+                                  });
                                 }}
                             />
 
@@ -652,7 +1060,6 @@ setVisitorId(storedVisitorId);
                       ))}
                     </div>
 
-                    {/* ADD CUSTOM FEATURE */}
                     <div className="add-chip-form">
                       <input
                         type="text"
@@ -674,6 +1081,10 @@ setVisitorId(storedVisitorId);
                             return;
                           }
 
+                           if (features.includes(value)) {
+                              return;
+                            }
+
                           setFeatures((current) => {
                             if (current.includes(value)) {
                               return current;
@@ -683,6 +1094,15 @@ setVisitorId(storedVisitorId);
                               ...current,
                               value,
                             ];
+                          });
+
+                            void trackEvent({
+                            eventName: "button_clicked",
+                            pageUrl: window.location.pathname,
+                            elementName: "custom_feature_added",
+                            metadata: {
+                              feature: value,
+                            },
                           });
 
                           setCustomFeature("");
@@ -696,10 +1116,6 @@ setVisitorId(storedVisitorId);
               </div>
             )}
 
-            {/* =========================
-                STEP 4
-                WILL ADD NEXT
-            ========================= */}
             {currentStep === 4 && (
                 <div className="wizard-panel active">
                     <div className="wiz-card">
@@ -843,9 +1259,6 @@ setVisitorId(storedVisitorId);
                 </div>
                 )}
 
-            {/* =========================
-                NAVIGATION
-            ========================= */}
             {wizardError && (
                 <p className="wiz-nav-error">
                     {wizardError}
@@ -879,10 +1292,634 @@ setVisitorId(storedVisitorId);
             </button>
             </div>
           </div>
+          )} */}
+          {!isBuilding && (
+            <div className="ai-wizard">
+              {!generatedWebsite ? (
+                <>
+                  {/* =========================
+                      PROGRESS
+                  ========================= */}
+                  <div className="wizard-progress">
+                    <div className={getStepClassName(1)}>
+                      <span className="num">
+                        {currentStep > 1 ? "✓" : "1"}
+                      </span>
+                      <span className="label">
+                        Industry
+                      </span>
+                    </div>
+
+                    <div className="wizard-connector" />
+
+                    <div className={getStepClassName(2)}>
+                      <span className="num">
+                        {currentStep > 2 ? "✓" : "2"}
+                      </span>
+                      <span className="label">
+                        Specialisation
+                      </span>
+                    </div>
+
+                    <div className="wizard-connector" />
+
+                    <div className={getStepClassName(3)}>
+                      <span className="num">
+                        {currentStep > 3 ? "✓" : "3"}
+                      </span>
+                      <span className="label">
+                        Pages & Features
+                      </span>
+                    </div>
+
+                    <div className="wizard-connector" />
+
+                    <div className={getStepClassName(4)}>
+                      <span className="num">
+                        4
+                      </span>
+                      <span className="label">
+                        Business Info
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* STEP 1 */}
+                  {currentStep === 1 && (
+                    <div className="wizard-panel active">
+                      <div className="wiz-card">
+                        <span className="wiz-label">
+                          Which industry is your business in?
+                        </span>
+
+                        <p className="wiz-sub">
+                          This helps our AI pick the right layout, pages, and features for you.
+                        </p>
+
+                        <div className="select-wrap">
+                          <select
+                            className="wiz-select"
+                            defaultValue="interior"
+                          >
+                            <option value="interior">
+                              Interior & Architecture
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* STEP 2 */}
+                  {currentStep === 2 && (
+                    <div className="wizard-panel active">
+                      <div className="wiz-card">
+                        <span className="wiz-label">
+                          Choose your specialisation
+                        </span>
+
+                        <p className="wiz-sub">
+                          Pick the option closest to your business.
+                        </p>
+
+                        <div className="select-wrap">
+                          <select
+                            className="wiz-select"
+                            value={subIndustry}
+                            onChange={(event) => {
+                              const value = event.target.value;
+
+                              setSubIndustry(value);
+
+                              void trackEvent({
+                                eventName: "subcategory_selected",
+                                pageUrl: window.location.pathname,
+                                elementName: "sub_industry",
+                                metadata: {
+                                  value,
+                                  industry: "interior",
+                                },
+                              });
+                            }}
+                          >
+                            <option value="" disabled>
+                              Select sub-industry
+                            </option>
+
+                            <option value="residential-interior-design">
+                              Residential Interior Design
+                            </option>
+
+                            <option value="commercial-interior-design">
+                              Commercial Interior Design
+                            </option>
+
+                            <option value="architecture-firm">
+                              Architecture Firm
+                            </option>
+
+                            <option value="modular-kitchen-furniture">
+                              Modular Kitchen & Furniture
+                            </option>
+
+                            <option value="other">
+                              Other
+                            </option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* STEP 3 */}
+                  {currentStep === 3 && (
+                    <div className="wizard-panel active">
+                      <div className="wiz-card">
+
+                        <div className="wiz-block">
+                          <span className="wiz-label">
+                            Pages for your website
+                          </span>
+
+                          <p className="wiz-sub">
+                            Default pages are pre-selected based on your industry.
+                          </p>
+
+                          <div className="chip-list">
+                            {pages.map((page) => (
+                              <label
+                                key={page}
+                                className="chip-check checked"
+                              >
+                                <input
+                                  type="checkbox"
+                                  checked
+                                  onChange={() => {
+                                    const updatedPages =
+                                      pages.filter(
+                                        (item) => item !== page,
+                                      );
+
+                                    setPages(updatedPages);
+
+                                    void trackEvent({
+                                      eventName:
+                                        "button_clicked",
+                                      pageUrl:
+                                        window.location.pathname,
+                                      elementName:
+                                        "page_removed",
+                                      metadata: {
+                                        page,
+                                        remaining_pages:
+                                          updatedPages,
+                                      },
+                                    });
+                                  }}
+                                />
+
+                                <span className="tick">
+                                  ✕
+                                </span>
+
+                                {page}
+                              </label>
+                            ))}
+                          </div>
+
+                          <div className="add-chip-form">
+                            <input
+                              type="text"
+                              value={customPage}
+                              placeholder="Add a custom page e.g. Careers"
+                              onChange={(event) => {
+                                setCustomPage(
+                                  event.target.value,
+                                );
+                              }}
+                            />
+
+                            <button
+                              type="button"
+                              className="btn-add-chip"
+                              onClick={() => {
+                                const value =
+                                  customPage.trim();
+
+                                if (!value) return;
+                                if (pages.includes(value))
+                                  return;
+
+                                setPages((current) => {
+                                  if (
+                                    current.includes(value)
+                                  ) {
+                                    return current;
+                                  }
+
+                                  return [
+                                    ...current,
+                                    value,
+                                  ];
+                                });
+
+                                void trackEvent({
+                                  eventName:
+                                    "button_clicked",
+                                  pageUrl:
+                                    window.location.pathname,
+                                  elementName:
+                                    "custom_page_added",
+                                  metadata: {
+                                    page: value,
+                                  },
+                                });
+
+                                setCustomPage("");
+                              }}
+                            >
+                              + Add Page
+                            </button>
+                          </div>
+                        </div>
+
+                        <div className="wiz-block">
+                          <span className="wiz-label">
+                            Website features
+                          </span>
+
+                          <p className="wiz-sub">
+                            Recommended features for your Interior website.
+                          </p>
+
+                          <div className="chip-list">
+                            {features.map((feature) => (
+                              <label
+                                key={feature}
+                                className="chip-check checked"
+                              >
+                                <input
+                                  type="checkbox"
+                                  checked
+                                  onChange={() => {
+                                    const updatedFeatures =
+                                      features.filter(
+                                        (item) =>
+                                          item !== feature,
+                                      );
+
+                                    setFeatures(
+                                      updatedFeatures,
+                                    );
+
+                                    void trackEvent({
+                                      eventName:
+                                        "button_clicked",
+                                      pageUrl:
+                                        window.location.pathname,
+                                      elementName:
+                                        "feature_removed",
+                                      metadata: {
+                                        feature,
+                                        remaining_features:
+                                          updatedFeatures,
+                                      },
+                                    });
+                                  }}
+                                />
+
+                                <span className="tick">
+                                  ✕
+                                </span>
+
+                                {feature}
+                              </label>
+                            ))}
+                          </div>
+
+                          <div className="add-chip-form">
+                            <input
+                              type="text"
+                              value={customFeature}
+                              placeholder="Add a custom / add-on feature"
+                              onChange={(event) => {
+                                setCustomFeature(
+                                  event.target.value,
+                                );
+                              }}
+                            />
+
+                            <button
+                              type="button"
+                              className="btn-add-chip"
+                              onClick={() => {
+                                const value =
+                                  customFeature.trim();
+
+                                if (!value) return;
+
+                                if (
+                                  features.includes(value)
+                                ) {
+                                  return;
+                                }
+
+                                setFeatures((current) => {
+                                  if (
+                                    current.includes(value)
+                                  ) {
+                                    return current;
+                                  }
+
+                                  return [
+                                    ...current,
+                                    value,
+                                  ];
+                                });
+
+                                void trackEvent({
+                                  eventName:
+                                    "button_clicked",
+                                  pageUrl:
+                                    window.location.pathname,
+                                  elementName:
+                                    "custom_feature_added",
+                                  metadata: {
+                                    feature: value,
+                                  },
+                                });
+
+                                setCustomFeature("");
+                              }}
+                            >
+                              + Add Feature
+                            </button>
+                          </div>
+                        </div>
+
+                      </div>
+                    </div>
+                  )}
+
+                  {/* STEP 4 */}
+                  {currentStep === 4 && (
+                    <div className="wizard-panel active">
+                      <div className="wiz-card">
+                        <span className="wiz-label">
+                          Tell us about your business
+                        </span>
+
+                        <p className="wiz-sub">
+                          Our AI uses this to personalise your content, logo, and contact details.
+                        </p>
+
+                        <div className="wiz-field full logo-field">
+                          <label>
+                            Business Logo
+                          </label>
+
+                          <div className="logo-upload">
+                            <div className="logo-preview">
+                              {businessLogo ? (
+                                <img
+                                  src={businessLogo}
+                                  alt="Business logo preview"
+                                />
+                              ) : (
+                                <span>
+                                  🖼️
+                                </span>
+                              )}
+                            </div>
+
+                            <button
+                              type="button"
+                              className="btn-upload-logo"
+                              onClick={() => {
+                                logoInputRef.current?.click();
+                              }}
+                            >
+                              Upload Logo
+                            </button>
+
+                            <input
+                              ref={logoInputRef}
+                              type="file"
+                              accept="image/*"
+                              hidden
+                              onChange={(event) => {
+                                const file =
+                                  event.target.files?.[0];
+
+                                if (!file) {
+                                  return;
+                                }
+
+                                const reader =
+                                  new FileReader();
+
+                                reader.onload = () => {
+                                  if (
+                                    typeof reader.result ===
+                                    "string"
+                                  ) {
+                                    setBusinessLogo(
+                                      reader.result,
+                                    );
+                                  }
+                                };
+
+                                reader.readAsDataURL(file);
+                              }}
+                            />
+                          </div>
+                        </div>
+
+                        <div className="wiz-grid">
+
+                          <div className="wiz-field full">
+                            <label>
+                              Business Name *
+                            </label>
+
+                            <input
+                              type="text"
+                              value={businessName}
+                              placeholder="e.g. Sunrise Interiors"
+                              onChange={(event) => {
+                                setBusinessName(
+                                  event.target.value,
+                                );
+                              }}
+                            />
+                          </div>
+
+                          <div className="wiz-field">
+                            <label>
+                              Phone Number *
+                            </label>
+
+                            <input
+                              type="tel"
+                              value={businessPhone}
+                              placeholder="10-digit mobile number"
+                              onChange={(event) => {
+                                setBusinessPhone(
+                                  event.target.value,
+                                );
+                              }}
+                            />
+                          </div>
+
+                          <div className="wiz-field">
+                            <label>
+                              Email Address
+                            </label>
+
+                            <input
+                              type="email"
+                              value={businessEmail}
+                              placeholder="you@business.com"
+                              onChange={(event) => {
+                                setBusinessEmail(
+                                  event.target.value,
+                                );
+                              }}
+                            />
+                          </div>
+
+                          <div className="wiz-field full">
+                            <label>
+                              Business Address
+                            </label>
+
+                            <input
+                              type="text"
+                              value={businessAddress}
+                              placeholder="City, State"
+                              onChange={(event) => {
+                                setBusinessAddress(
+                                  event.target.value,
+                                );
+                              }}
+                            />
+                          </div>
+
+                          <div className="wiz-field full">
+                            <div className="describe-label-row">
+                              <label>
+                                Describe Your Business
+                              </label>
+
+                              <span className="describe-ai-badge">
+                                ✨ AI uses this most
+                              </span>
+                            </div>
+
+                            <div className="describe-box">
+                              <textarea
+                                value={
+                                  businessDescription
+                                }
+                                placeholder="Describe your business — services you offer, tone, colours you like, and anything else the AI should know..."
+                                onChange={(event) => {
+                                  setBusinessDescription(
+                                    event.target.value,
+                                  );
+                                }}
+                              />
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* NAVIGATION */}
+                  {wizardError && (
+                    <p className="wiz-nav-error">
+                      {wizardError}
+                    </p>
+                  )}
+
+                  <div className="wiz-nav">
+                    <button
+                      type="button"
+                      className="btn btn-wiz-back"
+                      disabled={currentStep === 1}
+                      onClick={() => {
+                        setWizardError("");
+
+                        setCurrentStep((step) =>
+                          Math.max(1, step - 1),
+                        );
+                      }}
+                    >
+                      ← Back
+                    </button>
+
+                    <button
+                      type="button"
+                      className="btn btn-wiz-next"
+                      onClick={handleNextStep}
+                    >
+                      {currentStep === 4
+                        ? "✨ Free Website Build with AI"
+                        : "Next →"}
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <div
+                  style={{
+                    textAlign: "center",
+                    padding: "48px 24px",
+                  }}
+                >
+                  <div
+                    style={{
+                      fontSize: "48px",
+                      marginBottom: "16px",
+                    }}
+                  >
+                    ✅
+                  </div>
+
+                  <h2
+                    style={{
+                      marginBottom: "12px",
+                    }}
+                  >
+                    Your website is ready
+                  </h2>
+
+                  <p
+                    style={{
+                      marginBottom: "24px",
+                      opacity: 0.8,
+                    }}
+                  >
+                    Your AI-generated website has been created successfully.
+                  </p>
+
+                  <button
+                    type="button"
+                    className="btn btn-wiz-next"
+                    onClick={() => {
+                      setPreviewOpen(true);
+                    }}
+                  >
+                    👁 Preview Website
+                  </button>
+                </div>
+              )}
+            </div>
           )}
         </div>
 
-        {isBuilding && (
+        {isBuilding &&
+          !generatedWebsite && (
         <div className="build-stage active">
           <h3>
             ✨ Building your website with AI...
@@ -1282,6 +2319,296 @@ setVisitorId(storedVisitorId);
         setLoginModalOpen(false);
       }}
       />
+
+      {/* New Addition */}
+      {previewOpen &&
+        generatedWebsite?.generated_content && (
+          <div
+            style={{
+              position: "fixed",
+              inset: 0,
+              zIndex: 9999,
+              background: "rgba(0, 0, 0, 0.72)",
+              overflowY: "auto",
+              padding: "24px",
+            }}
+          >
+            <div
+              style={{
+                maxWidth: "1400px",
+                margin: "0 auto",
+                background: "#ffffff",
+                minHeight: "calc(100vh - 48px)",
+                borderRadius: "16px",
+                overflow: "hidden",
+                position: "relative",
+              }}
+            >
+              <button
+                type="button"
+                onClick={() => {
+                  setPreviewOpen(false);
+                }}
+                style={{
+                  position: "fixed",
+                  top: "32px",
+                  right: "32px",
+                  zIndex: 10001,
+                  width: "44px",
+                  height: "44px",
+                  borderRadius: "50%",
+                  border: "none",
+                  background: "#111827",
+                  color: "#ffffff",
+                  fontSize: "22px",
+                  cursor: "pointer",
+                }}
+                aria-label="Close preview"
+              >
+                ✕
+              </button>
+
+              {(() => {
+                const website =
+                  generatedWebsite.generated_content;
+
+                const theme = website.theme ?? {};
+
+                const generatedPages =
+                  website.pages ?? [];
+
+                return (
+                  <main
+                    style={{
+                      minHeight: "100vh",
+                      background:
+                        theme.secondary_color ||
+                        "#ffffff",
+                      color:
+                        theme.primary_color ||
+                        "#111111",
+                      fontFamily:
+                        theme.font_style ||
+                        "Arial, sans-serif",
+                    }}
+                  >
+                    <header
+                      style={{
+                        padding: "20px 6%",
+                        background:
+                          theme.primary_color ||
+                          "#111827",
+                        color: "#ffffff",
+                        display: "flex",
+                        justifyContent:
+                          "space-between",
+                        alignItems: "center",
+                        gap: "24px",
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      <div>
+                        <strong
+                          style={{
+                            fontSize: "24px",
+                          }}
+                        >
+                          {website.business_name}
+                        </strong>
+
+                        {website.tagline && (
+                          <div
+                            style={{
+                              marginTop: "4px",
+                              fontSize: "13px",
+                              opacity: 0.85,
+                            }}
+                          >
+                            {website.tagline}
+                          </div>
+                        )}
+                      </div>
+
+                      <nav
+                        style={{
+                          display: "flex",
+                          gap: "18px",
+                          flexWrap: "wrap",
+                        }}
+                      >
+                        {generatedPages.map(
+                          (page: any) => (
+                            <a
+                              key={page.slug}
+                              href={`#preview-${page.slug}`}
+                              style={{
+                                color: "#ffffff",
+                                textDecoration: "none",
+                              }}
+                            >
+                              {page.page_name}
+                            </a>
+                          ),
+                        )}
+                      </nav>
+                    </header>
+
+                    {generatedPages.map(
+                      (
+                        page: any,
+                        pageIndex: number,
+                      ) => (
+                        <section
+                          key={page.slug}
+                          id={`preview-${page.slug}`}
+                          style={{
+                            padding: "70px 8%",
+                            background:
+                              pageIndex % 2 === 0
+                                ? "#ffffff"
+                                : theme.secondary_color ||
+                                  "#f8fafc",
+                          }}
+                        >
+                          <div
+                            style={{
+                              maxWidth: "1100px",
+                              margin: "0 auto",
+                            }}
+                          >
+                            <h1
+                              style={{
+                                fontSize: "40px",
+                                marginBottom: "40px",
+                              }}
+                            >
+                              {page.page_name}
+                            </h1>
+
+                            {page.sections?.map(
+                              (
+                                section: any,
+                                sectionIndex: number,
+                              ) => (
+                                <div
+                                  key={`${page.slug}-${sectionIndex}`}
+                                  style={{
+                                    marginBottom: "48px",
+                                  }}
+                                >
+                                  {section.heading && (
+                                    <h2
+                                      style={{
+                                        fontSize: "30px",
+                                        marginBottom: "12px",
+                                      }}
+                                    >
+                                      {section.heading}
+                                    </h2>
+                                  )}
+
+                                  {section.subheading && (
+                                    <p
+                                      style={{
+                                        fontSize: "19px",
+                                        lineHeight: 1.7,
+                                        marginBottom: "16px",
+                                      }}
+                                    >
+                                      {
+                                        section.subheading
+                                      }
+                                    </p>
+                                  )}
+
+                                  {section.content && (
+                                    <p
+                                      style={{
+                                        fontSize: "16px",
+                                        lineHeight: 1.8,
+                                        maxWidth: "850px",
+                                      }}
+                                    >
+                                      {
+                                        section.content
+                                      }
+                                    </p>
+                                  )}
+
+                                  {section.cta_text && (
+                                    <button
+                                      type="button"
+                                      style={{
+                                        marginTop: "20px",
+                                        padding:
+                                          "12px 22px",
+                                        border: "none",
+                                        borderRadius: "6px",
+                                        background:
+                                          theme.accent_color ||
+                                          theme.primary_color ||
+                                          "#2563eb",
+                                        color: "#ffffff",
+                                        cursor: "pointer",
+                                      }}
+                                    >
+                                      {
+                                        section.cta_text
+                                      }
+                                    </button>
+                                  )}
+                                </div>
+                              ),
+                            )}
+                          </div>
+                        </section>
+                      ),
+                    )}
+
+                    <footer
+                      style={{
+                        padding: "40px 8%",
+                        background:
+                          theme.primary_color ||
+                          "#111827",
+                        color: "#ffffff",
+                      }}
+                    >
+                      <div
+                        style={{
+                          maxWidth: "1100px",
+                          margin: "0 auto",
+                        }}
+                      >
+                        <h3>
+                          {website.business_name}
+                        </h3>
+
+                        {website.phone && (
+                          <p>
+                            Phone: {website.phone}
+                          </p>
+                        )}
+
+                        {website.email && (
+                          <p>
+                            Email: {website.email}
+                          </p>
+                        )}
+
+                        {website.address && (
+                          <p>
+                            Address: {website.address}
+                          </p>
+                        )}
+                      </div>
+                    </footer>
+                  </main>
+                );
+              })()}
+            </div>
+          </div>
+        )}
     </>
   );
 }

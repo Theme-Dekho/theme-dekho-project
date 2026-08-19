@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import type { RefObject } from "react";
+import { createPortal } from "react-dom";
 
 interface PreviewStageProps {
   previewStageRef: RefObject<HTMLDivElement | null>;
@@ -18,11 +19,25 @@ export default function PreviewStage({
   previewDesc,
   generatedWebsite,
 }: PreviewStageProps) {
-  const [previewOpen, setPreviewOpen] =
-    useState(false);
+  const [previewOpen, setPreviewOpen] = useState(false);
+  
+  useEffect(() => {
+      if (!previewOpen) {
+        return;
+      }
 
-  const website =
-    generatedWebsite?.generated_content;
+      const previousOverflow =
+        document.body.style.overflow;
+
+      document.body.style.overflow = "hidden";
+
+      return () => {
+        document.body.style.overflow =
+          previousOverflow;
+      };
+    }, [previewOpen]);
+
+  const website = generatedWebsite?.generated_content;
 
   return (
     <>
@@ -77,53 +92,33 @@ export default function PreviewStage({
         </div>
       </div>
 
-      {previewOpen && website && (
+      {previewOpen && website && createPortal(
+        <>
         <div
           style={{
-            position: "fixed",
-            inset: 0,
-            zIndex: 9999,
-            background:
-              "rgba(0, 0, 0, 0.72)",
-            overflowY: "auto",
-            padding: "24px",
-          }}
+          position: "fixed",
+          inset: 0,
+          // zIndex: 9999,
+          zIndex: 2147483000,
+          background: "rgba(0, 0, 0, 0.58)",
+          backdropFilter: "blur(10px)",
+          WebkitBackdropFilter: "blur(10px)",
+          overflow: "auto",
+          padding: "24px",
+        }}
         >
           <div
             style={{
               maxWidth: "1400px",
               margin: "0 auto",
               background: "#ffffff",
-              minHeight:
-                "calc(100vh - 48px)",
+              // minHeight: "calc(100vh - 120px)",
+              minHeight: "100vh",
               borderRadius: "16px",
               overflow: "hidden",
               position: "relative",
             }}
           >
-            <button
-              type="button"
-              onClick={() => {
-                setPreviewOpen(false);
-              }}
-              style={{
-                position: "fixed",
-                top: "32px",
-                right: "32px",
-                zIndex: 10001,
-                width: "44px",
-                height: "44px",
-                borderRadius: "50%",
-                border: "none",
-                background: "#111827",
-                color: "#ffffff",
-                fontSize: "22px",
-                cursor: "pointer",
-              }}
-              aria-label="Close preview"
-            >
-              ✕
-            </button>
 
             {(() => {
               const theme =
@@ -261,92 +256,397 @@ export default function PreviewStage({
                             (
                               section: any,
                               sectionIndex: number,
-                            ) => (
-                              <div
-                                key={`${page.slug}-${sectionIndex}`}
-                                style={{
-                                  marginBottom:
-                                    "48px",
-                                }}
-                              >
-                                {section.heading && (
-                                  <h2
-                                    style={{
-                                      fontSize:
-                                        "30px",
-                                      marginBottom:
-                                        "12px",
-                                    }}
-                                  >
-                                    {
-                                      section.heading
-                                    }
-                                  </h2>
-                                )}
+                            ) => {
+                              const columns = Math.min(
+                                Math.max(section.columns || 3, 1),
+                                4,
+                              );
 
-                                {section.subheading && (
-                                  <p
-                                    style={{
-                                      fontSize:
-                                        "19px",
-                                      lineHeight:
-                                        1.7,
-                                      marginBottom:
-                                        "16px",
-                                    }}
-                                  >
-                                    {
-                                      section.subheading
-                                    }
-                                  </p>
-                                )}
+                              const isHero =
+                                section.section_type === "hero";
 
-                                {section.content && (
-                                  <p
-                                    style={{
-                                      fontSize:
-                                        "16px",
-                                      lineHeight:
-                                        1.8,
-                                      maxWidth:
-                                        "850px",
-                                    }}
-                                  >
-                                    {
-                                      section.content
-                                    }
-                                  </p>
-                                )}
+                              const isSplit =
+                                section.layout?.includes("split");
 
-                                {section.cta_text && (
-                                  <button
-                                    type="button"
+                              const isCentered =
+                                section.alignment === "center";
+
+                              const sectionBackground =
+                                section.background_style?.includes("primary")
+                                  ? theme.primary_color
+                                  : section.background_style?.includes(
+                                        "secondary",
+                                      )
+                                    ? theme.secondary_color
+                                    : section.background_style?.includes(
+                                          "surface",
+                                        )
+                                      ? theme.surface_color
+                                      : "transparent";
+
+                              return (
+                                <section
+                                  key={`${page.slug}-${sectionIndex}`}
+                                  style={{
+                                    marginBottom: "56px",
+                                    padding: isHero
+                                      ? "72px 6%"
+                                      : "48px 5%",
+                                    borderRadius:
+                                      theme.border_radius || "18px",
+                                    background:
+                                      sectionBackground ||
+                                      "transparent",
+                                    textAlign: isCentered
+                                      ? "center"
+                                      : "left",
+                                  }}
+                                >
+                                  <div
                                     style={{
-                                      marginTop:
-                                        "20px",
-                                      padding:
-                                        "12px 22px",
-                                      border:
-                                        "none",
-                                      borderRadius:
-                                        "6px",
-                                      background:
-                                        theme.accent_color ||
-                                        theme.primary_color ||
-                                        "#2563eb",
-                                      color:
-                                        "#ffffff",
-                                      cursor:
-                                        "pointer",
+                                      // display:
+                                      //   isSplit && isHero
+                                      //     ? "grid"
+                                      //     : "block",
+                                      // gridTemplateColumns:
+                                      //   isSplit && isHero
+                                      //     ? "1.1fr 0.9fr"
+                                      //     : undefined,
+                                      display: isHero
+                                        ? "grid"
+                                        : "block",
+
+                                      gridTemplateColumns: isHero
+                                        ? "1.05fr 0.95fr"
+                                        : undefined,
+                                        gap: "48px",
+                                      alignItems: "center",
                                     }}
                                   >
-                                    {
-                                      section.cta_text
-                                    }
-                                  </button>
-                                )}
-                              </div>
-                            ),
+                                    <div>
+                                      {section.eyebrow && (
+                                        <div
+                                          style={{
+                                            fontSize: "13px",
+                                            fontWeight: 700,
+                                            letterSpacing: "0.08em",
+                                            textTransform: "uppercase",
+                                            marginBottom: "12px",
+                                            color:
+                                              theme.accent_color ||
+                                              theme.primary_color,
+                                          }}
+                                        >
+                                          {section.eyebrow}
+                                        </div>
+                                      )}
+
+                                      {section.heading && (
+                                        <h2
+                                          style={{
+                                            fontSize: isHero
+                                              ? "clamp(38px, 6vw, 72px)"
+                                              : "clamp(30px, 4vw, 44px)",
+                                            lineHeight: 1.08,
+                                            marginBottom: "18px",
+                                            maxWidth: isCentered
+                                              ? "900px"
+                                              : "780px",
+                                            marginLeft: isCentered
+                                              ? "auto"
+                                              : 0,
+                                            marginRight: isCentered
+                                              ? "auto"
+                                              : 0,
+                                          }}
+                                        >
+                                          {section.heading}
+                                        </h2>
+                                      )}
+
+                                      {section.subheading && (
+                                        <p
+                                          style={{
+                                            fontSize: isHero
+                                              ? "20px"
+                                              : "18px",
+                                            lineHeight: 1.7,
+                                            marginBottom: "18px",
+                                            maxWidth: "760px",
+                                            marginLeft: isCentered
+                                              ? "auto"
+                                              : 0,
+                                            marginRight: isCentered
+                                              ? "auto"
+                                              : 0,
+                                          }}
+                                        >
+                                          {section.subheading}
+                                        </p>
+                                      )}
+
+                                      {section.content && (
+                                        <p
+                                          style={{
+                                            fontSize: "16px",
+                                            lineHeight: 1.8,
+                                            maxWidth: "820px",
+                                            marginBottom: "22px",
+                                            marginLeft: isCentered
+                                              ? "auto"
+                                              : 0,
+                                            marginRight: isCentered
+                                              ? "auto"
+                                              : 0,
+                                          }}
+                                        >
+                                          {section.content}
+                                        </p>
+                                      )}
+
+                                      {(section.primary_cta ||
+                                        section.secondary_cta) && (
+                                        <div
+                                          style={{
+                                            display: "flex",
+                                            gap: "12px",
+                                            marginTop: "24px",
+                                            justifyContent: isCentered
+                                              ? "center"
+                                              : "flex-start",
+                                            flexWrap: "wrap",
+                                          }}
+                                        >
+                                          {section.primary_cta && (
+                                            <button
+                                              type="button"
+                                              style={{
+                                                padding:
+                                                  "14px 24px",
+                                                border: "none",
+                                                borderRadius:
+                                                  theme.border_radius ||
+                                                  "10px",
+                                                background:
+                                                  theme.accent_color ||
+                                                  theme.primary_color ||
+                                                  "#2563eb",
+                                                color: "#ffffff",
+                                                fontWeight: 600,
+                                                cursor: "pointer",
+                                              }}
+                                            >
+                                              {section.primary_cta.text}
+                                            </button>
+                                          )}
+
+                                          {section.secondary_cta && (
+                                            <button
+                                              type="button"
+                                              style={{
+                                                padding:
+                                                  "14px 24px",
+                                                border: `1px solid ${
+                                                  theme.primary_color ||
+                                                  "#111827"
+                                                }`,
+                                                borderRadius:
+                                                  theme.border_radius ||
+                                                  "10px",
+                                                background:
+                                                  "transparent",
+                                                color:
+                                                  theme.primary_color ||
+                                                  "#111827",
+                                                fontWeight: 600,
+                                                cursor: "pointer",
+                                              }}
+                                            >
+                                              {section.secondary_cta.text}
+                                            </button>
+                                          )}
+                                        </div>
+                                      )}
+                                    </div>
+{/* 
+                                    {isHero &&
+                                      section.image_direction && (
+                                        <div
+                                          style={{
+                                            minHeight: "320px",
+                                            borderRadius:
+                                              theme.border_radius ||
+                                              "18px",
+                                            background:
+                                              theme.surface_color ||
+                                              "#f3f4f6",
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent:
+                                              "center",
+                                            padding: "32px",
+                                            textAlign: "center",
+                                            color:
+                                              theme.muted_text_color ||
+                                              "#6b7280",
+                                            fontSize: "14px",
+                                            lineHeight: 1.6,
+                                          }}
+                                        >
+                                          {section.image_direction}
+                                        </div>
+                                      )} */}
+                                      {isHero && (
+                                        <div
+                                          style={{
+                                            minHeight: "500px",
+                                            borderRadius:
+                                              theme.border_radius ||
+                                              "24px",
+                                            // background: `
+                                            //   linear-gradient(
+                                            //     135deg,
+                                            //     ${
+                                            //       theme.primary_color ||
+                                            //       "#1f2937"
+                                            //     }18,
+                                            //     ${
+                                            //       theme.accent_color ||
+                                            //       "#d1a36f"
+                                            //     }35
+                                            //   )
+                                            // `,
+                                            background: `
+                                              linear-gradient(
+                                                145deg,
+                                                ${theme.primary_color || "#2f2f2f"} 0%,
+                                                ${theme.secondary_color || "#6b6258"} 55%,
+                                                ${theme.accent_color || "#c4a47c"} 100%
+                                              )
+                                            `,
+                                            boxShadow: "0 30px 70px rgba(0,0,0,0.14)",
+                                            transform: "translateY(12px)",
+                                            display: "flex",
+                                            alignItems: "flex-end",
+                                            justifyContent: "flex-start",
+                                            padding: "28px",
+                                            position: "relative",
+                                            overflow: "hidden",
+                                          }}
+                                        >
+                                          <div
+                                            style={{
+                                              position: "absolute",
+                                              inset: 0,
+                                              background: `
+                                                radial-gradient(
+                                                  circle at 70% 30%,
+                                                  ${
+                                                    theme.accent_color ||
+                                                    "#d1a36f"
+                                                  }30,
+                                                  transparent 45%
+                                                )
+                                              `,
+                                            }}
+                                          />
+
+                                          {section.image_direction && (
+                                            <div
+                                              style={{
+                                                position: "relative",
+                                                zIndex: 1,
+                                                maxWidth: "340px",
+                                                padding: "14px 16px",
+                                                borderRadius: "12px",
+                                                background:
+                                                  "rgba(255,255,255,0.82)",
+                                                backdropFilter: "blur(8px)",
+                                                fontSize: "13px",
+                                                lineHeight: 1.5,
+                                                color:
+                                                  theme.text_color ||
+                                                  "#111827",
+                                              }}
+                                            >
+                                              {section.image_direction}
+                                            </div>
+                                          )}
+                                        </div>
+                                      )}
+                                  </div>
+
+                                  {section.items?.length > 0 && (
+                                    <div
+                                      style={{
+                                        display: "grid",
+                                        gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
+                                        gap: "22px",
+                                        marginTop: "36px",
+                                      }}
+                                    >
+                                      {section.items.map(
+                                        (
+                                          item: any,
+                                          itemIndex: number,
+                                        ) => (
+                                          <article
+                                            key={itemIndex}
+                                            style={{
+                                              padding: "24px",
+                                              borderRadius:
+                                                theme.border_radius ||
+                                                "14px",
+                                              background:
+                                                theme.surface_color ||
+                                                "#ffffff",
+                                              boxShadow:
+                                                theme.shadow_style ||
+                                                "0 10px 30px rgba(0,0,0,0.06)",
+                                            }}
+                                          >
+                                            {item.label && (
+                                              <div
+                                                style={{
+                                                  fontSize: "12px",
+                                                  fontWeight: 700,
+                                                  marginBottom: "10px",
+                                                  color:
+                                                    theme.accent_color ||
+                                                    theme.primary_color,
+                                                }}
+                                              >
+                                                {item.label}
+                                              </div>
+                                            )}
+
+                                            <h3
+                                              style={{
+                                                fontSize: "20px",
+                                                marginBottom: "10px",
+                                              }}
+                                            >
+                                              {item.title}
+                                            </h3>
+
+                                            {item.description && (
+                                              <p
+                                                style={{
+                                                  fontSize: "15px",
+                                                  lineHeight: 1.7,
+                                                }}
+                                              >
+                                                {item.description}
+                                              </p>
+                                            )}
+                                          </article>
+                                        ),
+                                      )}
+                                    </div>
+                                  )}
+                                </section>
+                              );
+                            },
                           )}
                         </div>
                       </section>
@@ -410,6 +710,38 @@ export default function PreviewStage({
             })()}
           </div>
         </div>
+
+         <button
+          type="button"
+          onClick={() => {
+            setPreviewOpen(false);
+          }}
+          style={{
+            position: "fixed",
+            top: "20px",
+            right: "20px",
+            zIndex: 2147483647,
+            width: "46px",
+            height: "46px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: "50%",
+            border: "2px solid rgba(255,255,255,0.9)",
+            background: "#111827",
+            color: "#ffffff",
+            fontSize: "22px",
+            fontWeight: 700,
+            lineHeight: 1,
+            cursor: "pointer",
+            boxShadow: "0 8px 30px rgba(0,0,0,0.35)",
+          }}
+          aria-label="Close preview"
+        >
+          ✕
+        </button>
+      </>,
+        document.body
       )}
     </>
   );

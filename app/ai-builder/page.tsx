@@ -11,7 +11,7 @@ import Wizard from "@/components/ai-builder/wizard/Wizard";
 import BuildStage from "@/components/ai-builder/BuildStage";
 import PreviewStage from "@/components/ai-builder/PreviewStage";
 import TrustRow from "@/components/ai-builder/TrustRow";
-import FabWrap from "@/components/ai-builder/FabWrap";
+// import FabWrap from "@/components/ai-builder/FabWrap";
 import FabModal from "@/components/ai-builder/FabModal";
 import Header from "@/components/layout/Header";
 import { useAuth } from "@/lib/auth-context";
@@ -228,14 +228,14 @@ useEffect(() => {
         </div>
       </section>
 
-      <FabWrap
+      {/* <FabWrap
         fabReady={b.fabReady}
         fabOpen={b.fabOpen}
         onToggleOpen={() =>
           b.setFabOpen((open) => !open)
         }
         onOpenPanel={b.openPanel}
-      />
+      /> */}
 
       <FabModal
         modalOpen={b.modalOpen}

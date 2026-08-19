@@ -674,9 +674,6 @@ const readApiResponse = async (
         </div>
       </header>
 
-      <WishlistDrawer />
-      <EnquiryDrawer />
-
       <div
         className="mnav-scrim"
         onClick={closeMobileNav}
@@ -736,7 +733,7 @@ const readApiResponse = async (
             ))}
           </div>
 
-          
+
           <AuthControls
             mobile
             onLoginClick={() => {
@@ -778,6 +775,10 @@ const readApiResponse = async (
       </aside>
       </>
     )}
+
+
+      <WishlistDrawer />
+      <EnquiryDrawer />
     
       {/* changes made */}
       <AuthModal

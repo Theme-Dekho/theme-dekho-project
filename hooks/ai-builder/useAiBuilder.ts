@@ -84,6 +84,135 @@ export function useAiBuilder({
     };
   }, []);
 
+
+  useEffect(() => {
+  if (!sessionChecked || !isLoggedIn) {
+    return;
+  }
+
+  if (!API_BASE_URL) {
+    console.error(
+      "NEXT_PUBLIC_API_BASE_URL is not configured.",
+    );
+    return;
+  }
+
+  let cancelled = false;
+
+  const restoreGeneratedWebsite = async () => {
+    try {
+      const response = await fetch(
+        `${API_BASE_URL}/api/ai-websites/me`,
+        {
+          method: "GET",
+          credentials: "include",
+        },
+      );
+
+      if (cancelled) return;
+
+      if (response.status === 404) {
+        // User has never generated a website.
+        setWizardVisible(true);
+        return;
+      }
+
+      if (response.status === 410) {
+        // User already used generation, but website expired.
+        setWizardVisible(true);
+        setWizNavError(
+          "Your previously generated website has expired.",
+        );
+        return;
+      }
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.error(
+          "Unable to restore generated website:",
+          data,
+        );
+        return;
+      }
+
+      if (data.generation_status === "failed") {
+        // Previous AI attempt failed, so backend allows retry.
+        setWizardVisible(true);
+        return;
+      }
+
+      if (data.generation_status !== "completed") {
+        return;
+      }
+
+      setGeneratedWebsite(data);
+
+      setWizardVisible(false);
+      setBuildActive(false);
+      setBuildFillActive(false);
+
+      setPreviewUrl(
+        data.generated_url ?? "Website generated",
+      );
+
+      setPreviewHeadline(
+        `${data.business_name} website is ready`,
+      );
+
+      setPreviewDesc(
+        "Your previously generated AI website has been restored.",
+      );
+
+      setPreviewActive(true);
+      setFabReady(true);
+
+      setBizName(data.business_name ?? "");
+      setBizPhone(data.business_phone ?? "");
+      setBizEmail(data.business_email ?? "");
+      setBizAddress(data.business_address ?? "");
+      setBizExtra(data.business_description ?? "");
+
+      setSubIndustry(data.sub_industry ?? "");
+
+      setPages(
+        Array.isArray(data.selected_pages)
+          ? data.selected_pages.map((label: string) => ({
+              label,
+              checked: true,
+            }))
+          : [],
+      );
+
+      setFeatures(
+        Array.isArray(data.selected_features)
+          ? data.selected_features.map((label: string) => ({
+              label,
+              checked: true,
+            }))
+          : [],
+      );
+
+      setExpertName(data.business_name ?? "");
+      setExpertPhone(data.business_phone ?? "");
+    } catch (error) {
+      if (!cancelled) {
+        console.error(
+          "Generated website restore error:",
+          error,
+        );
+      }
+    }
+  };
+
+  void restoreGeneratedWebsite();
+
+  return () => {
+    cancelled = true;
+  };
+}, [sessionChecked, isLoggedIn]);
+
+
   function addTimeout(fn: () => void, ms: number) {
     const id = setTimeout(fn, ms);
     timeouts.current.push(id);

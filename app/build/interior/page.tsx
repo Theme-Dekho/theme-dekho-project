@@ -10,6 +10,7 @@ import AuthControls from "@/components/auth/AuthControls";
 import AuthModal from "@/components/auth/AuthModal";
 import { useAuth } from "@/lib/auth-context";
 import { trackEvent } from "@/lib/analytics/trackEvent";
+import PreviewStage from "@/components/ai-builder/PreviewStage";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -36,7 +37,7 @@ export default function InteriorBuilderPage() {
   const [isBuilding, setIsBuilding] = useState(false);
   const [buildProgress, setBuildProgress] = useState(0);
   const [generatedWebsite, setGeneratedWebsite] = useState<any | null>(null);
-  const [previewOpen, setPreviewOpen] = useState(false);
+  // const [previewOpen, setPreviewOpen] = useState(false);
   const [visitorId, setVisitorId] = useState("");
 
   const [pages, setPages] = useState([
@@ -317,6 +318,111 @@ export default function InteriorBuilderPage() {
       }
     };
 
+                      useEffect(() => {
+                    if (!sessionChecked) {
+                      return;
+                    }
+
+                    if (!isLoggedIn) {
+                      setGeneratedWebsite(null);
+                      return;
+                    }
+
+                    if (!API_BASE_URL) {
+                      return;
+                    }
+
+                    const restoreGeneratedWebsite = async () => {
+                      try {
+                        const response = await fetch(
+                          `${API_BASE_URL}/api/ai-websites/me`,
+                          {
+                            method: "GET",
+                            credentials: "include",
+                            cache: "no-store",
+                          },
+                        );
+
+                        if (response.status === 404) {
+                          return;
+                        }
+
+                        if (response.status === 410) {
+                          return;
+                        }
+
+                        const data = await response.json();
+
+                        if (!response.ok) {
+                          console.error(
+                            "Failed to restore generated website:",
+                            data,
+                          );
+                          return;
+                        }
+
+                        if (
+                          data.generation_status === "completed" &&
+                          data.generated_content
+                        ) {
+                          setGeneratedWebsite(data);
+
+                          setBusinessName(
+                            data.business_name ?? "",
+                          );
+
+                          setBusinessPhone(
+                            data.business_phone ?? "",
+                          );
+
+                          setBusinessEmail(
+                            data.business_email ?? "",
+                          );
+
+                          setBusinessAddress(
+                            data.business_address ?? "",
+                          );
+
+                          setBusinessDescription(
+                            data.business_description ?? "",
+                          );
+
+                          setSubIndustry(
+                            data.sub_industry ?? "",
+                          );
+
+                          if (
+                            Array.isArray(data.selected_pages) &&
+                            data.selected_pages.length > 0
+                          ) {
+                            setPages(data.selected_pages);
+                          }
+
+                          if (
+                            Array.isArray(data.selected_features)
+                          ) {
+                            setFeatures(
+                              data.selected_features,
+                            );
+                          }
+
+                          setIsBuilding(false);
+                          setBuildProgress(100);
+                        }
+                      } catch (error) {
+                        console.error(
+                          "Generated website restore error:",
+                          error,
+                        );
+                      }
+                    };
+
+                    void restoreGeneratedWebsite();
+                  }, [
+                    isLoggedIn,
+                    sessionChecked,
+                  ]);
+
 
   useEffect(() => {
     const params = new URLSearchParams(
@@ -486,813 +592,6 @@ setVisitorId(storedVisitorId);
             and writes your content instantly.
             </p>
 
-            {/* {generatedWebsite?.generated_content && (
-              <div className="generated-preview-shell">
-                {(() => {
-                  const website =
-                    generatedWebsite.generated_content;
-
-                  const theme = website.theme ?? {};
-                  const generatedPages =
-                    website.pages ?? [];
-
-                  return (
-                    <main
-                      style={{
-                        minHeight: "100vh",
-                        background:
-                          theme.secondary_color ||
-                          "#ffffff",
-                        color:
-                          theme.primary_color ||
-                          "#111111",
-                        fontFamily:
-                          theme.font_style ||
-                          "Arial, sans-serif",
-                      }}
-                    >
-                      <header
-                        style={{
-                          padding: "20px 6%",
-                          background:
-                            theme.primary_color ||
-                            "#111827",
-                          color: "#ffffff",
-                          display: "flex",
-                          justifyContent:
-                            "space-between",
-                          alignItems: "center",
-                          gap: "24px",
-                          flexWrap: "wrap",
-                        }}
-                      >
-                        <div>
-                          <strong
-                            style={{
-                              fontSize: "24px",
-                            }}
-                          >
-                            {website.business_name}
-                          </strong>
-
-                          {website.tagline && (
-                            <div
-                              style={{
-                                marginTop: "4px",
-                                fontSize: "13px",
-                                opacity: 0.85,
-                              }}
-                            >
-                              {website.tagline}
-                            </div>
-                          )}
-                        </div>
-
-                        <nav
-                          style={{
-                            display: "flex",
-                            gap: "18px",
-                            flexWrap: "wrap",
-                          }}
-                        >
-                          {generatedPages.map(
-                            (page: any) => (
-                              <a
-                                key={page.slug}
-                                href={`#${page.slug}`}
-                                style={{
-                                  color: "#ffffff",
-                                  textDecoration: "none",
-                                }}
-                              >
-                                {page.page_name}
-                              </a>
-                            ),
-                          )}
-                        </nav>
-                      </header>
-
-                      {generatedPages.map(
-                        (
-                          page: any,
-                          pageIndex: number,
-                        ) => (
-                          <section
-                            key={page.slug}
-                            id={page.slug}
-                            style={{
-                              padding: "70px 8%",
-                              background:
-                                pageIndex % 2 === 0
-                                  ? "#ffffff"
-                                  : theme.secondary_color ||
-                                    "#f8fafc",
-                            }}
-                          >
-                            <div
-                              style={{
-                                maxWidth: "1100px",
-                                margin: "0 auto",
-                              }}
-                            >
-                              <h1
-                                style={{
-                                  fontSize: "40px",
-                                  marginBottom: "40px",
-                                }}
-                              >
-                                {page.page_name}
-                              </h1>
-
-                              {page.sections?.map(
-                                (
-                                  section: any,
-                                  sectionIndex: number,
-                                ) => (
-                                  <div
-                                    key={`${page.slug}-${sectionIndex}`}
-                                    style={{
-                                      marginBottom:
-                                        "48px",
-                                    }}
-                                  >
-                                    {section.heading && (
-                                      <h2>
-                                        {
-                                          section.heading
-                                        }
-                                      </h2>
-                                    )}
-
-                                    {section.subheading && (
-                                      <p>
-                                        {
-                                          section.subheading
-                                        }
-                                      </p>
-                                    )}
-
-                                    {section.content && (
-                                      <p>
-                                        {
-                                          section.content
-                                        }
-                                      </p>
-                                    )}
-
-                                    {section.cta_text && (
-                                      <button
-                                        type="button"
-                                        style={{
-                                          marginTop:
-                                            "20px",
-                                          padding:
-                                            "12px 22px",
-                                          border: "none",
-                                          borderRadius:
-                                            "6px",
-                                          background:
-                                            theme.accent_color ||
-                                            theme.primary_color ||
-                                            "#2563eb",
-                                          color:
-                                            "#ffffff",
-                                          cursor:
-                                            "pointer",
-                                        }}
-                                      >
-                                        {
-                                          section.cta_text
-                                        }
-                                      </button>
-                                    )}
-                                  </div>
-                                ),
-                              )}
-                            </div>
-                          </section>
-                        ),
-                      )}
-
-                      <footer
-                        style={{
-                          padding: "40px 8%",
-                          background:
-                            theme.primary_color ||
-                            "#111827",
-                          color: "#ffffff",
-                        }}
-                      >
-                        <h3>
-                          {website.business_name}
-                        </h3>
-
-                        {website.phone && (
-                          <p>
-                            Phone: {website.phone}
-                          </p>
-                        )}
-
-                        {website.email && (
-                          <p>
-                            Email: {website.email}
-                          </p>
-                        )}
-
-                        {website.address && (
-                          <p>
-                            Address: {website.address}
-                          </p>
-                        )}
-                      </footer>
-                    </main>
-                  );
-                })()}
-              </div>
-            )}   */}
-
-          {/* =========================
-              WIZARD
-          ========================= */}
-          {/* {!isBuilding && (
-            <div className="ai-wizard">
-
-              {!generatedWebsite ? (
-                  <>
-                  </>
-                ) : (
-                  <div
-                    style={{
-                      textAlign: "center",
-                      padding: "48px 24px",
-                    }}
-                  >
-                    <div
-                      style={{
-                        fontSize: "48px",
-                        marginBottom: "16px",
-                      }}
-                    >
-                      ✅
-                    </div>
-
-                    <h2
-                      style={{
-                        marginBottom: "12px",
-                      }}
-                    >
-                      Your website is ready
-                    </h2>
-
-                    <p
-                      style={{
-                        marginBottom: "24px",
-                        opacity: 0.8,
-                      }}
-                    >
-                      Your AI-generated website has been created successfully.
-                    </p>
-
-                    <button
-                      type="button"
-                      className="btn btn-wiz-next"
-                      onClick={() => {
-                        setPreviewOpen(true);
-                      }}
-                    >
-                      👁 Preview Website
-                    </button>
-                  </div>
-                )}
-
-            <div className="wizard-progress">
-
-              <div
-                className={getStepClassName(1)}
-              >
-                <span className="num">
-                {currentStep > 1 ? "✓" : "1"}
-                </span>
-
-                <span className="label">
-                  Industry
-                </span>
-              </div>
-
-              <div className="wizard-connector" />
-
-              <div 
-              className={getStepClassName(2)}
-              >
-                <span className="num">
-                {currentStep > 2 ? "✓" : "2"}
-                </span>
-
-                <span className="label">
-                  Specialisation
-                </span>
-              </div>
-
-              <div className="wizard-connector" />
-
-              <div 
-              className={getStepClassName(3)}
-              >
-                <span className="num">
-                {currentStep > 3 ? "✓" : "3"}
-                </span>
-
-                <span className="label">
-                  Pages & Features
-                </span>
-              </div>
-
-              <div className="wizard-connector" />
-
-              <div 
-              className={getStepClassName(4)}
-              >
-                <span className="num">
-                  4
-                </span>
-
-                <span className="label">
-                  Business Info
-                </span>
-              </div>
-            </div>
-
-            {currentStep === 1 && (
-              <div className="wizard-panel active">
-                <div className="wiz-card">
-                  <span className="wiz-label">
-                    Which industry is your business in?
-                  </span>
-
-                  <p className="wiz-sub">
-                    This helps our AI pick the right layout, pages, and
-                    features for you.
-                  </p>
-
-                  <div className="select-wrap">
-                    <select
-                      className="wiz-select"
-                      defaultValue="interior"
-                    >
-                      <option value="interior">
-                        Interior & Architecture
-                      </option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            )}
-
-           
-            {currentStep === 2 && (
-              <div className="wizard-panel active">
-                <div className="wiz-card">
-                  <span className="wiz-label">
-                    Choose your specialisation
-                  </span>
-
-                  <p className="wiz-sub">
-                    Pick the option closest to your business.
-                  </p>
-
-                  <div className="select-wrap">
-                    <select
-                      className="wiz-select"
-                      value={subIndustry}
-                      onChange={(event) => {
-                        const value = event.target.value;
-
-                        setSubIndustry(value);
-
-                        void trackEvent({
-                          eventName: "subcategory_selected",
-                          pageUrl: window.location.pathname,
-                          elementName: "sub_industry",
-                          metadata: {
-                            value,
-                            industry: "interior",
-                          },
-                        });
-                      }}
-                    >
-                      <option
-                        value=""
-                        disabled
-                      >
-                        Select sub-industry
-                      </option>
-
-                      <option value="residential-interior-design">
-                        Residential Interior Design
-                      </option>
-
-                      <option value="commercial-interior-design">
-                        Commercial Interior Design
-                      </option>
-
-                      <option value="architecture-firm">
-                        Architecture Firm
-                      </option>
-
-                      <option value="modular-kitchen-furniture">
-                        Modular Kitchen & Furniture
-                      </option>
-
-                      <option value="other">
-                        Other
-                      </option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {currentStep === 3 && (
-              <div className="wizard-panel active">
-                <div className="wiz-card">
-
-                  <div className="wiz-block">
-                    <span className="wiz-label">
-                      Pages for your website
-                    </span>
-
-                    <p className="wiz-sub">
-                      Default pages are pre-selected based on your industry.
-                    </p>
-
-                    <div className="chip-list">
-                      {pages.map((page) => (
-                        <label
-                            key={page}
-                            className="chip-check checked"
-                            >
-                            <input
-                                type="checkbox"
-                                checked
-                               onChange={() => {
-                                const updatedPages = pages.filter(
-                                  (item) => item !== page
-                                );
-
-                                setPages(updatedPages);
-
-                                void trackEvent({
-                                  eventName: "button_clicked",
-                                  pageUrl: window.location.pathname,
-                                  elementName: "page_removed",
-                                  metadata: {
-                                    page,
-                                    remaining_pages: updatedPages,
-                                  },
-                                });
-                              }}
-                            />
-
-                            <span className="tick">
-                                ✕
-                            </span>
-
-                            {page}
-                            </label>
-                      ))}
-                    </div>
-
-                    <div className="add-chip-form">
-                      <input
-                        type="text"
-                        value={customPage}
-                        placeholder="Add a custom page e.g. Careers"
-                        onChange={(event) => {
-                          setCustomPage(event.target.value);
-                        }}
-                      />
-
-                      <button
-                        type="button"
-                        className="btn-add-chip"
-                        onClick={() => {
-                          const value = customPage.trim();
-
-                          if (!value) {
-                            return;
-                          }
-
-                          if (pages.includes(value)) {
-                            return;
-                          }
-
-                          setPages((current) => {
-                            if (current.includes(value)) {
-                              return current;
-                            }
-
-                            return [
-                              ...current,
-                              value,
-                            ];
-                          });
-
-                           void trackEvent({
-                            eventName: "button_clicked",
-                            pageUrl: window.location.pathname,
-                            elementName: "custom_page_added",
-                            metadata: {
-                              page: value,
-                            },
-                          });
-
-                          setCustomPage("");
-                        }}
-                      >
-                        + Add Page
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="wiz-block">
-                    <span className="wiz-label">
-                      Website features
-                    </span>
-
-                    <p className="wiz-sub">
-                      Recommended features for your Interior website.
-                    </p>
-
-                    <div className="chip-list">
-                      {features.map((feature) => (
-                        <label
-                            key={feature}
-                            className="chip-check checked"
-                            >
-                            <input
-                                type="checkbox"
-                                checked
-                                onChange={() => {
-                                  const updatedFeatures = features.filter(
-                                    (item) => item !== feature
-                                  );
-
-                                  setFeatures(updatedFeatures);
-
-                                  void trackEvent({
-                                    eventName: "button_clicked",
-                                    pageUrl: window.location.pathname,
-                                    elementName: "feature_removed",
-                                    metadata: {
-                                      feature,
-                                      remaining_features: updatedFeatures,
-                                    },
-                                  });
-                                }}
-                            />
-
-                            <span className="tick">
-                                ✕
-                            </span>
-
-                            {feature}
-                            </label>
-                      ))}
-                    </div>
-
-                    <div className="add-chip-form">
-                      <input
-                        type="text"
-                        value={customFeature}
-                        placeholder="Add a custom / add-on feature"
-                        onChange={(event) => {
-                          setCustomFeature(event.target.value);
-                        }}
-                      />
-
-                      <button
-                        type="button"
-                        className="btn-add-chip"
-                        onClick={() => {
-                          const value =
-                            customFeature.trim();
-
-                          if (!value) {
-                            return;
-                          }
-
-                           if (features.includes(value)) {
-                              return;
-                            }
-
-                          setFeatures((current) => {
-                            if (current.includes(value)) {
-                              return current;
-                            }
-
-                            return [
-                              ...current,
-                              value,
-                            ];
-                          });
-
-                            void trackEvent({
-                            eventName: "button_clicked",
-                            pageUrl: window.location.pathname,
-                            elementName: "custom_feature_added",
-                            metadata: {
-                              feature: value,
-                            },
-                          });
-
-                          setCustomFeature("");
-                        }}
-                      >
-                        + Add Feature
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {currentStep === 4 && (
-                <div className="wizard-panel active">
-                    <div className="wiz-card">
-                    <span className="wiz-label">
-                        Tell us about your business
-                    </span>
-
-                    <p className="wiz-sub">
-                        Our AI uses this to personalise your content, logo, and contact details.
-                    </p>
-
-                    <div className="wiz-field full logo-field">
-                        <label>Business Logo</label>
-
-                        <div className="logo-upload">
-                            <div className="logo-preview">
-                            {businessLogo ? (
-                                <img
-                                src={businessLogo}
-                                alt="Business logo preview"
-                                />
-                            ) : (
-                                <span>🖼️</span>
-                            )}
-                            </div>
-
-                            <button
-                            type="button"
-                            className="btn-upload-logo"
-                            onClick={() => {
-                                logoInputRef.current?.click();
-                            }}
-                            >
-                            Upload Logo
-                            </button>
-
-                            <input
-                            ref={logoInputRef}
-                            type="file"
-                            accept="image/*"
-                            hidden
-                            onChange={(event) => {
-                                const file = event.target.files?.[0];
-
-                                if (!file) {
-                                return;
-                                }
-
-                                const reader = new FileReader();
-
-                                reader.onload = () => {
-                                if (typeof reader.result === "string") {
-                                    setBusinessLogo(reader.result);
-                                }
-                                };
-
-                                reader.readAsDataURL(file);
-                            }}
-                            />
-                        </div>
-                        </div>
-
-                    <div className="wiz-grid">
-
-                        <div className="wiz-field full">
-                        <label>Business Name *</label>
-
-                        <input
-                            type="text"
-                            value={businessName}
-                            placeholder="e.g. Sunrise Interiors"
-                            onChange={(event) => {
-                            setBusinessName(event.target.value);
-                            }}
-                        />
-                        </div>
-
-                        <div className="wiz-field">
-                        <label>Phone Number *</label>
-
-                        <input
-                            type="tel"
-                            value={businessPhone}
-                            placeholder="10-digit mobile number"
-                            onChange={(event) => {
-                            setBusinessPhone(event.target.value);
-                            }}
-                        />
-                        </div>
-
-                        <div className="wiz-field">
-                        <label>Email Address</label>
-
-                        <input
-                            type="email"
-                            value={businessEmail}
-                            placeholder="you@business.com"
-                            onChange={(event) => {
-                            setBusinessEmail(event.target.value);
-                            }}
-                        />
-                        </div>
-
-                        <div className="wiz-field full">
-                        <label>Business Address</label>
-
-                        <input
-                            type="text"
-                            value={businessAddress}
-                            placeholder="City, State"
-                            onChange={(event) => {
-                            setBusinessAddress(event.target.value);
-                            }}
-                        />
-                        </div>
-
-                        <div className="wiz-field full">
-                        <div className="describe-label-row">
-                            <label>
-                            Describe Your Business
-                            </label>
-
-                            <span className="describe-ai-badge">
-                            ✨ AI uses this most
-                            </span>
-                        </div>
-
-                        <div className="describe-box">
-                            <textarea
-                            value={businessDescription}
-                            placeholder="Describe your business — services you offer, tone, colours you like, and anything else the AI should know..."
-                            onChange={(event) => {
-                                setBusinessDescription(event.target.value);
-                            }}
-                            />
-                        </div>
-                        </div>
-
-                    </div>
-                    </div>
-                </div>
-                )}
-
-            {wizardError && (
-                <p className="wiz-nav-error">
-                    {wizardError}
-                </p>
-                )}
-
-            <div className="wiz-nav">
-            <button
-                type="button"
-                className="btn btn-wiz-back"
-                disabled={currentStep === 1}
-                onClick={() => {
-                setWizardError("");
-
-                setCurrentStep((step) =>
-                    Math.max(1, step - 1)
-                );
-                }}
-            >
-                ← Back
-            </button>
-
-            <button
-                type="button"
-                className="btn btn-wiz-next"
-                onClick={handleNextStep}
-            >
-                {currentStep === 4
-                ? "✨ Free Website Build with AI"
-                : "Next →"}
-            </button>
-            </div>
-          </div>
-          )} */}
           {!isBuilding && (
             <div className="ai-wizard">
               {!generatedWebsite ? (
@@ -1870,52 +1169,23 @@ setVisitorId(storedVisitorId);
                     </button>
                   </div>
                 </>
-              ) : (
-                <div
-                  style={{
-                    textAlign: "center",
-                    padding: "48px 24px",
-                  }}
-                >
-                  <div
-                    style={{
-                      fontSize: "48px",
-                      marginBottom: "16px",
-                    }}
-                  >
-                    ✅
-                  </div>
-
-                  <h2
-                    style={{
-                      marginBottom: "12px",
-                    }}
-                  >
-                    Your website is ready
-                  </h2>
-
-                  <p
-                    style={{
-                      marginBottom: "24px",
-                      opacity: 0.8,
-                    }}
-                  >
-                    Your AI-generated website has been created successfully.
-                  </p>
-
-                  <button
-                    type="button"
-                    className="btn btn-wiz-next"
-                    onClick={() => {
-                      setPreviewOpen(true);
-                    }}
-                  >
-                    👁 Preview Website
-                  </button>
-                </div>
-              )}
+              ) : null}
             </div>
           )}
+
+          {/* New Preview Addition */}
+          {generatedWebsite?.generated_content && (
+          <PreviewStage
+            previewStageRef={{ current: null }}
+            previewUrl={
+              generatedWebsite.generated_url ||
+              "yourbusiness.themedekho.com"
+            }
+            previewHeadline="Your website is ready"
+            previewDesc="Your AI-generated website has been created successfully."
+            generatedWebsite={generatedWebsite}
+          />
+        )}
         </div>
 
         {isBuilding &&
@@ -2321,7 +1591,7 @@ setVisitorId(storedVisitorId);
       />
 
       {/* New Addition */}
-      {previewOpen &&
+      {/* {previewOpen &&
         generatedWebsite?.generated_content && (
           <div
             style={{
@@ -2608,7 +1878,7 @@ setVisitorId(storedVisitorId);
               })()}
             </div>
           </div>
-        )}
+        )} */}
     </>
   );
 }

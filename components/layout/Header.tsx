@@ -10,7 +10,7 @@ import {
 } from "react";
 import Image from "next/image";
 import Link from "next/link";
-
+import { usePathname } from "next/navigation";
 import MegaMenu from "@/components/navigation/MegaMenu";
 import {
   customDevLinks,
@@ -57,6 +57,7 @@ export default function Header({
   showNavigation = true,
   modalOnly = false,
 }: HeaderProps) {
+  const pathname = usePathname();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const [mobileAccOpen, setMobileAccOpen] = useState(false);
 
@@ -614,11 +615,22 @@ const readApiResponse = async (
 
           {showNavigation && (
           <nav>
-            <div className="nav-item active">
+            {/* <div className="nav-item active"> */}
+            <div className={cn("nav-item",
+            pathname === "/" && "active",
+            )}  
+            >
               <Link href="/">Home</Link>
             </div>
 
-            <div className="nav-item">
+            {/* <div className="nav-item"> */}
+            <div className={cn("nav-item",
+              (
+                pathname.startsWith("/categories/") ||
+                pathname.startsWith("/products/")
+              ) && "active",
+            )}
+          >
               <Link href="#">
                 Our Work <span className="arrow">▾</span>
               </Link>
@@ -626,7 +638,16 @@ const readApiResponse = async (
               <MegaMenu />
             </div>
 
-            <div className="nav-item">
+            {/* <div className="nav-item"> */}
+            <div className={cn("nav-item",
+              (pathname.startsWith("/custom-web-development") ||
+              pathname.startsWith("/shopify-development") ||
+              pathname.startsWith("/wordpress-development") ||
+              pathname.startsWith("/ecommerce-development")
+              ) &&
+                "active",
+            )}
+          >
               <Link href="#">
                 Custom web development{" "}
                 <span className="arrow">▾</span>
@@ -645,14 +666,20 @@ const readApiResponse = async (
               </div>
             </div>
 
-            <div className="nav-item">
-              <Link href="#">
+            <div className={cn("nav-item",
+            pathname === "/redesign-wordpress" && "active",
+            )}  
+            >
+              <Link href="/redesign-wordpress">
                 Redesign WordPress Website
               </Link>
             </div>
 
-            <div className="nav-item">
-              <Link href="#">Contact us</Link>
+            <div className={cn("nav-item",
+            pathname === "/contact" && "active",
+            )}  
+            >
+              <Link href="/contact">Contact us</Link>
             </div>
           </nav>
           )}

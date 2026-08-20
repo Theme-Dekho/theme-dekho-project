@@ -1,14 +1,11 @@
 
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import FeatureStrip from "@/components/category/FeatureStrip";
 import { interiorProducts } from "@/constants/interior-products";
 import { healthcareCategoryProducts } from "@/constants/healthcare-products";
-
-// import CategoryBreadcrumb from "@/components/category/CategoryBreadcrumb";
 import CategoryHero from "@/components/category/CategoryHero";
 import { categoryData } from "@/constants/category-data";
 import CategoryContent from "@/components/category/CategoryContent";
@@ -60,7 +57,7 @@ export default async function CategoryPage({
 
   return (
     <>
-    <Header showNavigation={false}/>
+    <Header />
     <main className="category-page">
       {/* <CategoryBreadcrumb categoryName={currentCategory.name} /> */}
 

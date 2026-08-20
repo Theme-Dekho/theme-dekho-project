@@ -25,19 +25,22 @@ export default function ProductReviews({
 }: ProductReviewsProps) {
   return (
     <section
-      className="product-section product-reviews-section"
+      className="product-reviews-section"
       id="customer-reviews"
     >
       <div className="product-section-inner">
-        <h2 className="product-section-title">
-          Customer Reviews
-        </h2>
 
-        <p className="product-section-subtitle">
-          What our clients say about this website template
-        </p>
+        <div className="product-reviews-heading">
+          <h2>Customer Reviews</h2>
+
+          <p>
+            What our clients say about this website template
+          </p>
+        </div>
 
         <div className="product-reviews-summary">
+
+          {/* SCORE */}
           <div className="product-rating-overview">
             <strong className="product-rating-large">
               {rating}
@@ -55,6 +58,7 @@ export default function ProductReviews({
             </span>
           </div>
 
+          {/* DISTRIBUTION */}
           <div className="product-rating-bars">
             {ratingBreakdown.map((item) => (
               <div
@@ -62,7 +66,7 @@ export default function ProductReviews({
                 key={item.stars}
               >
                 <span className="product-rating-label">
-                  {item.stars}★
+                  {item.stars} ★
                 </span>
 
                 <div className="product-rating-track">
@@ -80,8 +84,10 @@ export default function ProductReviews({
               </div>
             ))}
           </div>
+
         </div>
 
+        {/* REVIEW CARDS */}
         <div className="product-reviews-list">
           {reviews.map((review) => (
             <article
@@ -89,6 +95,7 @@ export default function ProductReviews({
               key={review.id}
             >
               <div className="product-review-header">
+
                 <div
                   className="product-review-avatar"
                   style={{
@@ -114,6 +121,7 @@ export default function ProductReviews({
                 >
                   {renderStars(review.rating)}
                 </div>
+
               </div>
 
               <p className="product-review-text">
@@ -122,6 +130,7 @@ export default function ProductReviews({
             </article>
           ))}
         </div>
+
       </div>
     </section>
   );

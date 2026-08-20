@@ -98,10 +98,10 @@ export const megaMenuColumns: MegaMenuColumn[] = [
 
 /** "Custom web development" simple dropdown */
 export const customDevLinks: SimpleDropLink[] = [
-  { label: "WordPress Development", href: "#" },
-  { label: "Shopify Development", href: "#" },
-  { label: "E-commerce website", href: "#" },
-  { label: "Custom web development", href: "#" },
+  { label: "WordPress Development", href: "/wordpress-development"},
+  { label: "Shopify Development", href: "/shopify-development" },
+  { label: "E-commerce Development", href: "/ecommerce-development" },
+  { label: "Custom web Development", href: "/custom-web-development" },
 ];
 
 /** Primary nav items rendered in the desktop header */
@@ -109,7 +109,7 @@ export const primaryNav = [
   { label: "Home", href: "#", active: true },
   { label: "Our Work", href: "#", hasMegaMenu: true },
   { label: "Custom web development", href: "#", hasSimpleDropdown: true },
-  { label: "Redesign WordPress Website", href: "#" },
+  { label: "Redesign WordPress Website", href: "/redesign-wordpress" },
   { label: "Contact us", href: "#" },
 ] as const;
 

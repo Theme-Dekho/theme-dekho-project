@@ -291,9 +291,21 @@ export default function QuoteModal() {
                   type="text"
                   placeholder="e.g. Rahul Sharma"
                   value={name}
+                  // onChange={(event) => {
+                  //   setName(event.target.value);
+                  //   setError("");
+                  // }}
                   onChange={(event) => {
-                    setName(event.target.value);
-                    setError("");
+                    const value = event.target.value;
+                    const wordCount = value
+                      .trim()
+                      .split(/\s+/)
+                      .filter(Boolean).length;
+
+                    if (wordCount <= 100) {
+                      setMessage(value);
+                      setError("");
+                    }
                   }}
                 />
               </div>
@@ -433,10 +445,10 @@ export default function QuoteModal() {
               </button>
             </div>
 
-            <p className="quote-note">
+            {/* <p className="quote-note">
               🔒 Your information is safe.{" "}
               <span>We never share your data.</span>
-            </p>
+            </p> */}
           </>
         )}
         </div>

@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import ProductFeatures from "@/components/product/ProductFeatures";
+import ProductFeaturesIncluded from "@/components/product/ProductFeaturesIncluded";
 import ProductPackage from "@/components/product/ProductPackage";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -8,6 +8,9 @@ import { productDetails } from "@/constants/product-details";
 import ProductSpecifications from "@/components/product/ProductSpecifications";
 import ProductReviews from "@/components/product/ProductReviews";
 import QuoteModal from "@/components/modal/QuoteModal";
+import ProductDeliveryProcess from "@/components/product/ProductDeliveryProcess";
+import ProductFaq from "@/components/product/ProductFaq";
+import ProductStickyBar from "@/components/product/ProductStickyBar";
 
 import "@/styles/product-detail.css";
 
@@ -30,14 +33,17 @@ export default async function ProductPage({
 
   return (
     <>
-      <Header showNavigation={false} />
+      <Header />
 
       <main className="product-detail-page">
         <ProductHero product={product} />
-        <ProductFeatures features={product.features} />
+        {/* <ProductFeaturesIncluded features={product.features} /> */}
+        <ProductFeaturesIncluded 
+        features={product.features} 
+        packageIncludes={product.packageIncludes}
+        />
 
         <ProductPackage 
-        packageIncludes={product.packageIncludes}
         addons={product.addons}
         />
 
@@ -45,12 +51,17 @@ export default async function ProductPage({
         specifications={product.specifications}
         />
 
+        <ProductDeliveryProcess />
+
         <ProductReviews
         rating={product.rating}
         reviewCount={product.reviewCount}
         ratingBreakdown={product.ratingBreakdown}
         reviews={product.reviews}
         />
+
+      <ProductFaq />
+      <ProductStickyBar product={product}  />
       </main>
 
       <Footer />

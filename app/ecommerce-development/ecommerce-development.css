@@ -1,0 +1,2129 @@
+.ecommerce-development-page {
+  --blue-700: #123fc0;
+  --blue-600: #1b4de4;
+  --blue-500: #3d6bf5;
+  --blue-100: #dce6ff;
+  --blue-050: #eef3ff;
+
+  --ink: #0f172a;
+  --text: #4a5a66;
+  --muted: #8792a3;
+  --line: #e7ecf3;
+  --wash: #f7f9fc;
+
+  --shadow-sm:
+    0 1px 3px rgba(15, 23, 42, 0.05);
+
+  --shadow-md:
+    0 8px 30px rgba(15, 23, 42, 0.08);
+
+  color: var(--text);
+
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+
+/* =========================================
+   HERO
+========================================= */
+
+.ecommerce-hero {
+  padding: 0;
+
+  border-bottom: 1px solid var(--line);
+
+  background:
+    radial-gradient(
+      1100px 500px at 80% -10%,
+      var(--blue-050),
+      transparent 60%
+    ),
+    #ffffff;
+}
+
+.ecommerce-hero-inner {
+  display: grid;
+
+  grid-template-columns:
+    1.15fr
+    0.85fr;
+
+  align-items: center;
+
+  gap: 56px;
+
+  width: 100%;
+  max-width: 1180px;
+
+  margin: 0 auto;
+
+  padding: 76px 32px 80px;
+}
+
+
+/* =========================================
+   LEFT CONTENT
+========================================= */
+
+.ecommerce-hero-chip {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 8px;
+
+  margin-bottom: 22px;
+
+  padding: 6px 14px;
+
+  border: 1px solid var(--blue-100);
+  border-radius: 999px;
+
+  background: #ffffff;
+
+  color: var(--blue-700);
+
+  font-size: 12px;
+  font-weight: 600;
+
+  box-shadow: var(--shadow-sm);
+}
+
+.ecommerce-hero-chip > span {
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: var(--blue-600);
+}
+
+.ecommerce-hero-content h1 {
+  margin: 0 0 20px;
+
+  color: var(--ink);
+
+  font-family:
+    "Sora",
+    "Inter",
+    sans-serif;
+
+  font-size: 52px;
+  font-weight: 800;
+
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+}
+
+.ecommerce-hero-content h1 > span {
+  color: var(--blue-600);
+}
+
+.ecommerce-hero-description {
+  max-width: 500px;
+
+  margin: 0 0 22px;
+
+  color: var(--text);
+
+  font-size: 17px;
+  line-height: 1.65;
+}
+
+
+/* =========================================
+   HERO POINTS
+========================================= */
+
+.ecommerce-hero-points {
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+
+  margin: 0 0 30px;
+  padding: 0;
+
+  list-style: none;
+}
+
+.ecommerce-hero-points li {
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+
+  color: var(--ink);
+
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.ecommerce-hero-points li::before {
+  content: "✓";
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  width: 22px;
+  height: 22px;
+
+  border-radius: 50%;
+
+  background: var(--blue-050);
+  color: var(--blue-600);
+
+  font-size: 12px;
+  font-weight: 800;
+}
+
+
+/* =========================================
+   CTA BUTTONS
+========================================= */
+
+.ecommerce-hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 12px;
+
+  margin-bottom: 34px;
+}
+
+.ecommerce-primary-button,
+.ecommerce-secondary-button {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 13px 24px;
+
+  border-radius: 10px;
+
+  font-family:
+    "Sora",
+    "Inter",
+    sans-serif;
+
+  font-size: 14.5px;
+  font-weight: 600;
+
+  line-height: 1.2;
+
+  text-decoration: none;
+
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.ecommerce-primary-button {
+  border: 0;
+
+  background: var(--blue-600);
+  color: #ffffff;
+
+  box-shadow:
+    0 6px 18px rgba(27, 77, 228, 0.28);
+}
+
+.ecommerce-primary-button:hover {
+  background: var(--blue-500);
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 12px 26px rgba(27, 77, 228, 0.36);
+}
+
+.ecommerce-secondary-button {
+  border: 1.5px solid var(--line);
+
+  background: transparent;
+  color: var(--ink);
+}
+
+.ecommerce-secondary-button:hover {
+  border-color: var(--blue-600);
+
+  color: var(--blue-600);
+}
+
+
+/* =========================================
+   HERO STATS
+========================================= */
+
+.ecommerce-hero-stats {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 30px;
+}
+
+.ecommerce-hero-stats > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.ecommerce-hero-stats strong {
+  color: var(--ink);
+
+  font-family:
+    "Sora",
+    "Inter",
+    sans-serif;
+
+  font-size: 24px;
+  font-weight: 800;
+
+  line-height: 1;
+}
+
+.ecommerce-hero-stats span {
+  margin-top: 3px;
+
+  color: var(--muted);
+
+  font-size: 12.5px;
+}
+
+
+/* =========================================
+   LEAD CARD
+========================================= */
+
+.ecommerce-lead-card {
+  padding: 26px;
+
+  border: 1px solid var(--line);
+  border-radius: 18px;
+
+  background: #ffffff;
+
+  box-shadow: var(--shadow-md);
+}
+
+.ecommerce-lead-card h2 {
+  margin: 0 0 4px;
+
+  color: var(--ink);
+
+  font-family:
+    "Sora",
+    "Inter",
+    sans-serif;
+
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.ecommerce-lead-card > p {
+  margin: 0 0 18px;
+
+  color: var(--muted);
+
+  font-size: 13px;
+}
+
+
+/* =========================================
+   LEAD FORM
+========================================= */
+
+.ecommerce-lead-form {
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  gap: 10px;
+}
+
+.ecommerce-lead-form input,
+.ecommerce-lead-form select {
+  width: 100%;
+
+  padding: 11px 13px;
+
+  border: 1.5px solid var(--line);
+  border-radius: 9px;
+
+  outline: none;
+
+  background: var(--wash);
+  color: var(--ink);
+
+  font-family:
+    "Inter",
+    sans-serif;
+
+  font-size: 13.5px;
+
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.ecommerce-lead-form input:focus,
+.ecommerce-lead-form select:focus {
+  border-color: var(--blue-500);
+
+  background: #ffffff;
+}
+
+.ecommerce-lead-form .full {
+  grid-column: 1 / -1;
+}
+
+
+/* captcha */
+
+.ecommerce-captcha {
+  grid-column: 1 / -1;
+
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  color: var(--ink);
+
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+.ecommerce-captcha input {
+  width: 72px;
+}
+
+
+/* submit */
+
+.ecommerce-submit-button {
+  grid-column: 1 / -1;
+
+  padding: 13px;
+
+  border: 0;
+  border-radius: 10px;
+
+  background: var(--blue-600);
+  color: #ffffff;
+
+  font-family:
+    "Sora",
+    "Inter",
+    sans-serif;
+
+  font-size: 14.5px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 6px 18px rgba(27, 77, 228, 0.3);
+
+  transition:
+    background 0.18s ease,
+    transform 0.18s ease;
+}
+
+.ecommerce-submit-button:hover {
+  background: var(--blue-500);
+
+  transform: translateY(-1px);
+}
+
+
+/* =========================================
+   RESPONSIVE
+========================================= */
+
+@media (max-width: 960px) {
+  .ecommerce-hero-inner {
+    grid-template-columns: 1fr;
+
+    gap: 40px;
+
+    padding: 56px 32px 60px;
+  }
+
+  .ecommerce-hero-content h1 {
+    font-size: 40px;
+  }
+
+  .ecommerce-lead-card {
+    max-width: 460px;
+  }
+}
+
+@media (max-width: 600px) {
+  .ecommerce-hero-inner {
+    padding: 44px 20px 50px;
+  }
+
+  .ecommerce-hero-content h1 {
+    font-size: 33px;
+  }
+
+  .ecommerce-lead-form {
+    grid-template-columns: 1fr;
+  }
+
+  .ecommerce-lead-form .full,
+  .ecommerce-captcha,
+  .ecommerce-submit-button {
+    grid-column: 1;
+  }
+
+  .ecommerce-hero-stats {
+    gap: 22px;
+  }
+}
+
+/* =========================================
+   AWARD STRIP
+========================================= */
+
+.ecommerce-awards {
+  padding: 36px 0;
+
+  border-bottom: 1px solid var(--line);
+
+  background: var(--wash);
+}
+
+.ecommerce-awards-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 40px;
+
+  max-width: 1180px;
+
+  margin: 0 auto;
+
+  padding: 0 32px;
+}
+
+.ecommerce-awards-label {
+  color: var(--muted);
+
+  font-size: 12.5px;
+  font-weight: 600;
+
+  letter-spacing: 0.02em;
+
+  white-space: nowrap;
+}
+
+.ecommerce-awards-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+
+  gap: 34px;
+}
+
+.ecommerce-award-item {
+  display: flex;
+  flex-direction: column;
+
+  line-height: 1.2;
+}
+
+.ecommerce-award-item strong {
+  color: var(--ink);
+
+  font-family:
+    "Sora",
+    "Inter",
+    sans-serif;
+
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.ecommerce-award-item span {
+  color: var(--muted);
+
+  font-size: 11px;
+}
+
+@media (max-width: 900px) {
+  .ecommerce-awards-inner {
+    align-items: flex-start;
+    flex-direction: column;
+
+    gap: 20px;
+  }
+}
+
+@media (max-width: 600px) {
+  .ecommerce-awards-inner {
+    padding: 0 20px;
+  }
+
+  .ecommerce-awards-row {
+    gap: 20px 28px;
+  }
+}
+
+/* =========================================
+   INTRO SPLIT
+========================================= */
+
+.ecommerce-intro {
+  padding: 88px 0;
+
+  background: #ffffff;
+}
+
+.ecommerce-section-inner {
+  width: 100%;
+  max-width: 1180px;
+
+  margin: 0 auto;
+
+  padding: 0 32px;
+}
+
+.ecommerce-intro-grid {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  align-items: start;
+
+  gap: 64px;
+}
+
+.ecommerce-eyebrow {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 7px;
+
+  margin-bottom: 16px;
+
+  color: var(--blue-600);
+
+  font-size: 12px;
+  font-weight: 700;
+
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.ecommerce-eyebrow::before {
+  content: "";
+
+  display: inline-block;
+
+  width: 22px;
+  height: 1.5px;
+
+  background: var(--blue-600);
+}
+
+.ecommerce-section-title {
+  max-width: 720px;
+
+  margin: 0 0 22px;
+
+  color: var(--ink);
+
+  font-family:
+    "Sora",
+    "Inter",
+    sans-serif;
+
+  font-size: 33px;
+  font-weight: 800;
+
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.ecommerce-intro-copy p {
+  margin: 0 0 16px;
+
+  color: var(--text);
+
+  font-size: 15.5px;
+  line-height: 1.8;
+}
+
+.ecommerce-intro-copy p:last-child {
+  margin-bottom: 0;
+}
+
+
+/* right-side stats */
+
+.ecommerce-stat-stack {
+  display: flex;
+  flex-direction: column;
+
+  gap: 14px;
+
+  padding-left: 24px;
+
+  border-left: 2px solid var(--blue-100);
+}
+
+.ecommerce-stat-row {
+  display: flex;
+  align-items: baseline;
+
+  gap: 14px;
+
+  padding: 8px 0;
+}
+
+.ecommerce-stat-row strong {
+  min-width: 76px;
+
+  color: var(--blue-600);
+
+  font-family:
+    "Sora",
+    "Inter",
+    sans-serif;
+
+  font-size: 30px;
+  font-weight: 800;
+
+  line-height: 1;
+}
+
+.ecommerce-stat-row span {
+  color: var(--text);
+
+  font-size: 14px;
+}
+
+@media (max-width: 900px) {
+  .ecommerce-intro-grid {
+    grid-template-columns: 1fr;
+
+    gap: 36px;
+  }
+}
+
+@media (max-width: 600px) {
+  .ecommerce-intro {
+    padding: 60px 0;
+  }
+
+  .ecommerce-section-inner {
+    padding: 0 20px;
+  }
+
+  .ecommerce-section-title {
+    font-size: 29px;
+  }
+}
+
+/* =========================================
+   WHY CHOOSE US
+========================================= */
+
+.ecommerce-why {
+  padding: 88px 0;
+
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+
+  background: var(--wash);
+}
+
+.ecommerce-section-head {
+  margin-bottom: 52px;
+}
+
+.ecommerce-section-intro {
+  max-width: 640px;
+
+  margin: 16px 0 0;
+
+  color: var(--muted);
+
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+
+/* reasons grid */
+
+.ecommerce-reasons {
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  gap: 20px;
+}
+
+.ecommerce-reason-card {
+  padding: 24px;
+
+  border: 1px solid var(--line);
+  border-radius: 16px;
+
+  background: #ffffff;
+
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.ecommerce-reason-card:hover {
+  border-color: var(--blue-100);
+
+  box-shadow: var(--shadow-md);
+}
+
+
+/* card heading */
+
+.ecommerce-reason-header {
+  display: flex;
+  align-items: center;
+
+  gap: 12px;
+
+  margin-bottom: 16px;
+}
+
+.ecommerce-reason-header > span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  width: 28px;
+  height: 28px;
+
+  border-radius: 8px;
+
+  background: var(--blue-600);
+  color: #ffffff;
+
+  font-family:
+    "Sora",
+    "Inter",
+    sans-serif;
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.ecommerce-reason-header h3 {
+  margin: 0;
+
+  color: var(--ink);
+
+  font-family:
+    "Sora",
+    "Inter",
+    sans-serif;
+
+  font-size: 16.5px;
+  font-weight: 700;
+
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+.ecommerce-reason-card p {
+  margin: 0;
+
+  color: var(--text);
+
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+
+/* responsive */
+
+@media (max-width: 900px) {
+  .ecommerce-reasons {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .ecommerce-why {
+    padding: 60px 0;
+  }
+
+  .ecommerce-section-head {
+    margin-bottom: 36px;
+  }
+
+  .ecommerce-reason-card {
+    padding: 20px;
+  }
+}
+
+/* =========================================
+   ECOMMERCE PLATFORMS
+========================================= */
+
+.ecommerce-platforms {
+  padding: 88px 0;
+
+  background: #ffffff;
+}
+
+.ecommerce-platform-layout {
+  display: grid;
+
+  grid-template-columns:
+    0.9fr
+    1.1fr;
+
+  align-items: start;
+
+  gap: 48px;
+}
+
+
+/* left navigation */
+
+.ecommerce-platform-nav {
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+.ecommerce-platform-nav button {
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+
+  width: 100%;
+
+  padding: 16px 18px;
+
+  border: 0;
+  border-radius: 12px;
+
+  background: transparent;
+
+  color: var(--muted);
+
+  font-family:
+    "Inter",
+    sans-serif;
+
+  text-align: left;
+
+  cursor: pointer;
+
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.ecommerce-platform-nav button:hover {
+  background: var(--wash);
+}
+
+.ecommerce-platform-nav button.active {
+  background: var(--blue-050);
+}
+
+
+/* number */
+
+.platform-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  width: 26px;
+  height: 26px;
+
+  border-radius: 7px;
+
+  background: var(--wash);
+  color: var(--muted);
+
+  font-family:
+    "Sora",
+    "Inter",
+    sans-serif;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+}
+
+.ecommerce-platform-nav
+  button.active
+  .platform-number {
+  background: var(--blue-600);
+  color: #ffffff;
+}
+
+
+/* platform title */
+
+.platform-name {
+  color: var(--ink);
+
+  font-size: 15.5px;
+  font-weight: 600;
+}
+
+.ecommerce-platform-nav
+  button.active
+  .platform-name {
+  color: var(--blue-700);
+}
+
+
+/* right panel */
+
+.ecommerce-platform-panel {
+  min-height: 220px;
+
+  padding: 34px;
+
+  border: 1px solid var(--line);
+  border-radius: 18px;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 2px 14px rgba(15, 23, 42, 0.06);
+}
+
+.ecommerce-platform-label {
+  margin-bottom: 10px;
+
+  color: var(--blue-600);
+
+  font-family:
+    "Sora",
+    "Inter",
+    sans-serif;
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.ecommerce-platform-panel h3 {
+  margin: 0 0 14px;
+
+  color: var(--ink);
+
+  font-family:
+    "Sora",
+    "Inter",
+    sans-serif;
+
+  font-size: 23px;
+  font-weight: 800;
+
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+}
+
+.ecommerce-platform-panel p {
+  margin: 0;
+
+  color: var(--text);
+
+  font-size: 15.5px;
+  line-height: 1.75;
+}
+
+
+/* responsive */
+
+@media (max-width: 900px) {
+  .ecommerce-platform-layout {
+    grid-template-columns: 1fr;
+
+    gap: 24px;
+  }
+}
+
+@media (max-width: 600px) {
+  .ecommerce-platforms {
+    padding: 60px 0;
+  }
+
+  .ecommerce-platform-panel {
+    padding: 24px;
+  }
+}
+
+/* =========================================
+   ECOMMERCE BENEFITS
+========================================= */
+
+.ecommerce-benefits {
+  padding: 88px 0;
+
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+
+  background: var(--wash);
+}
+
+.ecommerce-benefits-grid {
+  display: grid;
+
+  grid-template-columns:
+    repeat(3, 1fr);
+
+  gap: 16px;
+}
+
+.ecommerce-benefit-card {
+  display: flex;
+
+  gap: 16px;
+
+  padding: 22px;
+
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--blue-100);
+  border-radius: 14px;
+
+  background: #ffffff;
+
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
+}
+
+.ecommerce-benefit-card:hover {
+  border-color: var(--blue-100);
+  border-left-color: var(--blue-600);
+
+  transform: translateY(-2px);
+
+  box-shadow: var(--shadow-md);
+}
+
+
+/* icon */
+
+.ecommerce-benefit-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  width: 44px;
+  height: 44px;
+
+  border-radius: 12px;
+
+  background: var(--blue-050);
+
+  transition:
+    background 0.18s ease;
+}
+
+.ecommerce-benefit-icon svg {
+  width: 22px;
+  height: 22px;
+
+  fill: none;
+
+  stroke: var(--blue-600);
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  transition:
+    stroke 0.18s ease;
+}
+
+.ecommerce-benefit-card:hover
+.ecommerce-benefit-icon {
+  background: var(--blue-600);
+}
+
+.ecommerce-benefit-card:hover
+.ecommerce-benefit-icon svg {
+  stroke: #ffffff;
+}
+
+
+/* content */
+
+.ecommerce-benefit-card > div:last-child {
+  flex: 1;
+}
+
+.ecommerce-benefit-card h3 {
+  margin: 0 0 7px;
+
+  color: var(--ink);
+
+  font-family:
+    "Sora",
+    "Inter",
+    sans-serif;
+
+  font-size: 16px;
+  font-weight: 700;
+
+  line-height: 1.25;
+  letter-spacing: -0.02em;
+}
+
+.ecommerce-benefit-card p {
+  margin: 0;
+
+  color: var(--text);
+
+  font-size: 13.5px;
+  line-height: 1.62;
+}
+
+
+/* responsive */
+
+@media (max-width: 900px) {
+  .ecommerce-benefits-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .ecommerce-benefits {
+    padding: 60px 0;
+  }
+
+  .ecommerce-benefit-card {
+    padding: 20px;
+  }
+}
+
+/* =========================================
+   BEFORE YOU HIRE
+========================================= */
+
+.ecommerce-hiring {
+  padding: 88px 0;
+
+  background: #ffffff;
+}
+
+.ecommerce-hiring-layout {
+  display: grid;
+
+  grid-template-columns:
+    0.8fr
+    1.2fr;
+
+  align-items: start;
+
+  gap: 56px;
+}
+
+
+/* sticky left content */
+
+.ecommerce-hiring-head {
+  position: sticky;
+
+  top: 96px;
+}
+
+.ecommerce-hiring-head h2 {
+  margin: 0;
+
+  color: var(--ink);
+
+  font-family:
+    "Sora",
+    "Inter",
+    sans-serif;
+
+  font-size: 30px;
+  font-weight: 800;
+
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.ecommerce-hiring-head p {
+  margin: 16px 0 0;
+
+  color: var(--text);
+
+  font-size: 15px;
+  line-height: 1.75;
+}
+
+
+/* steps */
+
+.ecommerce-hiring-steps {
+  display: flex;
+  flex-direction: column;
+}
+
+.ecommerce-hiring-step {
+  position: relative;
+
+  display: grid;
+
+  grid-template-columns:
+    auto
+    1fr;
+
+  gap: 22px;
+
+  padding-bottom: 32px;
+}
+
+.ecommerce-hiring-step:not(:last-child)::before {
+  content: "";
+
+  position: absolute;
+
+  top: 38px;
+  bottom: 0;
+  left: 17px;
+
+  width: 2px;
+
+  background: var(--line);
+}
+
+
+/* number */
+
+.ecommerce-step-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  width: 36px;
+  height: 36px;
+
+  border-radius: 10px;
+
+  background: var(--blue-600);
+  color: #ffffff;
+
+  font-family:
+    "Sora",
+    "Inter",
+    sans-serif;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  box-shadow:
+    0 4px 12px rgba(27, 77, 228, 0.25);
+}
+
+
+/* step text */
+
+.ecommerce-hiring-step h3 {
+  margin: 0 0 9px;
+
+  padding-top: 6px;
+
+  color: var(--ink);
+
+  font-family:
+    "Sora",
+    "Inter",
+    sans-serif;
+
+  font-size: 17px;
+  font-weight: 700;
+
+  line-height: 1.2;
+}
+
+.ecommerce-hiring-step ul {
+  display: flex;
+  flex-direction: column;
+
+  gap: 6px;
+
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+.ecommerce-hiring-step li {
+  display: flex;
+
+  gap: 9px;
+
+  color: var(--text);
+
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.ecommerce-hiring-step li::before {
+  content: "";
+
+  flex-shrink: 0;
+
+  width: 5px;
+  height: 5px;
+
+  margin-top: 9px;
+
+  border-radius: 50%;
+
+  background: var(--blue-500);
+}
+
+
+/* responsive */
+
+@media (max-width: 900px) {
+  .ecommerce-hiring-layout {
+    grid-template-columns: 1fr;
+
+    gap: 32px;
+  }
+
+  .ecommerce-hiring-head {
+    position: static;
+  }
+}
+
+@media (max-width: 600px) {
+  .ecommerce-hiring {
+    padding: 60px 0;
+  }
+}
+
+/* =========================================
+   TECHNOLOGY STACK
+========================================= */
+
+.ecommerce-tech {
+  padding: 88px 0;
+
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+
+  background: var(--wash);
+}
+
+.ecommerce-tech-grid {
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  gap: 16px;
+
+  margin-bottom: 44px;
+}
+
+.ecommerce-tech-card {
+  padding: 22px;
+
+  border: 1px solid var(--line);
+  border-radius: 16px;
+
+  background: #ffffff;
+
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease,
+    transform 0.18s ease;
+}
+
+.ecommerce-tech-card:hover {
+  border-color: var(--blue-100);
+
+  transform: translateY(-2px);
+
+  box-shadow: var(--shadow-md);
+}
+
+.ecommerce-tech-heading {
+  display: flex;
+  align-items: center;
+
+  gap: 11px;
+
+  margin-bottom: 15px;
+
+  color: var(--ink);
+
+  font-family:
+    "Sora",
+    "Inter",
+    sans-serif;
+
+  font-size: 14.5px;
+  font-weight: 700;
+}
+
+
+/* icons */
+
+.ecommerce-tech-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  width: 34px;
+  height: 34px;
+
+  border-radius: 9px;
+
+  background: var(--blue-050);
+
+  transition:
+    background 0.18s ease;
+}
+
+.ecommerce-tech-icon svg {
+  width: 18px;
+  height: 18px;
+
+  fill: none;
+
+  stroke: var(--blue-600);
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  transition:
+    stroke 0.18s ease;
+}
+
+.ecommerce-tech-card:hover
+.ecommerce-tech-icon {
+  background: var(--blue-600);
+}
+
+.ecommerce-tech-card:hover
+.ecommerce-tech-icon svg {
+  stroke: #ffffff;
+}
+
+
+/* technology chips */
+
+.ecommerce-tech-chips {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 8px;
+
+  padding-left: 45px;
+}
+
+.ecommerce-tech-chips span {
+  padding: 6px 13px;
+
+  border: 1px solid var(--line);
+  border-radius: 8px;
+
+  background: var(--wash);
+  color: var(--ink);
+
+  font-size: 12.5px;
+  font-weight: 600;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.ecommerce-tech-chips span:hover {
+  border-color: var(--blue-100);
+
+  background: var(--blue-050);
+  color: var(--blue-700);
+}
+
+
+/* =========================================
+   MARKETING TOOLS
+========================================= */
+
+.ecommerce-marketing-head {
+  margin-bottom: 20px;
+}
+
+.ecommerce-marketing-head .ecommerce-eyebrow {
+  margin-bottom: 10px;
+}
+
+.ecommerce-marketing-head h3 {
+  margin: 0;
+
+  color: var(--ink);
+
+  font-family:
+    "Sora",
+    "Inter",
+    sans-serif;
+
+  font-size: 20px;
+  font-weight: 700;
+
+  line-height: 1.3;
+}
+
+.ecommerce-marketing-tools {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 10px;
+}
+
+.ecommerce-marketing-tools span {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 8px;
+
+  padding: 10px 16px;
+
+  border: 1px solid var(--line);
+  border-radius: 10px;
+
+  background: #ffffff;
+  color: var(--ink);
+
+  font-family:
+    "Sora",
+    "Inter",
+    sans-serif;
+
+  font-size: 13.5px;
+  font-weight: 600;
+
+  transition:
+    border-color 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.ecommerce-marketing-tools span::before {
+  content: "";
+
+  flex-shrink: 0;
+
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: var(--blue-500);
+
+  transition:
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.ecommerce-marketing-tools span:hover {
+  border-color: #c2d3ff;
+
+  color: var(--blue-700);
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 2px 14px rgba(15, 23, 42, 0.06);
+}
+
+.ecommerce-marketing-tools span:hover::before {
+  background: var(--blue-600);
+
+  box-shadow:
+    0 0 0 3px var(--blue-050);
+}
+
+
+/* responsive */
+
+@media (max-width: 900px) {
+  .ecommerce-tech-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .ecommerce-tech {
+    padding: 60px 0;
+  }
+
+  .ecommerce-tech-chips {
+    padding-left: 0;
+  }
+}
+
+/* =========================================
+   COMPARISON
+========================================= */
+
+.ecommerce-comparison {
+  padding: 88px 0;
+
+  background: #ffffff;
+}
+
+.ecommerce-comparison-grid {
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  gap: 20px;
+}
+
+.ecommerce-comparison-card {
+  padding: 28px;
+
+  border-radius: 16px;
+}
+
+.ecommerce-comparison-us {
+  border: 1.5px solid var(--blue-100);
+
+  background: var(--blue-050);
+}
+
+.ecommerce-comparison-them {
+  border: 1.5px solid var(--line);
+
+  background: var(--wash);
+}
+
+.ecommerce-comparison-card h3 {
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  margin: 0 0 18px;
+
+  font-family:
+    "Sora",
+    "Inter",
+    sans-serif;
+
+  font-size: 18px;
+  font-weight: 800;
+
+  line-height: 1.2;
+}
+
+.ecommerce-comparison-us h3 {
+  color: var(--blue-700);
+}
+
+.ecommerce-comparison-them h3 {
+  color: var(--muted);
+}
+
+.ecommerce-comparison-card ul {
+  display: flex;
+  flex-direction: column;
+
+  gap: 11px;
+
+  margin: 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+.ecommerce-comparison-card li {
+  display: flex;
+
+  gap: 10px;
+
+  color: var(--text);
+
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+
+.ecommerce-comparison-us li::before {
+  content: "✓";
+
+  flex-shrink: 0;
+
+  color: #12855a;
+
+  font-weight: 800;
+}
+
+.ecommerce-comparison-them li::before {
+  content: "✗";
+
+  flex-shrink: 0;
+
+  color: #c4342e;
+
+  font-weight: 800;
+}
+
+@media (max-width: 900px) {
+  .ecommerce-comparison-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .ecommerce-comparison {
+    padding: 60px 0;
+  }
+
+  .ecommerce-comparison-card {
+    padding: 22px;
+  }
+}
+
+/* =========================================
+   FAQ
+========================================= */
+
+.ecommerce-faq {
+  padding: 88px 0;
+
+  border-top: 1px solid var(--line);
+
+  background: var(--wash);
+}
+
+.ecommerce-faq-grid {
+  display: grid;
+
+  grid-template-columns:
+    1fr
+    1fr;
+
+  gap: 12px;
+}
+
+.ecommerce-faq-item {
+  overflow: hidden;
+
+  border: 1px solid var(--line);
+  border-radius: 12px;
+
+  background: #ffffff;
+
+  transition:
+    border-color 0.18s ease;
+}
+
+.ecommerce-faq-item.open {
+  border-color: var(--blue-100);
+}
+
+.ecommerce-faq-question {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 14px;
+
+  width: 100%;
+
+  padding: 18px 20px;
+
+  border: 0;
+
+  background: transparent;
+  color: var(--ink);
+
+  font-family:
+    "Inter",
+    sans-serif;
+
+  font-size: 14.5px;
+  font-weight: 600;
+
+  text-align: left;
+
+  cursor: pointer;
+}
+
+.ecommerce-faq-plus {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+
+  width: 24px;
+  height: 24px;
+
+  border-radius: 7px;
+
+  background: var(--blue-050);
+  color: var(--blue-600);
+
+  font-size: 18px;
+  font-weight: 500;
+
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.ecommerce-faq-item.open
+.ecommerce-faq-plus {
+  background: var(--blue-600);
+  color: #ffffff;
+
+  transform: rotate(45deg);
+}
+
+.ecommerce-faq-answer {
+  max-height: 0;
+
+  overflow: hidden;
+
+  transition:
+    max-height 0.28s ease;
+}
+
+.ecommerce-faq-item.open
+.ecommerce-faq-answer {
+  max-height: 400px;
+}
+
+.ecommerce-faq-answer > div {
+  padding:
+    0
+    20px
+    18px;
+
+  color: var(--text);
+
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+@media (max-width: 900px) {
+  .ecommerce-faq-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .ecommerce-faq {
+    padding: 60px 0;
+  }
+}
+
+/* =========================================
+   FINAL CTA
+========================================= */
+
+.ecommerce-final-cta {
+  padding: 88px 0;
+
+  background: #ffffff;
+}
+
+.ecommerce-cta-box {
+  position: relative;
+
+  overflow: hidden;
+
+  padding: 52px 48px;
+
+  border-radius: 22px;
+
+  background:
+    linear-gradient(
+      120deg,
+      var(--blue-700),
+      var(--blue-600) 55%,
+      #0169dc
+    );
+}
+
+.ecommerce-cta-box::before {
+  content: "";
+
+  position: absolute;
+
+  top: -60px;
+  right: -60px;
+
+  width: 260px;
+  height: 260px;
+
+  border-radius: 50%;
+
+  background:
+    rgba(255, 255, 255, 0.08);
+}
+
+.ecommerce-cta-content {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  flex-wrap: wrap;
+
+  gap: 28px;
+}
+
+.ecommerce-cta-content h2 {
+  margin: 0 0 8px;
+
+  color: #ffffff;
+
+  font-family:
+    "Sora",
+    "Inter",
+    sans-serif;
+
+  font-size: 28px;
+  font-weight: 800;
+
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.ecommerce-cta-content p {
+  margin: 0;
+
+  color:
+    rgba(255, 255, 255, 0.9);
+
+  font-size: 15px;
+}
+
+.ecommerce-cta-tags {
+  display: flex;
+  flex-wrap: wrap;
+
+  gap: 8px;
+
+  margin-top: 18px;
+}
+
+.ecommerce-cta-tags span {
+  padding: 6px 13px;
+
+  border-radius: 100px;
+
+  background:
+    rgba(255, 255, 255, 0.14);
+
+  color: #ffffff;
+
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.ecommerce-cta-button {
+  flex-shrink: 0;
+
+  padding: 15px 30px;
+
+  border-radius: 11px;
+
+  background: #ffffff;
+  color: var(--blue-700);
+
+  font-family:
+    "Sora",
+    "Inter",
+    sans-serif;
+
+  font-size: 15px;
+  font-weight: 700;
+
+  text-decoration: none;
+  white-space: nowrap;
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.ecommerce-cta-button:hover {
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 10px 24px rgba(0, 0, 0, 0.2);
+}
+
+@media (max-width: 900px) {
+  .ecommerce-cta-box {
+    padding: 40px 28px;
+  }
+
+  .ecommerce-cta-content h2 {
+    font-size: 23px;
+  }
+}
+
+@media (max-width: 600px) {
+  .ecommerce-final-cta {
+    padding: 60px 0;
+  }
+
+  .ecommerce-cta-button {
+    width: 100%;
+
+    justify-content: center;
+    text-align: center;
+  }
+}

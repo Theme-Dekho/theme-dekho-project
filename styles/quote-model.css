@@ -254,3 +254,686 @@
     animation: none;
   }
 }
+
+/* =========================================
+   PRODUCT ENQUIRY MODAL — STEP 1
+========================================= */
+
+.quote-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 20px;
+
+  background: rgba(15, 23, 42, 0.68);
+  backdrop-filter: blur(6px);
+}
+
+.quote-box {
+  width: min(100%, 490px);
+  max-height: 80vh;
+  overflow-y: auto;
+  border-radius: 24px;
+  background: #ffffff;
+  box-shadow: 0 30px 80px rgba(15, 23, 42, 0.32);
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+}
+
+
+/* HEADER */
+
+.quote-header {
+  position: relative;
+  padding: 18px 24px 16px;
+  background: #0f172a;
+  color: #ffffff;
+}
+
+.quote-header-tag {
+  margin-bottom: 22px;
+  color: #2453e8;
+  font-family: "Sora", "Inter", sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.quote-product-name {
+  margin-bottom: 5px;
+  color: #ffffff;
+  font-family: "Sora", "Inter", sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.quote-header p {
+  margin: 0;
+  color: #a8b2c3;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.quote-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 40px;
+  height: 40px;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 50%;
+
+  background: #263147;
+  color: #ffffff;
+
+  font-size: 26px;
+  line-height: 1;
+
+  cursor: pointer;
+
+  transition:
+    background 0.18s ease,
+    transform 0.18s ease;
+}
+
+.quote-close:hover {
+  background: #344158;
+  transform: rotate(90deg);
+}
+
+
+/* BODY */
+.quote-body {
+  flex: 1;
+  min-height: 0;
+  padding: 18px 24px 92px;
+  overflow-y: auto;
+} 
+
+.quote-step-header {
+  margin-bottom: 16px;
+}
+
+.quote-step-header > span {
+  display: block;
+  margin-bottom: 5px;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.quote-step-header h3 {
+  margin: 0 0 5px;
+  color: #435466;
+  font-family: "Sora", "Inter", sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  line-height: 1.25;
+  letter-spacing: -0.025em;
+}
+
+.quote-step-header p {
+  margin: 0;
+  color: #64748b;
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.quote-grid {
+  gap: 11px;
+}
+
+
+/* =========================================
+   ADD-ON CARDS
+========================================= */
+
+.quote-addon-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+   /* Reserve space for sticky Skip / Proceed bar */
+  padding-bottom: 95px;
+}
+
+.quote-addon-card {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 14px;
+  padding: 15px 16px;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  background: #ffffff;
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.quote-addon-card:hover {
+  border-color: #c7d5fb;
+
+  background: #fafcff;
+
+  box-shadow:
+    0 5px 16px rgba(15, 23, 42, 0.05);
+}
+
+.quote-addon-card.selected {
+  border-color: #2453e8;
+
+  background: #f4f7ff;
+
+  box-shadow:
+    0 0 0 3px rgba(36, 83, 232, 0.08);
+}
+
+
+/* icon */
+
+.quote-addon-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 44px;
+  height: 44px;
+
+  border-radius: 11px;
+
+  background: #eef3ff;
+
+  font-size: 20px;
+}
+
+
+/* content */
+
+.quote-addon-content {
+  min-width: 0;
+}
+
+.quote-addon-content h4 {
+  margin: 0 0 3px;
+  color: #435466;
+  font-family: "Sora", "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+.quote-addon-content p {
+  margin: 0;
+  color: #64748b;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+
+/* ADD / REMOVE */
+
+.quote-addon-toggle {
+  min-width: 74px;
+  padding: 9px 15px;
+  border: 1.5px solid #d6dff0;
+  border-radius: 9px;
+  background: #ffffff;
+  color: #2453e8;
+  font-family: "Sora", "Inter", sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    background 0.18s ease,
+    border-color 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.quote-addon-toggle:hover {
+  border-color: #2453e8;
+
+  background: #eef3ff;
+
+  transform: translateY(-1px);
+}
+
+.quote-addon-card.selected .quote-addon-toggle {
+  border-color: #2453e8;
+
+  background: #2453e8;
+  color: #ffffff;
+}
+
+
+/* =========================================
+   STEP ACTIONS
+========================================= */
+
+.quote-step-actions {
+  display: grid;
+  grid-template-columns: 0.75fr 1.25fr;
+  gap: 12px;
+  position: sticky;
+  bottom: -22px;
+  z-index: 20;
+  isolation: isolate;
+  margin: 20px -26px -22px;
+  padding: 14px 26px 18px;
+  border-top: 1px solid #e7ecf3;
+  background: #ffffff;
+  backdrop-filter: none;
+  box-shadow: 0 -14px 28px rgba(15, 23, 42, 0.12);
+}
+
+.quote-step-skip,
+.quote-step-next {
+  min-height: 52px;
+  border-radius: 11px;
+  font-family: "Sora", "Inter", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    transform 0.18s ease,
+    background 0.18s ease,
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.quote-step-skip {
+  border: 1.5px solid #d8e0ec;
+
+  background: #ffffff;
+  color: #64748b;
+}
+
+.quote-step-skip:hover {
+  border-color: #b7c4d8;
+
+  background: #f8fafc;
+  color: #435466;
+}
+
+.quote-step-next {
+  border: 0;
+
+  background: linear-gradient(
+    135deg,
+    #2757ee,
+    #1947e3
+  );
+
+  color: #ffffff;
+
+  box-shadow:
+    0 9px 22px rgba(30, 79, 230, 0.25);
+}
+
+.quote-step-next:hover {
+  background: linear-gradient(
+    135deg,
+    #1f4ee8,
+    #133dd2
+  );
+
+  box-shadow:
+    0 12px 26px rgba(30, 79, 230, 0.32);
+
+  transform: translateY(-1px);
+}
+
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+  .quote-overlay {
+    align-items: flex-end;
+
+    padding: 0;
+  }
+
+  .quote-box {
+    width: 100%;
+    max-height: 94vh;
+
+    border-radius: 22px 22px 0 0;
+  }
+
+  .quote-header {
+    padding:
+      26px
+      22px
+      24px;
+  }
+
+  .quote-body {
+    padding:
+      20px
+      26px
+      22px;
+  }
+
+  .quote-addon-card {
+    grid-template-columns:
+      40px
+      minmax(0, 1fr);
+
+    gap: 12px;
+  }
+
+  .quote-addon-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .quote-addon-toggle {
+    grid-column: 2;
+
+    width: fit-content;
+  }
+
+  .quote-step-actions {
+    grid-template-columns:
+      1fr
+      1.4fr;
+  }
+}
+
+/* =========================================
+   PRODUCT ENQUIRY MODAL — FINAL OVERRIDES
+========================================= */
+
+/* Modal sizing */
+
+.quote-box {
+  width: min(100%, 520px);
+  max-height: 84vh;
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+}
+
+
+/* Header */
+
+.quote-header {
+  flex-shrink: 0;
+
+  padding: 20px 26px 18px;
+}
+
+
+/* Scrollable modal body */
+
+.quote-body {
+  flex: 1;
+
+  min-height: 0;
+
+  padding: 20px 26px 22px;
+
+  overflow-y: auto;
+}
+
+
+/* =========================================
+   STEP 1 — ADD-ON LIST
+========================================= */
+
+.quote-addon-list {
+  display: flex;
+  flex-direction: column;
+
+  gap: 12px;
+
+  max-height: 300px;
+
+  padding: 2px 6px 2px 2px;
+
+  overflow-y: auto;
+
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 transparent;
+}
+
+.quote-addon-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.quote-addon-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.quote-addon-list::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+
+  background: #cbd5e1;
+}
+
+.quote-addon-list::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+
+/* =========================================
+   PROJECT REQUIREMENTS
+========================================= */
+.quote-field input
+.quote-field textarea {
+    font-size: 12px;
+}
+
+
+.quote-field textarea {
+  width: 100%;
+  height: 70px;
+  max-height: 70px;
+  padding: 12px 14px;
+  resize: none;
+  overflow-y: auto;
+  border: 1px solid #d7e0ee;
+  border-radius: 12px;
+  outline: none;
+  background: #f8fafc;
+  color: #0f172a;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  font-size: 14px;
+  line-height: 1.55;
+
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.quote-field input::placeholder,
+.quote-field textarea::placeholder {
+  font-size: 12px;
+}
+
+.quote-field textarea::placeholder {
+  color: #94a3b8;
+
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.quote-field textarea:focus {
+  border-color: #2453eb;
+
+  background: #ffffff;
+
+  box-shadow:
+    0 0 0 4px rgba(36, 83, 235, 0.1);
+}
+
+.quote-field textarea::-webkit-scrollbar {
+  width: 6px;
+}
+
+.quote-field textarea::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.quote-field textarea::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: #cbd5e1;
+}
+
+.quote-field label {
+  font-size: 12px;
+}
+
+
+/* =========================================
+   STEP ACTIONS
+========================================= */
+
+.quote-step-actions {
+  display: grid;
+  grid-template-columns: 0.75fr 1.25fr;
+  gap: 12px;
+  position: sticky;
+  bottom: -22px;
+  z-index: 20;
+  margin: 16px -24px -22px;
+  padding: 12px 24px 15px;
+  border-top: 1px solid #e7ecf3;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 -7px 18px rgba(15, 23, 42, 0.05);
+}
+
+
+/* Submit button */
+
+.quote-submit {
+  min-height: 50px;
+
+  border: 0;
+  border-radius: 11px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #2757ee,
+      #1947e3
+    );
+
+  color: #ffffff;
+
+  font-family:
+    "Sora",
+    "Inter",
+    sans-serif;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 9px 22px rgba(30, 79, 230, 0.25);
+
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.quote-submit:hover {
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 12px 26px rgba(30, 79, 230, 0.32);
+}
+
+.quote-note,
+.captcha-err {
+  font-size: 11px;
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 600px) {
+  .quote-overlay {
+    align-items: flex-end;
+
+    padding: 0;
+  }
+
+  .quote-box {
+    width: 100%;
+    max-height: 90vh;
+
+    border-radius: 20px 20px 0 0;
+  }
+
+  .quote-header {
+    padding: 20px;
+  }
+
+  .quote-body {
+    padding: 20px;
+  }
+
+  .quote-addon-list {
+    max-height: 280px;
+  }
+
+  .quote-step-actions {
+    grid-template-columns:
+      1fr
+      1.4fr;
+
+    bottom: -20px;
+
+    margin:
+      18px
+      -20px
+      -20px;
+
+    padding:
+      13px
+      20px
+      16px;
+  }
+}

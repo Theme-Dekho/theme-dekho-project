@@ -1,114 +1,335 @@
-import type {
-  PackageItem,
-  ProductAddon,
-} from "@/constants/product-details";
+import type { ProductAddon } from "@/constants/product-details";
 
 interface ProductPackageProps {
-  packageIncludes: PackageItem[];
   addons: ProductAddon[];
 }
 
+const suitableFor = [
+  "Interior Design Studio",
+  "Interior Designer",
+  "Home Interior Designer",
+  "Residential Interior Designer",
+  "Commercial Interior Designer",
+  "Office Interior Designer",
+  "Modular Kitchen Designer",
+  "Turnkey Interior Designer",
+  "Luxury Interior Designer",
+  "Interior Decorator",
+  "Home Renovation Studio",
+  "Interior Architecture Studio",
+];
+
+// const addonDetails: Record<
+//   string,
+//   {
+//     chargeText: string;
+//     description: string;
+//     bullets: string[];
+//   }
+// > = {
+//   "interior-cost-calculator": {
+//     chargeText: "+ Actual charges apply",
+//     description:
+//       "Lets visitors estimate interior cost based on their project requirements.",
+//     bullets: [
+//       "Property type & area",
+//       "Room type & interior style",
+//       "Material / finish selection",
+//     ],
+//   },
+
+//   "crm-integration": {
+//     chargeText: "+ Actual charges apply",
+//     description:
+//       "Connects website enquiries to your CRM for lead management and follow-up.",
+//     bullets: [
+//       "Lead capture & tracking",
+//       "Follow-up management",
+//       "Enquiry pipeline",
+//     ],
+//   },
+
+//   "ai-chatbot": {
+//     chargeText: "+ Actual charges apply",
+//     description:
+//       "Gives instant responses to common interior-design questions.",
+//     bullets: [
+//       "Services & project process",
+//       "Design styles & enquiries",
+//       "Studio timings & location",
+//     ],
+//   },
+
+//   "domain-hosting": {
+//     chargeText:
+//       "Setup FREE · purchase charges apply",
+//     description:
+//       "Only actual domain registration and hosting purchase cost applies.",
+//     bullets: [
+//       "Domain registration",
+//       "Hosting purchase",
+//       "Setup, config & deployment free",
+//     ],
+//   },
+
+//   "multi-language-website": {
+//     chargeText: "+ Actual charges apply",
+//     description:
+//       "Serves your content in more than one language for wider reach.",
+//     bullets: [
+//       "Hindi + English versions",
+//       "Language switcher in header",
+//       "Regional language on request",
+//     ],
+//   },
+
+//   "appointment-scheduler": {
+//     chargeText: "+ Actual charges apply",
+//     description:
+//       "Lets clients book a design consultation slot directly from your website.",
+//     bullets: [
+//       "Calendar with available slots",
+//       "Email & WhatsApp confirmation",
+//       "Reduces back-and-forth calls",
+//     ],
+//   },
+// };
+
+const addonDetails: Record<
+  string,
+  {
+    chargeText: string;
+    description: string;
+    bullets: string[];
+  }
+> = {
+  calculator: {
+    chargeText: "+ Actual charges apply",
+    description:
+      "Lets visitors estimate interior cost based on their project requirements.",
+    bullets: [
+      "Property type & area",
+      "Room type & interior style",
+      "Material / finish selection",
+    ],
+  },
+
+  crm: {
+    chargeText: "+ Actual charges apply",
+    description:
+      "Connects website enquiries to your CRM for lead management and follow-up.",
+    bullets: [
+      "Lead capture & tracking",
+      "Follow-up management",
+      "Enquiry pipeline",
+    ],
+  },
+
+  boq: {
+    chargeText: "+ Actual charges apply",
+    description:
+      "Helps create and manage Bills of Quantities for interior projects.",
+    bullets: [
+      "Project quantity planning",
+      "Material and work breakdown",
+      "BOQ management",
+    ],
+  },
+
+  "ai-chatbot": {
+    chargeText: "+ Actual charges apply",
+    description:
+      "Gives instant responses to common interior-design questions.",
+    bullets: [
+      "Services & project process",
+      "Design styles & enquiries",
+      "Studio timings & location",
+    ],
+  },
+};
+
 export default function ProductPackage({
-  packageIncludes,
   addons,
 }: ProductPackageProps) {
   return (
     <section className="product-package-section">
       <div className="product-section-inner">
-        <h2 className="product-section-title">
-          What&apos;s Included
-        </h2>
 
-        <p className="product-section-subtitle">
-          Pages and sections included in this website package
-        </p>
+        <div className="product-package-heading">
+          <h2>
+            Add-On Features &amp; Suitable For
+          </h2>
+
+          <p>
+            Optional upgrades you can attach, and the
+            businesses this website is built for
+          </p>
+        </div>
 
         <div className="product-package-grid">
-          <div className="package-panel">
-            <div className="package-panel-header">
-              <h3>Website Pages &amp; Sections</h3>
 
-              <p>
-                Core content included in the base website
-                package
-              </p>
+          {/* ADD-ONS */}
+          <div className="product-package-column addons-column">
+
+            <div className="product-package-column-header">
+              <span
+                className="package-header-icon"
+                aria-hidden="true"
+              >
+                ★
+              </span>
+
+              <strong>
+                Available Add-On Features
+              </strong>
+
+              <span className="package-header-count">
+                {addons.length} optional
+              </span>
             </div>
 
-            <div className="package-items">
-              {packageIncludes.map((item) => (
-                <div
-                  className="package-item"
-                  key={item.title}
-                >
-                  <span
-                    className="package-item-dot"
-                    aria-hidden="true"
-                  />
+            <div className="product-package-column-body">
 
-                  <div>
-                    <strong>{item.title}</strong>
+              {addons.map((addon) => {
+                const details =
+                  addonDetails[addon.id];
 
-                    <span>
-                      {item.description}
-                    </span>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="addons-panel">
-            <div className="addons-panel-header">
-              <h3>⚡ Available Add-On Features</h3>
-
-              <p>
-                Enhance your website with additional tools
-              </p>
-            </div>
-
-            <div className="addon-items">
-              {addons.map((addon) => (
-                <article
-                  className="addon-item"
-                  key={addon.id}
-                >
-                  <div
-                    className="addon-item-icon"
-                    aria-hidden="true"
+                return (
+                  <article
+                    className="addon-item"
+                    key={addon.id}
                   >
-                    {addon.icon}
-                  </div>
-
-                  <div className="addon-item-content">
-                    <h4>{addon.name}</h4>
-
-                    <p>{addon.description}</p>
-                  </div>
-
-                  <span className="addon-item-price">
-                    {addon.price}
-                  </span>
-
-                  <div className="addon-item-actions">
-                    <button
-                      type="button"
-                      className="addon-details-button"
+                    <div
+                      className="addon-item-icon"
+                      aria-hidden="true"
                     >
-                      Details
-                    </button>
+                      {addon.icon}
+                    </div>
 
-                    <button
-                      type="button"
-                      className="addon-add-button"
-                    >
-                      ADD
-                    </button>
-                  </div>
-                </article>
-              ))}
+                    <div className="addon-item-content">
+                      <h3>
+                        {addon.name}
+                      </h3>
+
+                      <p className="addon-charge-text">
+                        {details?.chargeText ??
+                          "+ Actual charges apply"}
+                      </p>
+                    </div>
+
+                    <div className="addon-details-wrap">
+
+                      <button
+                        type="button"
+                        className="addon-details-button"
+                      >
+                        <span
+                          className="addon-details-icon"
+                          aria-hidden="true"
+                        >
+                          ⓘ
+                        </span>
+
+                        Details
+                      </button>
+
+                      {details && (
+                        <div
+                          className="addon-tooltip"
+                          role="tooltip"
+                        >
+                          <strong>
+                            {addon.name}
+                          </strong>
+
+                          <p>
+                            {details.description}
+                          </p>
+
+                          <ul>
+                            {details.bullets.map(
+                              (bullet) => (
+                                <li key={bullet}>
+                                  {bullet}
+                                </li>
+                              ),
+                            )}
+                          </ul>
+                        </div>
+                      )}
+
+                    </div>
+                  </article>
+                );
+              })}
+
+              <div className="product-package-note">
+                <strong>
+                  Nothing is charged upfront.
+                </strong>{" "}
+                Add-ons are fully optional and can
+                be attached anytime — even months
+                after your website goes live.
+              </div>
+
             </div>
           </div>
+
+          {/* SUITABLE FOR */}
+          <div className="product-package-column suitable-column">
+
+            <div className="product-package-column-header">
+              <span
+                className="package-header-icon"
+                aria-hidden="true"
+              >
+                ✓
+              </span>
+
+              <strong>
+                Suitable For
+              </strong>
+
+              <span className="package-header-count">
+                {suitableFor.length} business types
+              </span>
+            </div>
+
+            <div className="product-package-column-body">
+
+              <div className="suitable-grid">
+                {suitableFor.map((item) => (
+                  <div
+                    className="suitable-item"
+                    key={item}
+                  >
+                    <span
+                      className="suitable-check"
+                      aria-hidden="true"
+                    >
+                      ✓
+                    </span>
+
+                    {item}
+                  </div>
+                ))}
+              </div>
+
+              <div className="product-suitable-note">
+                <strong>
+                  Not sure if it fits your business?
+                </strong>{" "}
+                Share your requirement — our team
+                will confirm suitability and suggest
+                the right customisation within
+                30 minutes.
+              </div>
+
+            </div>
+          </div>
+
         </div>
+
       </div>
     </section>
   );

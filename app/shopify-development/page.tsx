@@ -1,8 +1,9 @@
 "use client";
 
-import { SubmitEvent, useEffect, useState } from "react";
+import { useState } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import ServiceQuoteForm from "@/components/forms/ServiceQuoteForm";
 import "./shopify-development.css";
 
 
@@ -42,134 +43,6 @@ export default function ShopifyDevelopmentPage() {
   const [activeService, setActiveService] = useState(0);
   const currentService = shopifyServices[activeService];
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const [captchaA, setCaptchaA] = useState(0);
-  const [captchaB, setCaptchaB] = useState(0);
-  const [captchaAnswer, setCaptchaAnswer] = useState("");
-  const [captchaError, setCaptchaError] = useState(false);
-  const [fullName, setFullName] = useState(""); 
-  const [contactNumber, setContactNumber] = useState("");
-  const [websiteType, setWebsiteType] = useState("");
-  const [formError, setFormError] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  
-  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
-
-
-  useEffect(() => {
-  setCaptchaA(Math.floor(Math.random() * 6) + 2);
-  setCaptchaB(Math.floor(Math.random() * 6) + 2);
-}, []);
-
-
-  
-//   const handleShopifyFormSubmit = (
-//     event: SubmitEvent<HTMLFormElement>
-//     ) => {
-//     event.preventDefault();
-
-//     const correctAnswer = captchaA * captchaB;
-
-//     if (Number(captchaAnswer) !== correctAnswer) {
-//         setCaptchaError(true);
-//         setCaptchaAnswer("");
-//         return;
-//     }
-
-//     setCaptchaError(false);
-
-//     alert(
-//         "Thank you! Our team will contact you within 30 minutes."
-//     );
-
-//     event.currentTarget.reset();
-//     setCaptchaAnswer("");
-//     };
-
-    const handleShopifyFormSubmit = async (
-        event: SubmitEvent<HTMLFormElement>
-        ) => {
-        event.preventDefault();
-
-        setFormError("");
-
-        const correctAnswer = captchaA * captchaB;
-
-        if (Number(captchaAnswer) !== correctAnswer) {
-            setCaptchaError(true);
-            setCaptchaAnswer("");
-            return;
-        }
-
-        if (!fullName.trim()) {
-            setFormError("Please enter your full name.");
-            return;
-        }
-
-        if (!/^[6-9]\d{9}$/.test(contactNumber)) {
-            setFormError("Please enter a valid 10-digit contact number.");
-            return;
-        }
-
-        if (!websiteType) {
-            setFormError("Please select the type of website.");
-            return;
-        }
-
-        if (!API_BASE_URL) {
-            setFormError("NEXT_PUBLIC_API_BASE_URL is missing.");
-            return;
-        }
-
-        if (isSubmitting) {
-            return;
-        }
-
-        try {
-            setIsSubmitting(true);
-
-            const response = await fetch(
-            `${API_BASE_URL}/api/quote-requests`,
-            {
-                method: "POST",
-                credentials: "include",
-                headers: {
-                "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                business_name: fullName.trim(),
-                whatsapp_number: contactNumber,
-                website_type: websiteType,
-                }),
-            }
-            );
-
-            const data = await response.json();
-
-            if (!response.ok) {
-            throw new Error(
-                data.detail ||
-                data.message ||
-                "Unable to submit quote request."
-            );
-            }
-
-            alert("Free quote request submitted successfully.");
-
-            setFullName("");
-            setContactNumber("");
-            setWebsiteType("");
-            setCaptchaAnswer("");
-            setCaptchaError(false);
-        } catch (error: unknown) {
-            setFormError(
-            error instanceof Error
-                ? error.message
-                : "Unable to submit quote request."
-            );
-        } finally {
-            setIsSubmitting(false);
-        }
-        };
 
 
   return (
@@ -265,86 +138,14 @@ export default function ShopifyDevelopmentPage() {
                 <div className="shopify-lead-subtitle">
                 Tell us your requirement — we reply within 30 minutes.
                 </div>
-
-                <form className="shopify-lead-form"
-                 onSubmit={handleShopifyFormSubmit} >
-
-                <input
-                type="text"
-                placeholder="Name *"
-                value={fullName}
-                onChange={(event) => setFullName(event.target.value)}
-                required
+                
+               <ServiceQuoteForm
+                className="shopify-lead-form"
+                captchaClassName="shopify-captcha"
+                submitClassName="shopify-form-submit"
+                errorClassName="shopify-form-error"
                 />
 
-
-                <input
-                type="tel"
-                placeholder="Contact number *"
-                value={contactNumber}
-                onChange={(event) => {
-                    const value = event.target.value
-                    .replace(/\D/g, "")
-                    .slice(0, 10);
-                    setContactNumber(value);
-                }}
-                required
-                />
-
-                <select
-                required
-                value={websiteType}
-                onChange={(event) => setWebsiteType(event.target.value)}
-                >
-                <option value="">Type of website</option>
-                <option>E-Commerce Store</option>
-                <option>Interior &amp; Architecture</option>
-                <option>Healthcare &amp; Clinic</option>
-                <option>Real Estate</option>
-                <option>Corporate / Business</option>
-                <option>Other</option>
-                </select>
-
-                <div className="shopify-captcha">
-                    <span>
-                    {captchaA > 0 && captchaB > 0
-                        ? `${captchaA} × ${captchaB} =`
-                        : "Loading..."}
-                    </span>
-
-                    <input
-                    type="text"
-                    inputMode="numeric"
-                    value={captchaAnswer}
-                    onChange={(event) => {
-                        setCaptchaAnswer(event.target.value);
-
-                        if (captchaError) {
-                        setCaptchaError(false);
-                        }
-                    }}
-                    placeholder={captchaError ? "Try again" : "?"}
-                    className={captchaError ? "captcha-error" : ""}
-                    required
-                    />
-                </div>
-
-                {formError && (
-                <p className="shopify-form-error">
-                    {formError}
-                </p>
-                )}
-
-                <button
-                type="submit"
-                className="shopify-form-submit"
-                disabled={isSubmitting}
-                >
-                {isSubmitting
-                    ? "Submitting..."
-                    : "Send message to our team"}
-                </button>
-                </form>
             </div>
             </div>
         </section>

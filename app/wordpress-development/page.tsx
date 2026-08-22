@@ -1,11 +1,16 @@
+// "use client";
+// import { SubmitEvent, useState } from "react";
+// import Header from "@/components/layout/Header";
+// import "./wordpress-development.css";
+// import Footer from "@/components/layout/Footer";
+// const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
 "use client";
-
-import { SubmitEvent, useState } from "react";
+import { useState } from "react";
 import Header from "@/components/layout/Header";
-import "./wordpress-development.css";
 import Footer from "@/components/layout/Footer";
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+import ServiceQuoteForm from "@/components/forms/ServiceQuoteForm";
+import "./wordpress-development.css";
 
 export default function WordPressDevelopmentPage() {
   
@@ -42,108 +47,6 @@ export default function WordPressDevelopmentPage() {
 
     const [activeStage, setActiveStage] = useState(0);
     const [openFaq, setOpenFaq] = useState<number | null>(null);
-    const [businessName, setBusinessName] = useState("");
-    const [whatsappNumber, setWhatsappNumber] = useState("");
-    const [websiteType, setWebsiteType] = useState("");
-    const [captchaAnswer, setCaptchaAnswer] = useState("");
-    const [quoteError, setQuoteError] = useState("");
-    const [isSubmittingQuote, setIsSubmittingQuote] = useState(false);
-
-    // add handleWhatsappChange here
-    function handleWhatsappChange(value: string) {
-        const cleanedValue = value.replace(/\D/g, "").slice(0, 10);
-        setWhatsappNumber(cleanedValue);
-        }
-
-        
-    // add handleQuoteSubmit here
-        async function handleQuoteSubmit(
-            event: SubmitEvent<HTMLFormElement>
-            ) {
-            event.preventDefault();
-    
-            setQuoteError("");
-    
-            if (!businessName.trim()) {
-                setQuoteError("Please enter your business name.");
-                return;
-            }
-    
-            if (!/^[6-9]\d{9}$/.test(whatsappNumber)) {
-                setQuoteError(
-                "Please enter a valid 10-digit WhatsApp number."
-                );
-                return;
-            }
-    
-            if (!websiteType) {
-                setQuoteError("Please select the type of website.");
-                return;
-            }
-    
-            if (captchaAnswer.trim() !== "12") {
-                setQuoteError("Incorrect captcha answer.");
-                setCaptchaAnswer("");
-                return;
-            }
-    
-            if (!API_BASE_URL) {
-                setQuoteError(
-                "NEXT_PUBLIC_API_BASE_URL is missing."
-                );
-                return;
-            }
-    
-            if (isSubmittingQuote) {
-                return;
-            }
-    
-            try {
-                setIsSubmittingQuote(true);
-    
-                const response = await fetch(
-                `${API_BASE_URL}/api/quote-requests`,
-                {
-                    method: "POST",
-                    credentials: "include",
-                    headers: {
-                    "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                    business_name: businessName.trim(),
-                    whatsapp_number: whatsappNumber,
-                    website_type: websiteType,
-                    }),
-                }
-                );
-    
-                const data = await response.json();
-    
-                if (!response.ok) {
-                throw new Error(
-                    data.detail ||
-                    data.message ||
-                    "Unable to submit quote request."
-                );
-                }
-    
-                alert("Free quote request submitted successfully.");
-    
-                setBusinessName("");
-                setWhatsappNumber("");
-                setWebsiteType("");
-                setCaptchaAnswer("");
-                setQuoteError("");
-            } catch (error: unknown) {
-                setQuoteError(
-                error instanceof Error
-                    ? error.message
-                    : "Unable to submit quote request."
-                );
-            } finally {
-                setIsSubmittingQuote(false);
-            }
-            }
 
 
     const wordpressFaqs = [
@@ -317,112 +220,12 @@ export default function WordPressDevelopmentPage() {
                     Send message to our team
                     </button>
                 </form> */}
-                <form
+                
+                <ServiceQuoteForm
                     className="wp-lead-form"
-                    onSubmit={handleQuoteSubmit}
-                    >
-                    <input
-                        type="text"
-                        value={businessName}
-                        onChange={(event) =>
-                        setBusinessName(event.target.value)
-                        }
-                        placeholder="Name *"
-                        autoComplete="organization"
-                        required
+                    captchaClassName="wp-captcha"
+                    submitClassName="wp-form-submit"
                     />
-
-                    <input
-                        type="tel"
-                        inputMode="numeric"
-                        value={whatsappNumber}
-                        onChange={(event) =>
-                        handleWhatsappChange(event.target.value)
-                        }
-                        placeholder="WhatsApp Number *"
-                        autoComplete="tel"
-                        required
-                    />
-
-                    <select
-                        value={websiteType}
-                        onChange={(event) =>
-                        setWebsiteType(event.target.value)
-                        }
-                        required
-                    >
-                        <option value="">
-                        Type of website
-                        </option>
-
-                        <option value="E-Commerce Website">
-                        E-Commerce Website
-                        </option>
-
-                        <option value="Interior & Architecture Website">
-                        Interior &amp; Architecture Website
-                        </option>
-
-                        <option value="Healthcare Website">
-                        Healthcare Website
-                        </option>
-
-                        <option value="Real Estate Website">
-                        Real Estate Website
-                        </option>
-
-                        <option value="Business Website">
-                        Business Website
-                        </option>
-
-                        <option value="Other">
-                        Other
-                        </option>
-                    </select>
-
-                    <div className="wp-captcha">
-                        <span>3 × 4 =</span>
-
-                        <input
-                        type="text"
-                        inputMode="numeric"
-                        value={captchaAnswer}
-                        onChange={(event) =>
-                            setCaptchaAnswer(
-                            event.target.value
-                                .replace(/\D/g, "")
-                                .slice(0, 2)
-                            )
-                        }
-                        placeholder="?"
-                        required
-                        />
-                    </div>
-
-                    {quoteError && (
-                        <p
-                        role="alert"
-                        style={{
-                            gridColumn: "1 / -1",
-                            margin: 0,
-                            color: "#c4342e",
-                            fontSize: "13px",
-                        }}
-                        >
-                        {quoteError}
-                        </p>
-                    )}
-
-                    <button
-                        type="submit"
-                        className="wp-form-submit"
-                        disabled={isSubmittingQuote}
-                    >
-                        {isSubmittingQuote
-                        ? "Sending..."
-                        : "Send message to our team"}
-                    </button>
-                    </form>
                 </div>
             </div>
             </section>

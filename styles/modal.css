@@ -478,7 +478,7 @@
   animation: fadeOverlay 0.2s ease;
 }
 
-.login-modal-box {
+.login-modal {
   position: relative;
 
   width: min(100%, 430px);

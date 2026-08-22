@@ -8,7 +8,7 @@ import Footer from "@/components/layout/Footer";
 import Hero from "@/components/hero/Hero";
 import ProductFilters from "@/components/product/ProductFilters";
 import ProductGrid from "@/components/product/ProductGrid";
-import PreviewModal from "@/components/product/PreviewModal";
+// import PreviewModal from "@/components/product/PreviewModal";
 import Pricing from "@/components/sections/Pricing";
 import Features from "@/components/sections/Features";
 import Testimonial from "@/components/sections/Testimonial";
@@ -18,7 +18,9 @@ import CustomQuoteModal from "@/components/modal/CustomQuoteModel";
 import ReviewsModal from "@/components/modal/ReviewsModal";
 import SaveToast from "@/components/modal/SaveToast";
 import QuoteModal from "@/components/modal/QuoteModal";
-import {ecommerceProducts, adBanners } from "@/constants/product";
+// import {ecommerceProducts, adBanners } from "@/constants/product";
+import { adBanners } from "@/constants/product";
+import { storeCategoryProducts } from "@/constants/store-products";
 import { interiorProducts} from "@/constants/interior-products";
 import { healthcareCategoryProducts} from "@/constants/healthcare-products";
 import type { CategoryFilter } from "@/types/category";
@@ -221,7 +223,25 @@ export default function HomePage() {
                 Explore Store Portfolio &rarr;
               </Link>
             </div>
-            <ProductGrid products={ecommerceProducts} sectionLabel="Our E-Commerce Work" />
+            <ProductGrid
+              products={[
+                storeCategoryProducts.find(
+                  (product) => product.slug === "techzone-electronics"
+                ),
+                storeCategoryProducts.find(
+                  (product) => product.slug === "freshbasket-grocery"
+                ),
+                storeCategoryProducts.find(
+                  (product) => product.slug === "urban-home-furniture"
+                ),
+                storeCategoryProducts.find(
+                  (product) => product.slug === "stylehub-fashion"
+                ),
+              ]
+                .filter((product): product is Product => Boolean(product))
+                .map(toHomeProductCard)}
+              sectionLabel="Our E-Commerce Work"
+            />
           </div>
         </section>
         <div className="divider" />
@@ -240,7 +260,7 @@ export default function HomePage() {
       <PriceInfoModal />
       <CustomQuoteModal />
       <ReviewsModal />
-      <PreviewModal />
+      {/* <PreviewModal /> */}
       <SaveToast />
       <QuoteModal />
     </>

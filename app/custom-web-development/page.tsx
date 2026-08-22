@@ -3,6 +3,7 @@
 import { SubmitEvent, useEffect, useState } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import ServiceQuoteForm from "@/components/forms/ServiceQuoteForm";
 import "./custom-web-development.css";
 
 const customWebServices = [
@@ -43,114 +44,8 @@ export default function CustomWebDevelopmentPage() {
   const [activeService, setActiveService] = useState(0);
   const currentService = customWebServices[activeService];  
   const [openFaq, setOpenFaq] = useState<number | null>(null);
-  const [fullName, setFullName] = useState("");
-  const [contactNumber, setContactNumber] = useState("");
-  const [websiteType, setWebsiteType] = useState("");
-  const [captchaA, setCaptchaA] = useState(0);
-  const [captchaB, setCaptchaB] = useState(0);
-  const [captchaAnswer, setCaptchaAnswer] = useState("");
-  const [captchaError, setCaptchaError] = useState(false);
-  const [formError, setFormError] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
   
-  useEffect(() => {
-    setCaptchaA(Math.floor(Math.random() * 6) + 2);
-    setCaptchaB(Math.floor(Math.random() * 6) + 2);
-  }, []);
-
-  const handleSubmit = async (event: SubmitEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (isSubmitting) {
-        return;
-    }
-
-    setFormError("");
-    setCaptchaError(false);
-
-    if (!fullName.trim()) {
-        setFormError("Please enter your full name.");
-        return;
-    }
-
-    const normalizedPhone = contactNumber.replace(/\D/g, "");
-
-    if (!/^[6-9]\d{9}$/.test(normalizedPhone)) {
-        setFormError("Please enter a valid 10-digit mobile number.");
-        return;
-    }
-
-    if (!websiteType) {
-        setFormError("Please select the type of website.");
-        return;
-    }
-
-    if (
-        Number(captchaAnswer) !== captchaA * captchaB
-    ) {
-        setCaptchaError(true);
-        setFormError("Please enter the correct CAPTCHA answer.");
-        return;
-    }
-
-    setIsSubmitting(true);
-
-    try {
-    if (!API_BASE_URL) {
-        setFormError("API base URL is not configured.");
-        return;
-    }
-
-    const response = await fetch(
-        `${API_BASE_URL}/api/quote-requests`,
-        {
-        method: "POST",
-        credentials: "include",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-            business_name: fullName.trim(),
-            whatsapp_number: normalizedPhone,
-            website_type: websiteType,
-        }),
-        }
-    );
-
-    if (!response.ok) {
-        const errorData = await response.json().catch(() => null);
-
-        throw new Error(
-        errorData?.detail ||
-            "Unable to submit your request."
-        );
-    }
-
-    alert("Your request has been submitted successfully.");
-
-    setFullName("");
-    setContactNumber("");
-    setWebsiteType("");
-    setCaptchaAnswer("");
-    setCaptchaError(false);
-    setFormError("");
-
-    setCaptchaA(Math.floor(Math.random() * 6) + 2);
-    setCaptchaB(Math.floor(Math.random() * 6) + 2);
-    } catch (error) {
-    console.error("Custom web quote submission failed:", error);
-
-    setFormError(
-        error instanceof Error
-        ? error.message
-        : "Unable to submit your request."
-    );
-    } finally {
-    setIsSubmitting(false);
-    }
-    };
   
   return (
     <>
@@ -255,77 +150,8 @@ export default function CustomWebDevelopmentPage() {
                 Tell us your requirement — we reply within 30 minutes.
                 </div>
 
-                <form className="custom-web-lead-form"
-                onSubmit={handleSubmit}>
-                <input
-                type="text"
-                value={fullName}
-                onChange={(event) => setFullName(event.target.value)}
-                placeholder="Enter your full name"
-                />
+                <ServiceQuoteForm />
 
-                <input
-                type="tel"
-                value={contactNumber}
-                onChange={(event) => setContactNumber(event.target.value)}
-                placeholder="Contact Number"
-                />
-
-                <select
-                value={websiteType}
-                onChange={(event) => setWebsiteType(event.target.value)}
-                >
-                <option value="">Type of Website</option>
-                <option value="Business Website">Business Website</option>
-                <option value="Ecommerce Website">Ecommerce Website</option>
-                <option value="WordPress Website">WordPress Website</option>
-                <option value="Custom Website">Custom Website</option>
-                </select>
-
-                <div className="custom-web-captcha">
-                <span>
-                {captchaA > 0 && captchaB > 0
-                    ? `${captchaA} × ${captchaB} =`
-                    : "Loading..."}
-                </span>
-                <input
-                type="number"
-                value={captchaAnswer}
-                onChange={(event) => {
-                    setCaptchaAnswer(event.target.value);
-
-                    if (captchaError) {
-                    setCaptchaError(false);
-                    }
-                }}
-                placeholder={captchaError ? "Try again" : "?"}
-                className={captchaError ? "captcha-error" : ""}
-                />
-                </div>
-
-                {formError && (
-                <p className="custom-web-form-error">
-                    {formError}
-                </p>
-                )}
-
-
-                {/* <button
-                    type="submit"
-                    className="custom-web-form-submit"
-                >
-                    Send message to our team
-                </button> */}
-                <button
-                type="submit"
-                className="custom-web-form-submit"
-                disabled={isSubmitting}
-                >
-                {isSubmitting
-                    ? "Sending..."
-                    : "Send message to our team"}
-                </button>
-                </form>
             </div>
             </div>
         </section>

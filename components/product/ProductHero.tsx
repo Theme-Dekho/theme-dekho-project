@@ -17,7 +17,8 @@ export default function ProductHero({
     product.mainImage,
   );
 
-  const { openQuoteModal } = useSite();
+  // const { openQuoteModal } = useSite();
+  const { openQuoteModal, openPreviewModal,} = useSite();
 
   return (
     <section className="product-hero-section">
@@ -329,14 +330,26 @@ export default function ProductHero({
                   Get Enquiry
                 </button>
 
-                <a
+                {/* <a
                   href={product.previewUrl}
                   target="_blank"
                   rel="noreferrer"
                   className="product-preview-button"
                 >
                   Live Preview
-                </a>
+                </a> */}
+                <button
+                  type="button"
+                  className="product-preview-button"
+                  onClick={() =>
+                    openPreviewModal(
+                      product.previewUrl,
+                      product.name
+                    )
+                  }
+                >
+                  Live Preview
+                </button>
 
               </div>
             </div>

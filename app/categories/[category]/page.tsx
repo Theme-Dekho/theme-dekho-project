@@ -6,6 +6,7 @@ import Footer from "@/components/layout/Footer";
 import FeatureStrip from "@/components/category/FeatureStrip";
 import { interiorProducts } from "@/constants/interior-products";
 import { healthcareCategoryProducts } from "@/constants/healthcare-products";
+import { storeCategoryProducts } from "@/constants/store-products";
 import CategoryHero from "@/components/category/CategoryHero";
 import { categoryData } from "@/constants/category-data";
 import CategoryContent from "@/components/category/CategoryContent";
@@ -48,12 +49,20 @@ export default async function CategoryPage({
     notFound();
   }
 
- const products =
-  category === "interior-architecture"
-    ? interiorProducts
-    : category === "healthcare"
-      ? healthcareCategoryProducts
-      : [];
+//  const products =
+//   category === "interior-architecture"
+//     ? interiorProducts
+//     : category === "healthcare"
+//       ? healthcareCategoryProducts
+//       : [];
+  const products =
+    category === "interior-architecture"
+      ? interiorProducts
+      : category === "healthcare"
+        ? healthcareCategoryProducts
+        : category === "ecommerce"
+          ? storeCategoryProducts
+          : [];
 
   return (
     <>

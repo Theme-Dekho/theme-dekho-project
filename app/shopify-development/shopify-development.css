@@ -225,9 +225,10 @@
 }
 
 .shopify-lead-form {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
 }
 
 .shopify-lead-form input,
@@ -261,15 +262,18 @@
 }
 
 .shopify-captcha {
-  grid-column: 1 / -1;
-
   display: flex;
   align-items: center;
-  gap: 12px;
-
+  gap: 14px;
+  width: 100%;
   color: var(--shopify-ink);
   font-size: 13.5px;
   font-weight: 600;
+}
+
+.shopify-captcha input {
+  width: 90px;
+  flex: none;
 }
 
 .shopify-captcha input {
@@ -277,23 +281,16 @@
 }
 
 .shopify-form-submit {
-  grid-column: 1 / -1;
-
+  width: 100%;
   background: var(--shopify-blue-600);
   color: #fff;
-
   padding: 13px;
-
   border: none;
   border-radius: 10px;
-
   font-size: 14.5px;
   font-weight: 600;
-
   cursor: pointer;
-
   box-shadow: 0 6px 18px rgba(27, 77, 228, 0.3);
-
   transition:
     background 0.18s,
     transform 0.18s;

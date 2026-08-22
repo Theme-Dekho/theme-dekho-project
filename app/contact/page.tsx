@@ -420,12 +420,20 @@ export default function ContactPage() {
                 </div>
                 </div>
 
-                <a
-                href="#contact-form"
-                className="contact-cta-button"
+                  <button
+                type="button"
+                className="wp-cta-button"
+                onClick={() => {
+                    document
+                    .getElementById("contact-form")
+                    ?.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                    });
+                }}
                 >
                 Get a free quote →
-                </a>
+                </button>
 
             </div>
 

@@ -277,6 +277,42 @@
   text-align: center;
 }
 
+.pcard-img {
+  position: relative;
+  overflow: hidden;
+  height: 260px;
+}
+
+.pcard-img .scroll-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+
+  transform: translateY(0);
+}
+
+/* Only hovered product image scrolls repeatedly */
+.pcard-img:hover .scroll-img {
+  animation: productPreviewScroll 4s linear infinite;
+}
+
+@keyframes productPreviewScroll {
+  0% {
+    transform: translateY(0);
+  }
+
+  90% {
+    transform: translateY(calc(-100% + 260px));
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
 /* ================================
    Responsive
 ================================ */

@@ -7,7 +7,6 @@
   justify-content: center;
   padding: 20px;
   background: rgba(15, 23, 42, 0.6);
-  backdrop-filter: blur(5px);
   animation: quote-overlay-in 180ms ease-out;
 }
 

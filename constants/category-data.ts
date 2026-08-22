@@ -1,98 +1,3 @@
-// import type {CategoryHeroContent,FeatureStripItem} from "@/types/category";
-
-// export interface CategoryPageData {
-//   name: string;
-//   title: string;
-//   description: string;
-//   hero: CategoryHeroContent;
-// }
-
-// export interface CategoryPageData {
-//   name: string;
-//   title: string;
-//   description: string;
-//   hero: CategoryHeroContent;
-//   features: FeatureStripItem[];
-// }
-
-// export const categoryData: Record<string, CategoryPageData> = {
-//   "interior-architecture": {
-//     name: "Interior & Architecture",
-
-//     title: "Interior & Architecture Website Design — ThemeDekho",
-
-//     description:
-//       "Explore professional website designs for interior designers, architects, studios, and architecture firms.",
-
-//     hero: {
-//       tag: "Interior & Architecture",
-
-//       titleLine1: "Custom Website Built at",
-
-//       titleHighlight: "Affordable Price for Indian Startup",
-
-//       subtitle:
-//         "750+ premium Interior & Architecture websites built for design firms across India — mobile-ready, SEO-optimized, with Price Calculator and CRM.",
-
-//       stats: [
-//         {
-//           value: "750+",
-//           label: "Clients Served",
-//           tone: "default",
-//         },
-//         {
-//           value: "10–12 Days",
-//           label: "Delivery",
-//           tone: "orange",
-//         },
-//         {
-//           value: "68%",
-//           label: "Average Savings",
-//           tone: "green",
-//         },
-//       ],
-//     },
-//   },
-
-//   healthcare: {
-//     name: "Healthcare & Clinic",
-
-//     title: "Healthcare Website Design — ThemeDekho",
-
-//     description:
-//       "Explore professional website designs for hospitals, clinics, doctors, and healthcare providers.",
-
-//     hero: {
-//       tag: "Healthcare & Clinic",
-
-//       titleLine1: "Custom Healthcare Website Built at",
-
-//       titleHighlight: "Affordable Price for Indian Business",
-
-//       subtitle:
-//         "Professional healthcare websites for hospitals, clinics, doctors, diagnostic centers, and medical businesses across India.",
-
-//       stats: [
-//         {
-//           value: "500+",
-//           label: "Healthcare Clients",
-//           tone: "default",
-//         },
-//         {
-//           value: "10–12 Days",
-//           label: "Delivery",
-//           tone: "orange",
-//         },
-//         {
-//           value: "24/7",
-//           label: "Support",
-//           tone: "green",
-//         },
-//       ],
-//     },
-//   },
-// };
-
 
 import type {
   CategoryHeroContent,
@@ -355,7 +260,7 @@ export const categoryData: Record<string, CategoryPageData> = {
 
       stats: [
         {
-          value: "200+",
+          value: "20+",
           label: "Store Designs",
           tone: "default",
         },
@@ -417,17 +322,17 @@ export const categoryData: Record<string, CategoryPageData> = {
         count: 4,
       },
       {
-        key: "grocery-store",
+        key: "groceries-store",
         label: "Groceries Store",
         count: 4,
       },
       {
-        key: "furniture-store",
+        key: "home-furniture-store",
         label: "Home & Furniture Store",
         count: 4,
       },
       {
-        key: "fashion-store",
+        key: "apparel-fashion-store",
         label: "Apparel & Fashion Store",
         count: 4,
       },
@@ -527,4 +432,109 @@ export const categoryData: Record<string, CategoryPageData> = {
       },
     ],
   },
+
+
+  //   ecommerce: {
+  //   name: "Store & E-Commerce",
+
+  //   title: "Store & E-Commerce Website Design — ThemeDekho",
+
+  //   description:
+  //     "Explore professional e-commerce website designs for electronics, groceries, furniture, fashion and jewelry businesses.",
+
+  //   hero: {
+  //     tag: "Store & E-Commerce",
+
+  //     titleLine1: "Custom Online Store Built at",
+
+  //     titleHighlight: "Affordable Price for Indian Business",
+
+  //     subtitle:
+  //       "Ready-to-customize e-commerce websites for electronics, grocery, furniture, fashion and jewelry stores — mobile-ready, SEO-optimized and built for online sales.",
+
+  //     stats: [
+  //       {
+  //         value: "20+",
+  //         label: "Store Designs",
+  //         tone: "default",
+  //       },
+  //       {
+  //         value: "10–12 Days",
+  //         label: "Delivery",
+  //         tone: "orange",
+  //       },
+  //       {
+  //         value: "5",
+  //         label: "Store Categories",
+  //         tone: "green",
+  //       },
+  //     ],
+  //   },
+
+  //   features: [
+  //     {
+  //       icon: "⚡",
+  //       title: "Fast Loading",
+  //       subtitle: "Optimized store performance",
+  //     },
+  //     {
+  //       icon: "📱",
+  //       title: "Mobile Ready",
+  //       subtitle: "Shopping on all devices",
+  //     },
+  //     {
+  //       icon: "🔍",
+  //       title: "SEO Optimized",
+  //       subtitle: "Product-friendly SEO",
+  //     },
+  //     {
+  //       icon: "🛒",
+  //       title: "Shopping Cart",
+  //       subtitle: "Smooth buying experience",
+  //     },
+  //     {
+  //       icon: "💳",
+  //       title: "Online Payments",
+  //       subtitle: "Payment-ready structure",
+  //     },
+  //     {
+  //       icon: "📦",
+  //       title: "Product Catalogue",
+  //       subtitle: "Organized product listings",
+  //     },
+  //   ],
+
+  //   subcategories: [
+  //     {
+  //       key: "all",
+  //       label: "All Designs",
+  //       count: 20,
+  //     },
+  //     {
+  //       key: "electronics-store",
+  //       label: "Electronics Store",
+  //       count: 4,
+  //     },
+  //     {
+  //       key: "groceries-store",
+  //       label: "Groceries Store",
+  //       count: 4,
+  //     },
+  //     {
+  //       key: "home-furniture-store",
+  //       label: "Home & Furniture Store",
+  //       count: 4,
+  //     },
+  //     {
+  //       key: "apparel-fashion-store",
+  //       label: "Apparel & Fashion Store",
+  //       count: 4,
+  //     },
+  //     {
+  //       key: "jewelry-store",
+  //       label: "Jewelry Store",
+  //       count: 4,
+  //     },
+  //   ],
+  // },
 };

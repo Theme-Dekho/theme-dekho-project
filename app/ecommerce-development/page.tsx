@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import ServiceQuoteForm from "@/components/forms/ServiceQuoteForm";
 import "./ecommerce-development.css";
 
 const ecommercePlatforms = [
@@ -146,83 +147,12 @@ export default function EcommerceDevelopmentPage() {
                 30 minutes.
               </p>
 
-              <form className="ecommerce-lead-form">
-
-                <input
-                  type="text"
-                  placeholder="Full name *"
+              <ServiceQuoteForm
+                className="ecommerce-lead-form"
+                captchaClassName="ecommerce-captcha"
+                submitClassName="ecommerce-submit-button"
                 />
 
-                <input
-                  type="email"
-                  placeholder="Email *"
-                />
-
-                <input
-                  type="tel"
-                  placeholder="Contact number *"
-                />
-
-                <select defaultValue="">
-                  <option value="" disabled>
-                    Type of website
-                  </option>
-
-                  <option>
-                    E-Commerce Store
-                  </option>
-
-                  <option>
-                    Interior & Architecture
-                  </option>
-
-                  <option>
-                    Healthcare & Clinic
-                  </option>
-
-                  <option>
-                    Real Estate
-                  </option>
-
-                  <option>
-                    Corporate / Business
-                  </option>
-
-                  <option>
-                    Other
-                  </option>
-                </select>
-
-                <input
-                  className="full"
-                  type="text"
-                  placeholder="Reference websites if any"
-                />
-
-                <input
-                  type="text"
-                  placeholder="Budget"
-                />
-
-                <div className="ecommerce-captcha">
-                  <span>
-                    3 × 4 =
-                  </span>
-
-                  <input
-                    type="text"
-                    placeholder="?"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className="ecommerce-submit-button"
-                >
-                  Send message to our team
-                </button>
-
-              </form>
             </div>
 
           </div>
@@ -1273,12 +1203,20 @@ export default function EcommerceDevelopmentPage() {
                 </div>
                 </div>
 
-                <a
-                href="#ecommerce-lead"
-                className="ecommerce-cta-button"
+                 <button
+                type="button"
+                className="wp-cta-button"
+                onClick={() => {
+                    document
+                    .getElementById("ecommerce-lead")
+                    ?.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                    });
+                }}
                 >
                 Get a free quote →
-                </a>
+                </button>
 
             </div>
 

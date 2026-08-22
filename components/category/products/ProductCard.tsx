@@ -14,10 +14,18 @@ export default function ProductCard({
   product,
 }: ProductCardProps) {
   const { isLoggedIn, openLoginModal} = useAuth();
-  const { isSaved, toggleSave} = useSite();
+  const { isSaved, toggleSave, openPreviewModal,} = useSite();
   const productId = String(product.id ?? product.slug ?? product.name);
   const productSlug = String(product.slug ?? product.id ?? product.name);
   const saved = isSaved(productId);
+
+  const handlePreview = () => {
+    openPreviewModal(
+      product.previewUrl,
+      product.name
+    );
+  };
+
   const handleWishlist = async () => {
     if (!isLoggedIn) {
       openLoginModal();
@@ -39,8 +47,9 @@ export default function ProductCard({
         <Image
           src={product.img}
           alt={product.alt}
-          fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1100px) 50vw, 33vw"
+          width={600}
+          height={1800}
+          className="scroll-img"
         />
 
         <div className="pcard-badges">
@@ -57,6 +66,7 @@ export default function ProductCard({
         <button
           type="button"
           className="pcard-preview-btn"
+          onClick={handlePreview}
         >
           👁 Live Preview
         </button>

@@ -44,7 +44,7 @@ export default function CustomQuoteModal() {
       document.body.style.overflow = "";
       window.removeEventListener("keydown", handleEscape);
     };
-  }, [customQuoteModal]);
+  }, [customQuoteModal.isOpen]);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();

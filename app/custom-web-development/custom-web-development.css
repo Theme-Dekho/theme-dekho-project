@@ -243,28 +243,22 @@
 }
 
 .custom-web-lead-form {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
 }
 
 .custom-web-lead-form input,
 .custom-web-lead-form select {
   width: 100%;
-
   padding: 11px 13px;
-
   background: var(--custom-wash);
-
   border: 1.5px solid var(--custom-line);
   border-radius: 9px;
-
   color: var(--custom-ink);
-
   font-size: 13.5px;
-
   outline: none;
-
   transition:
     border-color 0.15s,
     background 0.15s;
@@ -281,40 +275,31 @@
 }
 
 .custom-web-captcha {
-  grid-column: 1 / -1;
-
   display: flex;
   align-items: center;
-  gap: 12px;
-
+  gap: 14px;
+  width: 100%;
   color: var(--custom-ink);
-
   font-size: 13.5px;
   font-weight: 600;
 }
 
 .custom-web-captcha input {
-  width: 72px;
+  width: 90px;
+  flex: none;
 }
 
 .custom-web-form-submit {
-  grid-column: 1 / -1;
-
+  width: 100%;
   padding: 13px;
-
   background: var(--custom-blue-600);
   color: #fff;
-
   border: none;
   border-radius: 10px;
-
   font-size: 14.5px;
   font-weight: 600;
-
   cursor: pointer;
-
   box-shadow: 0 6px 18px rgba(27, 77, 228, 0.3);
-
   transition:
     background 0.18s,
     transform 0.18s;

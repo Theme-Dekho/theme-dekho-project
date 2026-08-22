@@ -28,9 +28,9 @@ export default function Hero() {
           </p>
 
           <div className="hero-actions">
-            <Link href="#templates" className="btn-primary">
+            {/* <Link href="#templates" className="btn-primary">
               Explore Portfolio &rarr;
-            </Link>
+            </Link> */}
             <div style={{ position: "relative", display: "inline-block" }}>
               <span className="click-tag">Free</span>
               <button className="btn-secondary-outline" onClick={customQuoteModal.open}>

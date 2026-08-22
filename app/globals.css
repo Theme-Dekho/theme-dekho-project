@@ -12,6 +12,12 @@
   padding: 0;
 }
 
+html,
+body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 :root {
   /* ── Project Studio palette ──
      blue  #155DFD  PRIMARY CTA / links / accents  (white text, 4.9:1)

@@ -100,24 +100,55 @@ export default function AuthModal({
     onClose();
   };
 
+  // useEffect(() => {
+  //   if (!isOpen) return;
+
+  //   const previousOverflow = document.body.style.overflow;
+  //   document.body.style.overflow = "hidden";
+
+  //   const timer = window.setTimeout(() => phoneRef.current?.focus(), 50);
+
+  //   const handleEscape = (event: globalThis.KeyboardEvent) => {
+  //     if (event.key === "Escape") close();
+  //   };
+
+  //   document.addEventListener("keydown", handleEscape);
+
+  //   return () => {
+  //     window.clearTimeout(timer);
+  //     document.body.style.overflow = previousOverflow;
+  //     document.removeEventListener("keydown", handleEscape);
+  //   };
+  // }, [isOpen, isSubmitting]);
+
   useEffect(() => {
     if (!isOpen) return;
 
-    const previousOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+    const timer = window.setTimeout(
+      () => phoneRef.current?.focus(),
+      50
+    );
 
-    const timer = window.setTimeout(() => phoneRef.current?.focus(), 50);
-
-    const handleEscape = (event: globalThis.KeyboardEvent) => {
-      if (event.key === "Escape") close();
+    const handleEscape = (
+      event: globalThis.KeyboardEvent
+    ) => {
+      if (event.key === "Escape") {
+        close();
+      }
     };
 
-    document.addEventListener("keydown", handleEscape);
+    document.addEventListener(
+      "keydown",
+      handleEscape
+    );
 
     return () => {
       window.clearTimeout(timer);
-      document.body.style.overflow = previousOverflow;
-      document.removeEventListener("keydown", handleEscape);
+
+      document.removeEventListener(
+        "keydown",
+        handleEscape
+      );
     };
   }, [isOpen, isSubmitting]);
 

@@ -1718,13 +1718,23 @@ button.active {
 
 /* grouped cards */
 
-.product-detail-page .product-specification-groups {
+/* .product-detail-page .product-specification-groups {
   display: grid;
   grid-template-columns: 1fr 1fr;
 
   gap: 18px;
 
   align-items: start;
+} */
+.product-detail-page .product-specification-groups {
+  column-count: 2;
+  column-gap: 18px;
+}
+
+.product-detail-page .product-specification-group {
+  width: 100%;
+  margin-bottom: 18px;
+  break-inside: avoid;
 }
 
 .product-detail-page .product-specification-group {
@@ -1888,9 +1898,15 @@ h3 {
 /* responsive */
 
 @media (max-width: 900px) {
-  .product-detail-page .product-specification-groups {
+  /* .product-detail-page .product-specification-groups {
     grid-template-columns: 1fr;
+  } */
+
+   @media (max-width: 900px) {
+  .product-detail-page .product-specification-groups {
+    column-count: 1;
   }
+}
 
   .product-detail-page .product-specification-legend {
     width: 100%;

@@ -5,6 +5,7 @@ import { Inter, Sora } from "next/font/google";
 import { SiteProvider } from "@/lib/site-context";
 import CustomQuoteModel from "@/components/modal/CustomQuoteModel";
 import AnalyticsPageTracker from "@/components/analytics/AnalyticsPageTracker";
+import PreviewModal from "@/components/product/PreviewModal";
 import "./globals.css";
 import "@/styles/header.css";
 import "@/styles/hero.css";
@@ -51,6 +52,7 @@ export default function RootLayout({
         <AuthProvider>
         <SiteProvider>{children}
         <CustomQuoteModel/>
+        <PreviewModal />
         </SiteProvider>
         </AuthProvider>
       </body>

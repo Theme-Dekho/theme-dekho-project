@@ -9,7 +9,7 @@
   backdrop-filter: blur(10px);
 }
 
-.ai-builder-page .auth-modal-card {
+.auth-modal-card {
   position: relative;
   width: min(100%, 380px);
   max-height: 78vh;
@@ -271,7 +271,7 @@
     padding: 16px;
   }
 
-  .ai-builder-page .auth-modal-card {
+  .auth-modal-card {
     width: min(100%, 360px);
     max-height: 82vh;
     border-radius: 16px;

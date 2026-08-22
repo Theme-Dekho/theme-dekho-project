@@ -3,7 +3,8 @@ import type { MegaMenuColumn, MegaMenuBarItem, SimpleDropLink, MobileAccordionLi
 /** Top colored category bar inside the "Our Work" mega dropdown */
 export const megaMenuBar: MegaMenuBarItem[] = [
   { icon: "🏛️", title: "Interior Architect", count: "400+ Designs", href: "/categories/interior-architecture"},
-  { icon: "🛒", title: "E-Commerce", count: "200+ Designs", href: "/categories/ecommerce"},
+  // { icon: "🛒", title: "E-Commerce", count: "200+ Designs", href: "/categories/ecommerce"},
+  { icon: "🛒", title: "E-Commerce", count: "20 Designs", href: "/categories/ecommerce"},
   { icon: "🏥", title: "Medical Healthcare", count: "150+ Designs", href: "/categories/healthcare"},
   { icon: "🏘️", title: "Real Estate", count: "100+ Designs", href: "/categories/real-estate"},
 ];
@@ -30,30 +31,80 @@ export const megaMenuColumns: MegaMenuColumn[] = [
     },
   ],
   },
+  // {
+  //   links: [
+  //   {
+  //     label: "Electronics store",
+  //     href: "/categories/ecommerce?subcategory=electronics-store",
+  //   },  
+  //   {
+  //     label: "Groceries stores",
+  //     href: "/categories/ecommerce?subcategory=grocery-store",
+  //   },    
+  //   {
+  //     label: "Home & furniture store",
+  //     href: "/categories/ecommerce?subcategory=furniture-store",
+  //   },    
+  //   {
+  //     label: "Apparel & fashion store",
+  //     href: "/categories/ecommerce?subcategory=fashion-store",
+  //   },    
+  //   {
+  //     label:  "Jewelry-Store",
+  //     href: "/categories/ecommerce?subcategory=jewelry-store",
+  //   },    
+  //   ],
+  // },
+//   {
+//   links: [
+//     {
+//       label: "Electronics Store",
+//       href: "/categories/store?subcategory=electronics-store",
+//     },
+//     {
+//       label: "Groceries Store",
+//       href: "/categories/store?subcategory=groceries-store",
+//     },
+//     {
+//       label: "Home & Furniture Store",
+//       href: "/categories/store?subcategory=home-furniture-store",
+//     },
+//     {
+//       label: "Apparel & Fashion Store",
+//       href: "/categories/store?subcategory=apparel-fashion-store",
+//     },
+//     {
+//       label: "Jewelry Store",
+//       href: "/categories/store?subcategory=jewelry-store",
+//     },
+//   ],
+// },
+
   {
     links: [
-    {
-      label: "Electronics store",
-      href: "/categories/ecommerce?subcategory=electronics-store",
-    },  
-    {
-      label: "Groceries stores",
-      href: "/categories/ecommerce?subcategory=grocery-store",
-    },    
-    {
-      label: "Home & furniture store",
-      href: "/categories/ecommerce?subcategory=furniture-store",
-    },    
-    {
-      label: "Apparel & fashion store",
-      href: "/categories/ecommerce?subcategory=fashion-store",
-    },    
-    {
-      label:  "Jewelry-Store",
-      href: "/categories/ecommerce?subcategory=jewelry-store",
-    },    
+      {
+        label: "Electronics Store",
+        href: "/categories/ecommerce?subcategory=electronics-store",
+      },
+      {
+        label: "Groceries Store",
+        href: "/categories/ecommerce?subcategory=groceries-store",
+      },
+      {
+        label: "Home & Furniture Store",
+        href: "/categories/ecommerce?subcategory=home-furniture-store",
+      },
+      {
+        label: "Apparel & Fashion Store",
+        href: "/categories/ecommerce?subcategory=apparel-fashion-store",
+      },
+      {
+        label: "Jewelry Store",
+        href: "/categories/ecommerce?subcategory=jewelry-store",
+      },
     ],
   },
+
   {
     links: [
     {

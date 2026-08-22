@@ -74,8 +74,9 @@ export default function MegaMenu() {
 
       {/* Footer strip */}
       <div className="mega-drop-footer">
-        <span>750+ Premium Templates Available</span>
-        <Link href="#">View All Templates &rarr;</Link>
+        <span>100+ Premium Portfolios Available</span>
+        {/* <Link href="#">View All Templates &rarr;
+        </Link> */}
       </div>
     </div>
   );

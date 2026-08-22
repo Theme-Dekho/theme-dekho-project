@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import ServiceQuoteForm from "@/components/forms/ServiceQuoteForm";
 import "./redesign-wordpress.css";
 
 
@@ -177,68 +178,11 @@ export default function RedesignWordPressPage() {
                 30 minutes.
                 </p>
 
-                <form className="redesign-lead-form">
-
-                <input
-                    type="text"
-                    placeholder="Full name *"
-                    required
+               <ServiceQuoteForm
+                className="redesign-lead-form"
+                captchaClassName="redesign-captcha"
+                submitClassName="redesign-submit-button"
                 />
-
-                <input
-                    type="email"
-                    placeholder="Email *"
-                    required
-                />
-
-                <input
-                    type="tel"
-                    placeholder="Contact number *"
-                    required
-                />
-
-                <select defaultValue="" required>
-                    <option value="" disabled>
-                    Type of website
-                    </option>
-
-                    <option>E-Commerce Store</option>
-                    <option>Interior &amp; Architecture</option>
-                    <option>Healthcare &amp; Clinic</option>
-                    <option>Real Estate</option>
-                    <option>Corporate / Business</option>
-                    <option>Other</option>
-                </select>
-
-                <input
-                    className="full"
-                    type="text"
-                    placeholder="Reference websites if any"
-                />
-
-                <input
-                    type="text"
-                    placeholder="Budget"
-                />
-
-                <div className="redesign-captcha">
-                    <span>3 × 4 =</span>
-
-                    <input
-                    type="text"
-                    placeholder="?"
-                    required
-                    />
-                </div>
-
-                <button
-                    type="submit"
-                    className="redesign-submit-button"
-                >
-                    Send message to our team
-                </button>
-
-                </form>
 
             </div>
 
@@ -1134,12 +1078,20 @@ export default function RedesignWordPressPage() {
                 </div>
                 </div>
 
-                <a
-                href="#redesign-lead"
-                className="redesign-cta-button"
+                  <button
+                type="button"
+                className="wp-cta-button"
+                onClick={() => {
+                    document
+                    .getElementById("redesign-lead")
+                    ?.scrollIntoView({
+                        behavior: "smooth",
+                        block: "start",
+                    });
+                }}
                 >
                 Get a free quote →
-                </a>
+                </button>
 
             </div>
 

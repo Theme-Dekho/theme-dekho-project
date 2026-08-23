@@ -360,6 +360,7 @@ export function useAiBuilder({
 
     setBuildFillActive(false);
     setBuildActive(true);
+    
 
     requestAnimationFrame(() => {
       requestAnimationFrame(() => {

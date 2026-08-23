@@ -25,7 +25,7 @@ export default function StepIndustry({ active, industryKey, invalid, onChange }:
             <option value="interior">Interior &amp; Architecture</option>
             <option value="medical">Medical &amp; Healthcare</option>
             <option value="realestate">Real Estate</option>
-            <option value="other">Other</option>
+            <option value="other">Ecommerce</option>
           </select>
         </div>
       </div>

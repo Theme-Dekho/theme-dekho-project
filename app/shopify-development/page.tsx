@@ -85,12 +85,12 @@ export default function ShopifyDevelopmentPage() {
                 </ul>
 
                 <div className="shopify-hero-actions">
-                <a
-                    href="#work"
+                <span
+                    // href="#work"
                     className="shopify-button shopify-button-primary"
                 >
                     See our work →
-                </a>
+                </span>
 
                 <a
                     href="#lead"

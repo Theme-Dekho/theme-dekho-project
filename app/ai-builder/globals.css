@@ -734,8 +734,8 @@
   color: #fff;
 }
 .wizard-step-dot.done .num {
-  background: var(--green);
-  border-color: var(--green);
+   background: #2563eb;
+   border-color: #2563eb;
   color: #fff;
 }
 .wizard-connector {
@@ -866,7 +866,8 @@ select.wiz-select.invalid {
   transition: all 0.2s;
   display: flex;
 }
-.chip-check.checked {
+
+/* .chip-check.checked {
   border-color: var(--green);
   color: #fff;
   background: #12855a29;
@@ -874,7 +875,19 @@ select.wiz-select.invalid {
 .chip-check.checked .tick {
   background: var(--green);
   border-color: var(--green);
+} */
+.chip-check.checked {
+  border-color: #3b82f6;
+  color: #fff;
+  background: rgba(59, 130, 246, 0.10);
 }
+
+.chip-check.checked .tick {
+  background: #2563eb;
+  border-color: #60a5fa;
+  color: #fff;
+}
+
 .add-chip-form {
   gap: 8px;
   margin-top: 14px;
@@ -1100,12 +1113,42 @@ select.wiz-select.invalid {
   margin: 20px auto 0;
   overflow: hidden;
 }
-.build-progress-fill {
+/* .build-progress-fill {
   background: linear-gradient(90deg, var(--orange), var(--green));
   width: 0%;
   height: 100%;
   transition: width linear;
+} */
+
+
+.build-progress-fill {
+  width: 35%;
+  height: 100%;
+  border-radius: 100px;
+  background: linear-gradient(
+    90deg,
+    var(--orange),
+    var(--green)
+  );
+
+  transform: translateX(-110%);
 }
+
+
+.build-progress-fill.active {
+  animation: build-loading-slide 1.6s ease-in-out infinite alternate;
+}
+@keyframes build-loading-slide {
+  from {
+    transform: translateX(-110%);
+  }
+
+  to {
+    transform: translateX(290%);
+  }
+}
+
+
 .float-zone {
   height: 200px;
   margin-top: 10px;

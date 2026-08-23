@@ -21,8 +21,8 @@ export const industryData: Record<IndustryKey, IndustryInfo> = {
     features: ["Contact Form", "Google Maps Location", "WhatsApp Chat Button", "Property Search & Filters", "EMI Calculator", "Virtual Tour / 360°"],
   },
   other: {
-    label: "Other",
-    subIndustries: ["Retail / E-commerce", "Education & Coaching", "Restaurant / Food", "Fitness & Wellness", "Other"],
+    label: "Ecommerce",
+    subIndustries: ["Electronics", "Clothes", "Restaurant / Food", "Fitness & Wellness", "Grocery"],
     pages: ["Home", "About Us", "Services / Products", "Gallery", "Contact Us"],
     features: ["Contact Form", "Google Maps Location", "WhatsApp Chat Button", "Newsletter Signup"],
   },

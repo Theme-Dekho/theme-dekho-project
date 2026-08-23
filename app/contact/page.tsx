@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { SubmitEvent, useEffect, useState } from "react";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 
@@ -9,6 +9,160 @@ import "./contact.css";
 export default function ContactPage() {
 
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [message, setMessage] = useState("");
+  const [captchaA, setCaptchaA] = useState(0);
+  const [captchaB, setCaptchaB] = useState(0);
+  const [captchaAnswer, setCaptchaAnswer] = useState("");
+  const [captchaError, setCaptchaError] = useState(false);
+  const [formError, setFormError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+
+  useEffect(() => {
+    setCaptchaA(Math.floor(Math.random() * 6) + 2);
+    setCaptchaB(Math.floor(Math.random() * 6) + 2);
+    }, []);
+  
+  async function handleContactSubmit(
+    event: SubmitEvent<HTMLFormElement>,
+    ) {
+    event.preventDefault();
+
+    setFormError("");
+    setCaptchaError(false);
+
+    if (!name.trim()) {
+        setFormError("Please enter your name.");
+        return;
+    }
+
+    if (!email.trim()) {
+        setFormError("Please enter your email address.");
+        return;
+    }
+
+    if (
+        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
+        email.trim(),
+        )
+    ) {
+        setFormError(
+        "Please enter a valid email address.",
+        );
+        return;
+    }
+
+    if (!/^[6-9]\d{9}$/.test(phone)) {
+        setFormError(
+        "Please enter a valid 10-digit phone number.",
+        );
+        return;
+    }
+
+    if (!message.trim()) {
+        setFormError("Please enter your message.");
+        return;
+    }
+
+    const messageWordCount = message
+        .trim()
+        .split(/\s+/)
+        .filter(Boolean).length;
+
+        if (messageWordCount > 100) {
+        setFormError(
+            "Message cannot exceed 100 words.",
+        );
+        return;
+        }
+
+    const correctAnswer = captchaA * captchaB;
+
+    if (
+        Number(captchaAnswer) !== correctAnswer
+    ) {
+        setCaptchaError(true);
+        setCaptchaAnswer("");
+        setFormError(
+        "Incorrect captcha answer. Please try again.",
+        );
+        return;
+    }
+
+    if (!API_BASE_URL) {
+        setFormError(
+        "NEXT_PUBLIC_API_BASE_URL is missing.",
+        );
+        return;
+    }
+
+    if (isSubmitting) {
+        return;
+    }
+
+    try {
+        setIsSubmitting(true);
+
+        const response = await fetch(
+        `${API_BASE_URL}/api/contact-requests`,
+        {
+            method: "POST",
+            credentials: "include",
+            headers: {
+            "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+            name: name.trim(),
+            email: email.trim(),
+            phone,
+            message: message.trim(),
+            source_url:
+                window.location.pathname +
+                window.location.search,
+            }),
+        },
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+        throw new Error(
+            data.detail ||
+            data.message ||
+            "Unable to submit contact request.",
+        );
+        }
+
+        alert("Message submitted successfully.");
+
+        setName("");
+        setEmail("");
+        setPhone("");
+        setMessage("");
+        setCaptchaAnswer("");
+        setCaptchaError(false);
+
+        setCaptchaA(
+        Math.floor(Math.random() * 6) + 2,
+        );
+        setCaptchaB(
+        Math.floor(Math.random() * 6) + 2,
+        );
+    } catch (error: unknown) {
+        setFormError(
+        error instanceof Error
+            ? error.message
+            : "Unable to submit contact request.",
+        );
+    } finally {
+        setIsSubmitting(false);
+    }
+    }  
+
+
   
   return (
     <>
@@ -130,78 +284,122 @@ export default function ContactPage() {
                 Fill in the form and our team will get back to you shortly.
             </p>
 
-            <form>
-
+            <form onSubmit={handleContactSubmit}>
                 <div className="contact-form-row">
-                <label htmlFor="contact-name">
+                    <label htmlFor="contact-name">
                     Your name *
-                </label>
+                    </label>
 
-                <input
+                    <input
                     id="contact-name"
                     type="text"
+                    value={name}
+                    onChange={(event) =>
+                        setName(event.target.value)
+                    }
                     placeholder="Enter your full name"
+                    autoComplete="name"
                     required
-                />
+                    />
                 </div>
 
                 <div className="contact-form-row">
-                <label htmlFor="contact-email">
+                    <label htmlFor="contact-email">
                     Your email *
-                </label>
+                    </label>
 
-                <input
+                    <input
                     id="contact-email"
                     type="email"
+                    value={email}
+                    onChange={(event) =>
+                        setEmail(event.target.value)
+                    }
                     placeholder="you@example.com"
+                    autoComplete="email"
                     required
-                />
+                    />
                 </div>
 
                 <div className="contact-form-row">
-                <label htmlFor="contact-subject">
-                    Subject *
-                </label>
+                    <label htmlFor="contact-phone">
+                    Phone number *
+                    </label>
 
-                <input
-                    id="contact-subject"
-                    type="text"
-                    placeholder="What is this about?"
+                    <input
+                    id="contact-phone"
+                    type="tel"
+                    inputMode="numeric"
+                    value={phone}
+                    onChange={(event) => {
+                        const value = event.target.value
+                        .replace(/\D/g, "")
+                        .slice(0, 10);
+
+                        setPhone(value);
+                    }}
+                    placeholder="Enter 10-digit phone number"
+                    autoComplete="tel"
+                    minLength={10}
+                    maxLength={10}
+                    pattern="[6-9][0-9]{9}"
                     required
-                />
+                    />
                 </div>
 
                 <div className="contact-form-row">
-                <label htmlFor="contact-message">
-                    Your message
-                </label>
+                    <label htmlFor="contact-message">
+                    Your message *
+                    </label>
 
-                <textarea
+                  <textarea
                     id="contact-message"
+                    value={message}
+                    onChange={(event) => {
+                        const value = event.target.value;
+
+                        const words = value
+                        .trim()
+                        .split(/\s+/)
+                        .filter(Boolean);
+
+                        if (words.length <= 100) {
+                        setMessage(value);
+                        }
+                    }}
                     placeholder="Tell us a little about your project or question..."
-                />
-                </div>
-
-                <div className="contact-captcha">
-                <span>
-                    5 × 4 =
-                </span>
-
-                <input
-                    type="text"
-                    placeholder="?"
                     required
-                />
+                    />
+                    <p className="contact-word-count">
+                        {
+                            message
+                            .trim()
+                            .split(/\s+/)
+                            .filter(Boolean).length
+                        }
+                        /100 words
+                        </p>
                 </div>
+
+                {formError && (
+                    <p
+                    className="contact-form-error"
+                    role="alert"
+                    >
+                    {formError}
+                    </p>
+                )}
 
                 <button
-                type="submit"
-                className="contact-submit-button"
+                    type="submit"
+                    className="contact-submit-button"
+                    disabled={isSubmitting}
                 >
-                Submit message
+                    {isSubmitting
+                    ? "Submitting..."
+                    : "Submit message"}
                 </button>
-
-            </form>
+                </form>
 
             </div>
 
@@ -422,7 +620,7 @@ export default function ContactPage() {
 
                   <button
                 type="button"
-                className="wp-cta-button"
+                className="contact-cta-button"
                 onClick={() => {
                     document
                     .getElementById("contact-form")

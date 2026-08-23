@@ -411,6 +411,33 @@
   background: #ffffff;
 }
 
+.contact-captcha input.captcha-error {
+  border-color: #c4342e;
+  background: #fff5f5;
+}
+
+.contact-word-count {
+  margin: 6px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  text-align: right;
+}
+
+.contact-form-error {
+  margin: -6px 0 16px;
+
+  color: #c4342e;
+
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.contact-submit-button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
 
 /* submit */
 

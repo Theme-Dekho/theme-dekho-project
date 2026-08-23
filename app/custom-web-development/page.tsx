@@ -90,12 +90,11 @@ export default function CustomWebDevelopmentPage() {
                 </ul>
 
                 <div className="custom-web-hero-actions">
-                <a
-                    href="#work"
+                <span
                     className="custom-web-button custom-web-button-primary"
                 >
                     See our work →
-                </a>
+                </span>
 
                 <a
                     href="#lead"

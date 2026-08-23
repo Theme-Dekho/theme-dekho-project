@@ -36,17 +36,34 @@
 
 .sec-blue   .view-all:hover { background: var(--orange); color: var(--on-primary); }
 
-.pc-img {
+/* .pc-img {
     overflow: hidden;
-  }
+  } */
+
+  /* .pc-img .scroll-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transform: translateY(0%);
+      transition: transform 0s;
+    } */
+
+.pc-img {
+  height: 260px;
+  position: relative;
+  overflow: hidden;
+  display: block;
+}
 
 .pc-img .scroll-img {
-    width: 100%;
-    height: auto;
-    display: block;
-    transform: translateY(0%);
-    transition: transform 0s;
-  }
+  width: 100%;
+  height: auto;
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  object-position: top;
+}    
 
 .product-card:hover .scroll-img {
     animation: scroll-website 4s linear infinite;

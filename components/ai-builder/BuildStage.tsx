@@ -16,7 +16,7 @@ export default function BuildStage({
         layout, and content.
       </p>
 
-      <div className="build-progress-bar">
+      {/* <div className="build-progress-bar">
         <div
           className="build-progress-fill"
           style={{
@@ -26,7 +26,14 @@ export default function BuildStage({
             transitionDuration: "30s",
           }}
         />
-      </div>
+      </div> */}
+      <div className="build-progress-bar">
+      <div
+        className={`build-progress-fill ${
+          buildFillActive ? "active" : ""
+        }`}
+      />
+    </div>
     </div>
   );
 }

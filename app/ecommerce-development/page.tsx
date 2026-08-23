@@ -98,12 +98,11 @@ export default function EcommerceDevelopmentPage() {
               </ul>
 
               <div className="ecommerce-hero-actions">
-                <a
-                  href="#ecommerce-work"
+                <span
                   className="ecommerce-primary-button"
                 >
                   See our work →
-                </a>
+                </span>
 
                 <a
                   href="#ecommerce-lead"
@@ -1205,7 +1204,7 @@ export default function EcommerceDevelopmentPage() {
 
                  <button
                 type="button"
-                className="wp-cta-button"
+                className="ecommerce-primary-button"
                 onClick={() => {
                     document
                     .getElementById("ecommerce-lead")

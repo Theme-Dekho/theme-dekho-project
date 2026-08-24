@@ -27,7 +27,7 @@ export default function HealthcareTemplate({
       className={styles.page}
       style={cssVariables}
     >
-      <header className={styles.header}>
+      {/* <header className={styles.header}>
         <div className={styles.container}>
           <div className={styles.brand}>
             {data.businessName}
@@ -39,6 +39,64 @@ export default function HealthcareTemplate({
           >
             Book Appointment
           </a>
+        </div>
+      </header> */}
+      <header className={styles.header}>
+        <div className={styles.container}>
+          <div className={styles.brandWrap}>
+            <div className={styles.brand}>
+              {data.businessName}
+            </div>
+
+            <span className={styles.brandTagline}>
+              Trusted Healthcare Services
+            </span>
+          </div>
+
+          <nav
+            className={styles.nav}
+            aria-label="Healthcare navigation"
+          >
+            <a href="#services">
+              Services
+            </a>
+
+            {data.doctors.length > 0 && (
+              <a href="#doctors">
+                Doctors
+              </a>
+            )}
+
+            <a href="#process">
+              Patient Journey
+            </a>
+
+            <a href="#about">
+              About
+            </a>
+
+            <a href="#contact">
+              Contact
+            </a>
+          </nav>
+
+          <div className={styles.headerActions}>
+            {data.phone && (
+              <a
+                href={`tel:${data.phone}`}
+                className={styles.phoneLink}
+              >
+                {data.phone}
+              </a>
+            )}
+
+            <a
+              href="#contact"
+              className={styles.headerCta}
+            >
+              Book Appointment
+            </a>
+          </div>
         </div>
       </header>
 

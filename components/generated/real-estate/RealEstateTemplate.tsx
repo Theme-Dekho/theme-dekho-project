@@ -27,18 +27,64 @@ export default function RealEstateTemplate({
       className={styles.page}
       style={cssVariables}
     >
+
+
       <header className={styles.header}>
         <div className={styles.container}>
-          <div className={styles.brand}>
-            {data.businessName}
+          <div className={styles.brandWrap}>
+            <div className={styles.brand}>
+              {data.businessName}
+            </div>
+
+            <span className={styles.brandTagline}>
+              Property & Real Estate
+            </span>
           </div>
 
-          <a
-            href="#contact"
-            className={styles.headerCta}
+          <nav
+            className={styles.nav}
+            aria-label="Real estate navigation"
           >
-            Contact
-          </a>
+            {data.properties.length > 0 && (
+              <a href="#properties">
+                Properties
+              </a>
+            )}
+
+            <a href="#services">
+              Services
+            </a>
+
+            <a href="#process">
+              Process
+            </a>
+
+            <a href="#about">
+              About
+            </a>
+
+            <a href="#contact">
+              Contact
+            </a>
+          </nav>
+
+          <div className={styles.headerActions}>
+            {data.phone && (
+              <a
+                href={`tel:${data.phone}`}
+                className={styles.phoneLink}
+              >
+                {data.phone}
+              </a>
+            )}
+
+            <a
+              href="#contact"
+              className={styles.headerCta}
+            >
+              Enquire Now
+            </a>
+          </div>
         </div>
       </header>
 

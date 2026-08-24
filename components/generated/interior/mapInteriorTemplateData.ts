@@ -4,9 +4,9 @@ import type {
 } from "./types";
 
 const projectImages = [
-  "/templates/interior/project-1.png",
-  "/templates/interior/project-2.png",
-  "/templates/interior/project-3.png",
+  "/templates/interior/project-1.webp",
+  "/templates/interior/project-2.webp",
+  "/templates/interior/project-3.webp",
 ];
 
 export function mapInteriorTemplateData(
@@ -23,7 +23,7 @@ export function mapInteriorTemplateData(
 
     colors: content.colors,
 
-    heroImage: "/templates/interior/hero.png",
+    heroImage: "/templates/interior/hero.webp",
 
     highlights: content.highlights,
 
@@ -39,13 +39,13 @@ export function mapInteriorTemplateData(
     process: content.process,
 
     processImage:
-      "/templates/interior/process.png",
+      "/templates/interior/process.webp",
 
     aboutTitle: content.aboutTitle,
     aboutDescription: content.aboutDescription,
 
     aboutImage:
-      "/templates/interior/about.png",
+      "/templates/interior/about.webp",
 
     testimonials: content.testimonials,
   };

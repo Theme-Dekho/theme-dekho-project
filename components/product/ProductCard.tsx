@@ -50,25 +50,7 @@ export default function ProductCard({ product, sectionLabel }: ProductCardProps)
         }
       };
       
-      // const handleWishlist = (
-        //   event: MouseEvent<HTMLButtonElement>,
-        // ) => {
-          //   event.stopPropagation();
-          
-          //   if (!isLoggedIn) {
-            //     openLoginModal();
-            //     return;
-            //   }
-            
-            //   // toggleSave(product.name, sectionLabel);
-            //   await toggleSave({
-              //     productId: product.id,
-              //     slug: product.slug ?? product.id,
-              //     name: product.name,
-              //     label: sectionLabel,
-              //     image: product.image ?? null,
-              //   });
-              // };
+
   const productId = String(product.id ?? product.slug ?? product.name,);
   const productSlug = String(product.slug ?? product.id ?? product.name,);
   const saved = isSaved(productId);

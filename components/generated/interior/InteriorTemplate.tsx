@@ -26,7 +26,7 @@ export default function InteriorTemplate({
       className={styles.page}
       style={cssVariables}
     >
-      <header className={styles.header}>
+      {/* <header className={styles.header}>
         <div className={styles.container}>
           <div className={styles.brand}>
             {data.businessName}
@@ -38,6 +38,58 @@ export default function InteriorTemplate({
           >
             Contact
           </a>
+        </div>
+      </header> */}
+      <header className={styles.header}>
+        <div className={styles.container}>
+          <div className={styles.brandWrap}>
+            <div className={styles.brand}>
+              {data.businessName}
+            </div>
+
+            <span className={styles.brandTagline}>
+              Interior & Architecture Studio
+            </span>
+          </div>
+
+          <nav
+            className={styles.nav}
+            aria-label="Interior navigation"
+          >
+            <a href="#projects">
+              Projects
+            </a>
+
+            <a href="#process">
+              Process
+            </a>
+
+            <a href="#about">
+              About
+            </a>
+
+            <a href="#contact">
+              Contact
+            </a>
+          </nav>
+
+          <div className={styles.headerActions}>
+            {data.phone && (
+              <a
+                href={`tel:${data.phone}`}
+                className={styles.phoneLink}
+              >
+                {data.phone}
+              </a>
+            )}
+
+            <a
+              href="#contact"
+              className={styles.headerCta}
+            >
+              Get Consultation
+            </a>
+          </div>
         </div>
       </header>
 
@@ -92,7 +144,7 @@ export default function InteriorTemplate({
       </section>
 
       <section
-        id="projects"
+        id="about"
         className={styles.section}
       >
         <div className={styles.container}>
@@ -124,7 +176,9 @@ export default function InteriorTemplate({
         </div>
       </section>
 
-      <section className={styles.processSection}>
+      <section 
+      id="process"
+      className={styles.processSection}>
         <div className={styles.container}>
           <div className={styles.processGrid}>
             <div>

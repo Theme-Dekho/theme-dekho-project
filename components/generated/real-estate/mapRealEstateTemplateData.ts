@@ -4,9 +4,9 @@ import type {
 } from "./types";
 
 const propertyImages = [
-  "/templates/real-estate/property-1.png",
-  "/templates/real-estate/property-2.png",
-  "/templates/real-estate/property-3.png",
+  "/templates/real-estate/property-1.webp",
+  "/templates/real-estate/property-2.webp",
+  "/templates/real-estate/property-3.webp",
 ];
 
 export function mapRealEstateTemplateData(
@@ -24,7 +24,7 @@ export function mapRealEstateTemplateData(
     colors: content.colors,
 
     heroImage:
-      "/templates/real-estate/hero.png",
+      "/templates/real-estate/hero.webp",
 
     highlights: content.highlights,
 
@@ -44,13 +44,13 @@ export function mapRealEstateTemplateData(
     process: content.process,
 
     processImage:
-      "/templates/real-estate/process.png",
+      "/templates/real-estate/process.webp",
 
     aboutTitle: content.aboutTitle,
     aboutDescription: content.aboutDescription,
 
     aboutImage:
-      "/templates/real-estate/about.png",
+      "/templates/real-estate/about.webp",
 
     testimonials: content.testimonials,
   };

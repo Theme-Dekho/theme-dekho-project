@@ -22,11 +22,10 @@
 }
 
 .header .container {
-  min-height: 76px;
+  min-height: 78px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 24px;
+  gap: 28px;
 }
 
 .brand {
@@ -301,6 +300,61 @@
   color: rgba(255, 255, 255, 0.72);
 }
 
+
+.brandWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 200px;
+}
+
+.brandTagline {
+  font-size: 11px;
+  line-height: 1.2;
+  color: var(--secondary);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  margin-left: auto;
+}
+
+.nav a {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition:
+    color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.nav a:hover {
+  color: var(--accent);
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.phoneLink {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.phoneLink:hover {
+  color: var(--accent);
+}
+
 @media (max-width: 900px) {
   .heroGrid,
   .processGrid,
@@ -368,3 +422,34 @@
     flex-direction: column;
   }
 }
+
+@media (max-width: 1000px) {
+  .nav {
+    display: none;
+  }
+
+  .headerActions {
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .brandTagline {
+    display: none;
+  }
+
+  .phoneLink {
+    display: none;
+  }
+
+  .header .container {
+    min-height: 68px;
+    gap: 12px;
+  }
+
+  .headerCta {
+    padding: 10px 14px;
+    font-size: 12px;
+  }
+}
+

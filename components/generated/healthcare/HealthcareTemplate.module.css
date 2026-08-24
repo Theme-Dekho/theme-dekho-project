@@ -22,6 +22,59 @@
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
+.brandWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 180px;
+}
+
+.brandTagline {
+  font-size: 11px;
+  line-height: 1.2;
+  color: var(--secondary);
+  letter-spacing: 0.04em;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-left: auto;
+}
+
+.nav a {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition:
+    color 0.2s ease,
+    opacity 0.2s ease;
+}
+
+.nav a:hover {
+  color: var(--primary);
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.phoneLink {
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.phoneLink:hover {
+  opacity: 0.8;
+}
+
 .header .container {
   min-height: 76px;
   display: flex;
@@ -422,5 +475,35 @@
 
   .contactDetails {
     flex-direction: column;
+  }
+}
+
+@media (max-width: 1000px) {
+  .nav {
+    display: none;
+  }
+
+  .headerActions {
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .brandTagline {
+    display: none;
+  }
+
+  .phoneLink {
+    display: none;
+  }
+
+  .header .container {
+    min-height: 68px;
+    gap: 12px;
+  }
+
+  .headerCta {
+    padding: 10px 14px;
+    font-size: 12px;
   }
 }

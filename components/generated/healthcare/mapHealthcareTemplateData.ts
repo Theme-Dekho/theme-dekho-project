@@ -4,9 +4,9 @@ import type {
 } from "./types";
 
 const doctorImages = [
-  "/templates/healthcare/doctor-1.png",
-  "/templates/healthcare/doctor-2.png",
-  "/templates/healthcare/doctor-3.png",
+  "/templates/healthcare/doctor-1.webp",
+  "/templates/healthcare/doctor-2.webp",
+  "/templates/healthcare/doctor-3.webp",
 ];
 
 export function mapHealthcareTemplateData(
@@ -23,7 +23,7 @@ export function mapHealthcareTemplateData(
 
     colors: content.colors,
 
-    heroImage: "/templates/healthcare/hero.png",
+    heroImage: "/templates/healthcare/hero.webp",
 
     highlights: content.highlights,
 
@@ -42,13 +42,13 @@ export function mapHealthcareTemplateData(
     process: content.process,
 
     processImage:
-      "/templates/healthcare/process.png",
+      "/templates/healthcare/process.webp",
 
     aboutTitle: content.aboutTitle,
     aboutDescription: content.aboutDescription,
 
     aboutImage:
-      "/templates/healthcare/about.png",
+      "/templates/healthcare/about.webp",
 
     testimonials: content.testimonials,
   };

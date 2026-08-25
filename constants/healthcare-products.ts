@@ -12,7 +12,7 @@ export const healthcareCategoryProducts: Product[] = [
     discount: 60,
     img: "/images/templates/healthcare/hospital1.webp",
     alt: "MediCare Plus Hospital Website",
-    previewUrl: "https://themedekho.com/",
+    previewUrl: "https://theme-dekho.github.io/development_page/",
     badges: [
       {
         type: "badge-hot",
@@ -40,7 +40,7 @@ export const healthcareCategoryProducts: Product[] = [
     discount: 55,
     img: "/images/templates/healthcare/dental1.webp",
     alt: "SmileCare Dental Hospital Website",
-    previewUrl: "https://themedekho.com/",
+    previewUrl: "https://theme-dekho.github.io/development_page/",
     badges: [],
     sold: "98",
     rating: "4.7",
@@ -63,7 +63,7 @@ export const healthcareCategoryProducts: Product[] = [
     discount: 58,
     img: "/images/templates/healthcare/eye1.webp",
     alt: "VisionPoint Eye Hospital Website",
-    previewUrl: "https://themedekho.com/",
+    previewUrl: "https://theme-dekho.github.io/development_page/",
     badges: [],
     sold: "76",
     rating: "4.6",
@@ -87,7 +87,7 @@ export const healthcareCategoryProducts: Product[] = [
   discount: 60,
   img: "/images/templates/healthcare/cardio3.webp",
   alt: "HeartCare Cardiology Website",
-  previewUrl: "https://themedekho.com/",
+  previewUrl: "https://theme-dekho.github.io/development_page/",
   badges: [
     {
       type: "badge-premium",
@@ -116,7 +116,7 @@ export const healthcareCategoryProducts: Product[] = [
   discount: 50,
   img: "/images/theme.webp",
   alt: "Doctor Portfolio Website",
-  previewUrl: "https://themedekho.com/",
+  previewUrl: "https://theme-dekho.github.io/development_page/",
   badges: [],
   sold: "61",
   rating: "4.6",
@@ -140,7 +140,7 @@ export const healthcareCategoryProducts: Product[] = [
   discount: 62,
   img: "/images/theme.webp",
   alt: "Medical Tourism Website",
-  previewUrl: "https://themedekho.com/",
+  previewUrl: "https://theme-dekho.github.io/development_page/",
   badges: [
     {
       type: "badge-hot",
@@ -169,7 +169,7 @@ export const healthcareCategoryProducts: Product[] = [
   discount: 61,
   img: "/images/templates/healthcare/hospital2.webp",
   alt: "CityCare Multispeciality Hospital Website",
-  previewUrl: "https://themedekho.com/",
+  previewUrl: "https://theme-dekho.github.io/development_page/",
   badges: [],
   sold: "119",
   rating: "4.8",
@@ -193,7 +193,7 @@ export const healthcareCategoryProducts: Product[] = [
   discount: 57,
   img: "/images/templates/healthcare/dental2.webp",
   alt: "Bright Smile Dental Hospital Website",
-  previewUrl: "https://themedekho.com/",
+  previewUrl: "https://theme-dekho.github.io/development_page/",
   badges: [],
   sold: "72",
   rating: "4.7",
@@ -217,7 +217,7 @@ export const healthcareCategoryProducts: Product[] = [
   discount: 58,
   img: "/images/templates/healthcare/eye2.webp",
   alt: "Vision Eye Care Center Website",
-  previewUrl: "https://themedekho.com/",
+  previewUrl: "https://theme-dekho.github.io/development_page/",
   badges: [],
   sold: "88",
   rating: "4.8",
@@ -241,7 +241,7 @@ export const healthcareCategoryProducts: Product[] = [
   discount: 62,
   img: "/images/templates/healthcare/hospital3.webp",
   alt: "Lifeline Super Speciality Hospital Website",
-  previewUrl: "https://themedekho.com/",
+  previewUrl: "https://theme-dekho.github.io/development_page/",
   badges: [],
   sold: "143",
   rating: "4.8",
@@ -265,7 +265,7 @@ export const healthcareCategoryProducts: Product[] = [
   discount: 59,
   img: "/images/templates/healthcare/hospital4.webp",
   alt: "Apollo Care Hospital Website",
-  previewUrl: "https://themedekho.com/",
+  previewUrl: "https://theme-dekho.github.io/development_page/",
   badges: [],
   sold: "128",
   rating: "4.7",
@@ -289,7 +289,7 @@ export const healthcareCategoryProducts: Product[] = [
   discount: 58,
   img: "/images/templates/healthcare/hospital5.webp",
   alt: "Greenfield Hospital Website",
-  previewUrl: "https://themedekho.com/",
+  previewUrl: "https://theme-dekho.github.io/development_page/",
   badges: [],
   sold: "96",
   rating: "4.7",
@@ -313,7 +313,7 @@ export const healthcareCategoryProducts: Product[] = [
   discount: 63,
   img: "/images/templates/healthcare/hospital6.webp",
   alt: "Metro Health Hospital Website",
-  previewUrl: "https://themedekho.com/",
+  previewUrl: "https://theme-dekho.github.io/development_page/",
   badges: [
     {
       type: "badge-premium",
@@ -342,7 +342,7 @@ export const healthcareCategoryProducts: Product[] = [
   discount: 55,
   img: "/images/templates/healthcare/dental3.webp",
   alt: "Dental Care Plus Clinic Website",
-  previewUrl: "https://themedekho.com/",
+  previewUrl: "https://theme-dekho.github.io/development_page/",
   badges: [],
   sold: "67",
   rating: "4.7",
@@ -366,7 +366,7 @@ export const healthcareCategoryProducts: Product[] = [
   discount: 58,
   img: "/images/templates/healthcare/dental4.webp",
   alt: "Perfect Smile Dental Clinic Website",
-  previewUrl: "https://themedekho.com/",
+  previewUrl: "https://theme-dekho.github.io/development_page/",
   badges: [
     {
       type: "badge-hot",
@@ -395,7 +395,7 @@ export const healthcareCategoryProducts: Product[] = [
   discount: 50,
   img: "/images/templates/healthcare/dental5.webp",
   alt: "Smile Point Dental Center Website",
-  previewUrl: "https://themedekho.com/",
+  previewUrl: "https://theme-dekho.github.io/development_page/",
   badges: [],
   sold: "54",
   rating: "4.6",
@@ -419,7 +419,7 @@ export const healthcareCategoryProducts: Product[] = [
   discount: 59,
   img: "/images/templates/healthcare/eye3.webp",
   alt: "ClearVision Eye Hospital Website",
-  previewUrl: "https://themedekho.com/",
+  previewUrl: "https://theme-dekho.github.io/development_page/",
   badges: [
     {
       type: "badge-hot",
@@ -448,7 +448,7 @@ export const healthcareCategoryProducts: Product[] = [
   discount: 56,
   img: "/images/templates/healthcare/eye4.webp",
   alt: "Advanced Eye Centre Website",
-  previewUrl: "https://themedekho.com/",
+  previewUrl: "https://theme-dekho.github.io/development_page/",
   badges: [],
   sold: "69",
   rating: "4.7",
@@ -472,7 +472,7 @@ export const healthcareCategoryProducts: Product[] = [
   discount: 60,
   img: "/images/templates/healthcare/cardio2.webp",
   alt: "CardioLife Heart Centre Website",
-  previewUrl: "https://themedekho.com/",
+  previewUrl: "https://theme-dekho.github.io/development_page/",
   badges: [],
   sold: "92",
   rating: "4.8",
@@ -496,7 +496,7 @@ export const healthcareCategoryProducts: Product[] = [
   discount: 57,
   img: "/images/templates/healthcare/cardio1.webp",
   alt: "Heart First Cardiac Clinic Website",
-  previewUrl: "https://themedekho.com/",
+  previewUrl: "https://theme-dekho.github.io/development_page/",
   badges: [],
   sold: "73",
   rating: "4.7",
@@ -520,7 +520,7 @@ export const healthcareCategoryProducts: Product[] = [
   discount: 62,
   img: "/images/templates/healthcare/cardio4.webp",
   alt: "Pulse Heart Institute Website",
-  previewUrl: "https://themedekho.com/",
+  previewUrl: "https://theme-dekho.github.io/development_page/",
   badges: [
     {
       type: "badge-premium",
@@ -549,7 +549,7 @@ export const healthcareCategoryProducts: Product[] = [
   discount: 52,
   img: "/images/theme.webp",
   alt: "Doctor Clinic Website",
-  previewUrl: "https://themedekho.com/",
+  previewUrl: "https://theme-dekho.github.io/development_page/",
   badges: [],
   sold: "58",
   rating: "4.6",
@@ -573,7 +573,7 @@ export const healthcareCategoryProducts: Product[] = [
   discount: 55,
   img: "/images/theme.webp",
   alt: "Specialist Doctor Portfolio Website",
-  previewUrl: "https://themedekho.com/",
+  previewUrl: "https://theme-dekho.github.io/development_page/",
   badges: [],
   sold: "74",
   rating: "4.7",
@@ -597,7 +597,7 @@ export const healthcareCategoryProducts: Product[] = [
   discount: 58,
   img: "/images/theme.webp",
   alt: "Premium Doctor Portfolio Website",
-  previewUrl: "https://themedekho.com/",
+  previewUrl: "https://theme-dekho.github.io/development_page/",
   badges: [
     {
       type: "badge-premium",
@@ -626,7 +626,7 @@ export const healthcareCategoryProducts: Product[] = [
   discount: 58,
   img: "/images/theme.webp",
   alt: "Hope IVF Center Website",
-  previewUrl: "https://themedekho.com/",
+  previewUrl: "https://theme-dekho.github.io/development_page/",
   badges: [],
   sold: "86",
   rating: "4.8",
@@ -650,7 +650,7 @@ export const healthcareCategoryProducts: Product[] = [
   discount: 60,
   img: "/images/theme.webp",
   alt: "Fertility Care IVF Website",
-  previewUrl: "https://themedekho.com/",
+  previewUrl: "https://theme-dekho.github.io/development_page/",
   badges: [
     {
       type: "badge-hot",
@@ -679,7 +679,7 @@ export const healthcareCategoryProducts: Product[] = [
   discount: 62,
   img: "/images/theme.webp",
   alt: "Motherhood Fertility Center Website",
-  previewUrl: "https://themedekho.com/",
+  previewUrl: "https://theme-dekho.github.io/development_page/",
   badges: [
     {
       type: "badge-premium",
@@ -708,7 +708,7 @@ export const healthcareCategoryProducts: Product[] = [
   discount: 56,
   img: "/images/theme.webp",
   alt: "NewLife IVF Clinic Website",
-  previewUrl: "https://themedekho.com/",
+  previewUrl: "https://theme-dekho.github.io/development_page/",
   badges: [],
   sold: "64",
   rating: "4.7",
@@ -732,7 +732,7 @@ export const healthcareCategoryProducts: Product[] = [
   discount: 56,
   img: "/images/theme.webp",
   alt: "HealthScan Diagnostic Center Website",
-  previewUrl: "https://themedekho.com/",
+  previewUrl: "https://theme-dekho.github.io/development_page/",
   badges: [],
   sold: "82",
   rating: "4.7",
@@ -756,7 +756,7 @@ export const healthcareCategoryProducts: Product[] = [
   discount: 58,
   img: "/images/theme.webp",
   alt: "Prime Diagnostics Website",
-  previewUrl: "https://themedekho.com/",
+  previewUrl: "https://theme-dekho.github.io/development_page/",
   badges: [
     {
       type: "badge-hot",
@@ -785,7 +785,7 @@ export const healthcareCategoryProducts: Product[] = [
   discount: 54,
   img: "/images/theme.webp",
   alt: "MediLab Diagnostic Center Website",
-  previewUrl: "https://themedekho.com/",
+  previewUrl: "https://theme-dekho.github.io/development_page/",
   badges: [],
   sold: "66",
   rating: "4.6",
@@ -809,7 +809,7 @@ export const healthcareCategoryProducts: Product[] = [
   discount: 59,
   img: "/images/theme.webp",
   alt: "Accurate Diagnostics Website",
-  previewUrl: "https://themedekho.com/",
+  previewUrl: "https://theme-dekho.github.io/development_page/",
   badges: [],
   sold: "91",
   rating: "4.8",
@@ -833,7 +833,7 @@ export const healthcareCategoryProducts: Product[] = [
   discount: 61,
   img: "/images/theme.webp",
   alt: "Advanced Diagnostic Lab Website",
-  previewUrl: "https://themedekho.com/",
+  previewUrl: "https://theme-dekho.github.io/development_page/",
   badges: [
     {
       type: "badge-premium",
@@ -862,7 +862,7 @@ export const healthcareCategoryProducts: Product[] = [
   discount: 63,
   img: "/images/theme.webp",
   alt: "India Medical Journey Website",
-  previewUrl: "https://themedekho.com/",
+  previewUrl: "https://theme-dekho.github.io/development_page/",
   badges: [],
   sold: "97",
   rating: "4.8",
@@ -886,7 +886,7 @@ export const healthcareCategoryProducts: Product[] = [
   discount: 65,
   img: "/images/theme.webp",
   alt: "Global Health Travel Website",
-  previewUrl: "https://themedekho.com/",
+  previewUrl: "https://theme-dekho.github.io/development_page/",
   badges: [
     {
       type: "badge-hot",
@@ -915,7 +915,7 @@ export const healthcareCategoryProducts: Product[] = [
   discount: 61,
   img: "/images/theme.webp",
   alt: "MedAssist India Medical Tourism Website",
-  previewUrl: "https://themedekho.com/",
+  previewUrl: "https://theme-dekho.github.io/development_page/",
   badges: [
     {
       type: "badge-premium",

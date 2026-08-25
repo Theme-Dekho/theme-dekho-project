@@ -17,7 +17,7 @@ export const storeCategoryProducts: Product[] = [
     discount: 55,
     img: "/images/templates/ecommerce/techzone.webp",
     alt: "TechZone Electronics Store Website",
-    previewUrl: "https://themedekho.com/",
+    previewUrl: "https://theme-dekho.github.io/development_page/",
     badges: [
       {
         type: "badge-hot",
@@ -46,7 +46,7 @@ export const storeCategoryProducts: Product[] = [
     discount: 58,
     img: "/images/templates/ecommerce/digitalhub.webp",
     alt: "Digital Hub Electronics Store Website",
-    previewUrl: "https://themedekho.com/",
+    previewUrl: "https://theme-dekho.github.io/development_page/",
     badges: [],
     sold: "96",
     rating: "4.7",
@@ -70,7 +70,7 @@ export const storeCategoryProducts: Product[] = [
     discount: 60,
     img: "/images/templates/ecommerce/smartcart.webp",
     alt: "SmartCart Electronics Ecommerce Website",
-    previewUrl: "https://themedekho.com/",
+    previewUrl: "https://theme-dekho.github.io/development_page/",
     badges: [
       {
         type: "badge-premium",
@@ -99,7 +99,7 @@ export const storeCategoryProducts: Product[] = [
     discount: 52,
     img: "/images/templates/ecommerce/gadgetpoint.webp",
     alt: "Gadget Point Electronics Store Website",
-    previewUrl: "https://themedekho.com/",
+    previewUrl: "https://theme-dekho.github.io/development_page/",
     badges: [],
     sold: "73",
     rating: "4.6",
@@ -127,7 +127,7 @@ export const storeCategoryProducts: Product[] = [
     discount: 50,
     img: "/images/templates/ecommerce/freshbasket.webp",
     alt: "FreshBasket Grocery Store Website",
-    previewUrl: "https://themedekho.com/",
+    previewUrl: "https://theme-dekho.github.io/development_page/",
     badges: [
       {
         type: "badge-hot",
@@ -156,7 +156,7 @@ export const storeCategoryProducts: Product[] = [
     discount: 53,
     img: "/images/templates/ecommerce/dailymart.webp",
     alt: "Daily Mart Grocery Store Website",
-    previewUrl: "https://themedekho.com/",
+    previewUrl: "https://theme-dekho.github.io/development_page/",
     badges: [],
     sold: "101",
     rating: "4.7",
@@ -180,7 +180,7 @@ export const storeCategoryProducts: Product[] = [
     discount: 56,
     img: "/images/templates/ecommerce/organicbasket.webp",
     alt: "Organic Basket Grocery Website",
-    previewUrl: "https://themedekho.com/",
+    previewUrl: "https://theme-dekho.github.io/development_page/",
     badges: [
       {
         type: "badge-premium",
@@ -209,7 +209,7 @@ export const storeCategoryProducts: Product[] = [
     discount: 48,
     img: "/images/templates/ecommerce/quickgrocery.webp",
     alt: "Quick Grocery Store Website",
-    previewUrl: "https://themedekho.com/",
+    previewUrl: "https://theme-dekho.github.io/development_page/",
     badges: [],
     sold: "69",
     rating: "4.6",
@@ -237,7 +237,7 @@ export const storeCategoryProducts: Product[] = [
     discount: 57,
     img: "/images/templates/ecommerce/urbanhome.webp",
     alt: "Urban Home Furniture Store Website",
-    previewUrl: "https://themedekho.com/",
+    previewUrl: "https://theme-dekho.github.io/development_page/",
     badges: [
       {
         type: "badge-hot",
@@ -266,7 +266,7 @@ export const storeCategoryProducts: Product[] = [
     discount: 60,
     img: "/images/templates/ecommerce/livingspace.webp",
     alt: "Living Space Furniture Ecommerce Website",
-    previewUrl: "https://themedekho.com/",
+    previewUrl: "https://theme-dekho.github.io/development_page/",
     badges: [
       {
         type: "badge-premium",
@@ -295,7 +295,7 @@ export const storeCategoryProducts: Product[] = [
     discount: 54,
     img: "/images/templates/ecommerce/comforthome.webp",
     alt: "Comfort Home Furniture Store Website",
-    previewUrl: "https://themedekho.com/",
+    previewUrl: "https://theme-dekho.github.io/development_page/",
     badges: [],
     sold: "84",
     rating: "4.7",
@@ -319,7 +319,7 @@ export const storeCategoryProducts: Product[] = [
     discount: 61,
     img: "/images/templates/ecommerce/woodcraft.webp",
     alt: "WoodCraft Furniture Store Website",
-    previewUrl: "https://themedekho.com/",
+    previewUrl: "https://theme-dekho.github.io/development_page/",
     badges: [
       {
         type: "badge-premium",
@@ -352,7 +352,7 @@ export const storeCategoryProducts: Product[] = [
     discount: 55,
     img: "/images/templates/ecommerce/stylehub.webp",
     alt: "StyleHub Apparel and Fashion Store Website",
-    previewUrl: "https://themedekho.com/",
+    previewUrl: "https://theme-dekho.github.io/development_page/",
     badges: [
       {
         type: "badge-hot",
@@ -381,7 +381,7 @@ export const storeCategoryProducts: Product[] = [
     discount: 56,
     img: "/images/templates/ecommerce/urbanwear.webp",
     alt: "Urban Wear Fashion Ecommerce Website",
-    previewUrl: "https://themedekho.com/",
+    previewUrl: "https://theme-dekho.github.io/development_page/",
     badges: [],
     sold: "108",
     rating: "4.7",
@@ -405,7 +405,7 @@ export const storeCategoryProducts: Product[] = [
     discount: 62,
     img: "/images/templates/ecommerce/luxury.webp",
     alt: "Luxury Fashion Boutique Website",
-    previewUrl: "https://themedekho.com/",
+    previewUrl: "https://theme-dekho.github.io/development_page/",
     badges: [
       {
         type: "badge-premium",
@@ -434,7 +434,7 @@ export const storeCategoryProducts: Product[] = [
     discount: 51,
     img: "/images/templates/ecommerce/trendline.webp",
     alt: "Trendline Apparel Store Website",
-    previewUrl: "https://themedekho.com/",
+    previewUrl: "https://theme-dekho.github.io/development_page/",
     badges: [],
     sold: "72",
     rating: "4.6",
@@ -462,7 +462,7 @@ export const storeCategoryProducts: Product[] = [
     discount: 60,
     img: "/images/templates/ecommerce/royal.webp",
     alt: "Royal Jewels Store Website",
-    previewUrl: "https://themedekho.com/",
+    previewUrl: "https://theme-dekho.github.io/development_page/",
     badges: [
       {
         type: "badge-premium",
@@ -491,7 +491,7 @@ export const storeCategoryProducts: Product[] = [
     discount: 63,
     img: "/images/templates/ecommerce/diamond.webp",
     alt: "Diamond Gallery Jewelry Store Website",
-    previewUrl: "https://themedekho.com/",
+    previewUrl: "https://theme-dekho.github.io/development_page/",
     badges: [
       {
         type: "badge-premium",
@@ -520,7 +520,7 @@ export const storeCategoryProducts: Product[] = [
     discount: 57,
     img: "/images/templates/ecommerce/ornament.webp",
     alt: "Ornament House Jewelry Website",
-    previewUrl: "https://themedekho.com/",
+    previewUrl: "https://theme-dekho.github.io/development_page/",
     badges: [
       {
         type: "badge-hot",
@@ -549,7 +549,7 @@ export const storeCategoryProducts: Product[] = [
     discount: 55,
     img: "/images/templates/ecommerce/elegance.webp",
     alt: "Elegance Jewellery Store Website",
-    previewUrl: "https://themedekho.com/",
+    previewUrl: "https://theme-dekho.github.io/development_page/",
     badges: [],
     sold: "79",
     rating: "4.7",

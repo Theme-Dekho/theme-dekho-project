@@ -539,3 +539,19 @@ body.mnav-open {
 .section {
   padding: 40px 20px;
 }
+
+@media (max-width: 768px) {
+  .section {
+    padding: 30px 16px; /* Reduces horizontal and vertical padding for mobile */
+  }
+  
+  .section-head {
+    flex-direction: column; /* Stacks the title and view-all link vertically */
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .section-title {
+    font-size: 24px !important; /* Scales down large headings for smaller screens */
+  }
+}

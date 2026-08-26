@@ -1,5 +1,8 @@
 "use client";
 
+import dynamic from "next/dynamic";
+
+
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import Topbar from "@/components/layout/Topbar";
@@ -13,12 +16,14 @@ import Pricing from "@/components/sections/Pricing";
 import Features from "@/components/sections/Features";
 import Testimonial from "@/components/sections/Testimonial";
 import CTABand from "@/components/sections/CTABand";
-import PriceInfoModal from "@/components/modal/PriceInfoModal";
-import CustomQuoteModal from "@/components/modal/CustomQuoteModel";
-import ReviewsModal from "@/components/modal/ReviewsModal";
-import SaveToast from "@/components/modal/SaveToast";
-import QuoteModal from "@/components/modal/QuoteModal";
-// import {ecommerceProducts, adBanners } from "@/constants/product";
+
+// Dynamically loaded modals to improve initial page load performance
+const PriceInfoModal = dynamic(() => import("@/components/modal/PriceInfoModal"), { ssr: false });
+const CustomQuoteModal = dynamic(() => import("@/components/modal/CustomQuoteModel"), { ssr: false });
+const ReviewsModal = dynamic(() => import("@/components/modal/ReviewsModal"), { ssr: false });
+const SaveToast = dynamic(() => import("@/components/modal/SaveToast"), { ssr: false });
+const QuoteModal = dynamic(() => import("@/components/modal/QuoteModal"), { ssr: false });
+
 import { adBanners } from "@/constants/product";
 import { storeCategoryProducts } from "@/constants/store-products";
 import { interiorProducts} from "@/constants/interior-products";

@@ -2,10 +2,9 @@
 
 import dynamic from "next/dynamic";
 
-
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import Topbar from "@/components/layout/Topbar";
+// import Topbar from "@/components/layout/Topbar";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Hero from "@/components/hero/Hero";
@@ -118,7 +117,7 @@ export default function HomePage() {
 
   return (
     <>
-      <Topbar />
+      {/* <Topbar /> */}
       <Header />
       {/* <AnalyticsTestButton /> */}
 

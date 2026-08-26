@@ -1133,9 +1133,12 @@ body.mnav-open .mnav {
 }
 
 .mnav-list {
+  display: flex;
+  flex-direction: column; /* Forces all menu items to stack vertically */
   padding: 10px 0;
   flex: 1;
 }
+
 .mnav-link,
 .mnav-acc {
   display: flex;
@@ -1169,7 +1172,7 @@ body.mnav-open .mnav {
   transform: rotate(180deg);
 }
 
-.mnav-panel {
+/* .mnav-panel {
   max-height: 0;
   overflow: hidden;
   transition: max-height .3s ease;
@@ -1177,7 +1180,19 @@ body.mnav-open .mnav {
 }
 .mnav-panel.open {
   max-height: 420px;
+} */
+.mnav-panel {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  background: var(--light);
 }
+
+.mnav-panel.open {
+  max-height: 800px; /* Increased from 420px to fit all mobile links */
+}
+
+
 .mnav-panel a {
   display: block;
   padding: 13px 20px 13px 34px;

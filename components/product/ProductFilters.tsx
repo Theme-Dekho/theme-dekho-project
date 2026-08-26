@@ -46,7 +46,7 @@ export default function ProductFilters({ activeCategory, onCategoryChange, showS
   };
 
   return (
-    <>
+    <div className="sticky-filters-wrapper">
       <CategoryStrip
         active={activeCategory}
         onSelect={handleCategorySelect}
@@ -65,6 +65,6 @@ export default function ProductFilters({ activeCategory, onCategoryChange, showS
           onSelectSub={setActiveSub}
         />
       )} */}
-    </>
+    </div>
   );
 }

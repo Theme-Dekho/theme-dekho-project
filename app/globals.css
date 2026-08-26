@@ -15,7 +15,7 @@
 html,
 body {
   max-width: 100%;
-  overflow-x: hidden;
+  /* overflow-x: hidden; */
 }
 
 :root {
@@ -554,4 +554,44 @@ body.mnav-open {
   .section-title {
     font-size: 24px !important; /* Scales down large headings for smaller screens */
   }
+}
+
+/* LIVE DATE: 25-08-2026 */
+/* MODIFICATION AFTER LIVE*/
+/* ============================================================
+   STICKY PRODUCT FILTERS BAR
+   ============================================================ */
+.sticky-filters-wrapper {
+  position: sticky;
+  top: 68px; /* Matches desktop header height */
+  z-index: 90;  /* Below header (100) but above page content */
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+}
+
+/* Adjust top offset for mobile screens where header height is 60px */
+@media (max-width: 768px) {
+  .sticky-filters-wrapper {
+    top: 60px; 
+  }
+}
+
+/* ProductFilters.tsx css for home page */
+/* Ensure the outer wrapper never exceeds the viewport width */
+.sticky-filters-wrapper {
+  max-width: 100vw;
+  width: 100%;
+  box-sizing: border-box;
+  overflow: hidden; /* Contains children safely */
+}
+
+/* Make the inner pill track scrollable internally instead of breaking the page */
+.sticky-filters-wrapper .filter-inner, 
+[class*="category-strip"],
+[class*="filter-container"] {
+  max-width: 100%;
+  overflow-x: auto; /* Puts the scrollbar INSIDE the filter bar if it's too wide */
+  overflow-y: hidden;
+  white-space: nowrap;
+  -webkit-overflow-scrolling: touch;
 }

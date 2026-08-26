@@ -29,9 +29,13 @@ const sora = Sora({
 });
 
 export const metadata: Metadata = {
-  title: "Theme Dekho — Affordable & Custom Website Development",
+  // title: "Theme Dekho — Affordable & Custom Website Development",
+  title: "Theme Dekho",
   description:
     "10,000+ websites built for Healthcare, Interior Design, E-Commerce, Real Estate & Tour & Travel businesses. Launch your professional website today.",
+  icons: {
+    icon: "logos/logo.jpeg", // Path relative to the public folder
+  },  
 };
 
 export default function RootLayout({

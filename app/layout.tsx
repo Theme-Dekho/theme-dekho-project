@@ -6,6 +6,7 @@ import { SiteProvider } from "@/lib/site-context";
 import CustomQuoteModel from "@/components/modal/CustomQuoteModel";
 import AnalyticsPageTracker from "@/components/analytics/AnalyticsPageTracker";
 import PreviewModal from "@/components/product/PreviewModal";
+import { Analytics } from "@vercel/analytics/next";
 import "./globals.css";
 import "@/styles/header.css";
 import "@/styles/hero.css";
@@ -55,6 +56,7 @@ export default function RootLayout({
         <PreviewModal />
         </SiteProvider>
         </AuthProvider>
+        <Analytics />
       </body>
     </html>
   );

@@ -116,7 +116,7 @@ export default function ProductCard({
           </div>
         </div>
 
-        <div className="pcard-price">
+        {/* <div className="pcard-price">
           <span className="price-now">
             {product.priceDisplay}
           </span>
@@ -132,7 +132,7 @@ export default function ProductCard({
           >
             i
           </button>
-        </div>
+        </div> */}
 
         <div className="pcard-actions">
            <Link

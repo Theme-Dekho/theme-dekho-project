@@ -4,13 +4,11 @@ import dynamic from "next/dynamic";
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-// import Topbar from "@/components/layout/Topbar";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Hero from "@/components/hero/Hero";
 import ProductFilters from "@/components/product/ProductFilters";
 import ProductGrid from "@/components/product/ProductGrid";
-// import PreviewModal from "@/components/product/PreviewModal";
 import Pricing from "@/components/sections/Pricing";
 import Features from "@/components/sections/Features";
 import Testimonial from "@/components/sections/Testimonial";
@@ -42,8 +40,8 @@ const toHomeProductCard = (
     category: product.subCategoryLabel,
     // priceFrom: product.priceDisplay,
     // priceTo: product.priceDisplay,
-    priceFrom: "₹4,999",
-    priceTo: "₹19,999",
+    // priceFrom: "₹4,999",
+    // priceTo: "₹19,999",
     rating: Number(product.rating),
     reviewCount: Number(product.sold),
     sold: Number(product.sold),

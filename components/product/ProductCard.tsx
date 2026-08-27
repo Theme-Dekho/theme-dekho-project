@@ -35,7 +35,7 @@ export default function ProductCard({ product, sectionLabel }: ProductCardProps)
         e.stopPropagation();
         const shareData = {
           title: product.name,
-          text: `Check out "${product.name}" ${product.priceFrom} – ${product.priceTo} on Theme Dekho!`,
+          // text: `Check out "${product.name}" ${product.priceFrom} – ${product.priceTo} on Theme Dekho!`,
           url: "https://themedekho.com/",
         };
         if (navigator.share) {
@@ -45,7 +45,7 @@ export default function ProductCard({ product, sectionLabel }: ProductCardProps)
             /* user cancelled — no-op */
           }
         } else {
-          await navigator.clipboard.writeText(`${shareData.text}\n${shareData.url}`);
+          // await navigator.clipboard.writeText(`${shareData.text}\n${shareData.url}`);
           showToast("🔗 Link copied to clipboard!");
         }
       };
@@ -116,11 +116,11 @@ export default function ProductCard({ product, sectionLabel }: ProductCardProps)
           </div>
         </div>
 
-        <div className="pc-prices">
-          <span className="pc-range">
+        {/* <div className="pc-prices"> */}
+          {/* <span className="pc-range">
             {product.priceFrom} <span className="pc-dash">&ndash;</span> {product.priceTo}
-          </span>
-          <button
+          </span> */}
+          {/* <button
             className="pc-info"
             type="button"
             aria-label="Pricing details"
@@ -130,8 +130,8 @@ export default function ProductCard({ product, sectionLabel }: ProductCardProps)
             }}
           >
             <span aria-hidden="true">i</span>
-          </button>
-        </div>
+          </button> */}
+        {/* </div> */}
 
         <div className="pc-actions">
           {/* <a className="pc-details" href="/product-page">

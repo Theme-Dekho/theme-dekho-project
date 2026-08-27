@@ -18,6 +18,7 @@ export default function ContactPage() {
   const [captchaAnswer, setCaptchaAnswer] = useState("");
   const [captchaError, setCaptchaError] = useState(false);
   const [formError, setFormError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
 
@@ -136,7 +137,8 @@ export default function ContactPage() {
         );
         }
 
-        alert("Message submitted successfully.");
+        // alert("Message submitted successfully.");
+        setSuccessMessage("Form submitted successfully! We will get back to you shortly.");
 
         setName("");
         setEmail("");
@@ -380,6 +382,21 @@ export default function ContactPage() {
                         /100 words
                         </p>
                 </div>
+                
+                {/* CAPTCHA CODE */}
+                    <div className="contact-form-row">
+                        <label htmlFor="contact-captcha">
+                            Security Check: What is {captchaA} × {captchaB}? *
+                        </label>
+                        <input
+                            id="contact-captcha"
+                            type="number"
+                            value={captchaAnswer}
+                            onChange={(event) => setCaptchaAnswer(event.target.value)}
+                            placeholder="Enter the answer"
+                            required
+                        />
+                    </div>
 
                 {formError && (
                     <p
@@ -388,6 +405,15 @@ export default function ContactPage() {
                     >
                     {formError}
                     </p>
+                )}
+
+                {successMessage && (
+                    <div
+                    className="contact-form-success"
+                    role="status"
+                    >
+                    {successMessage}
+                    </div>
                 )}
 
                 <button

@@ -39,8 +39,7 @@ export default function CategoryContent({
   const [selectedSubcategory, setSelectedSubcategory] =
   useState(initialSubcategory);
 
-  const [maximumPrice, setMaximumPrice] =
-    useState(50000);
+  // const [maximumPrice, setMaximumPrice] = useState(50000);
 
   const [sortOption, setSortOption] =
     useState<SortOption>("popular");
@@ -61,10 +60,10 @@ export default function CategoryContent({
           selectedSubcategory === "all" ||
           product.category === selectedSubcategory;
 
-        const priceMatches =
-          product.price <= maximumPrice;
+        // const priceMatches =
+        //   product.price <= maximumPrice;
 
-        return subcategoryMatches && priceMatches;
+        return subcategoryMatches //&& priceMatches;
       },
     );
 
@@ -94,7 +93,7 @@ export default function CategoryContent({
     );
   }, [
     selectedSubcategory,
-    maximumPrice,
+    // maximumPrice,
     sortOption,
   ]);
 
@@ -112,7 +111,7 @@ export default function CategoryContent({
     setVisibleProductCount(INITIAL_PRODUCT_COUNT);
   }, [
     selectedSubcategory,
-    maximumPrice,
+    // maximumPrice,
     sortOption,
   ]);
 
@@ -202,12 +201,12 @@ export default function CategoryContent({
           </div>
         </div>
 
-        <PriceFilter
+        {/* <PriceFilter
           maximumPrice={maximumPrice}
           onMaximumPriceChange={
             setMaximumPrice
           }
-        />
+        /> */}
       </aside>
 
       <div className="category-results">

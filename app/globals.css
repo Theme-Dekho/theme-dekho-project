@@ -579,7 +579,7 @@ body.mnav-open {
 /* ProductFilters.tsx css for home page */
 /* Ensure the outer wrapper never exceeds the viewport width */
 .sticky-filters-wrapper {
-  max-width: 100vw;
+  max-width: 100%;
   width: 100%;
   box-sizing: border-box;
   overflow: hidden; /* Contains children safely */
@@ -595,3 +595,4 @@ body.mnav-open {
   white-space: nowrap;
   -webkit-overflow-scrolling: touch;
 }
+

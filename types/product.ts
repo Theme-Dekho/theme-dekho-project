@@ -12,8 +12,8 @@ export interface ProductCardData {
   name: string;
   category: string;
   categoryVariant?: "hot" | "default";
-  priceFrom: string;
-  priceTo: string;
+  // priceFrom: string;
+  // priceTo: string;
   rating: number;
   reviewCount: number;
   sold?: number;

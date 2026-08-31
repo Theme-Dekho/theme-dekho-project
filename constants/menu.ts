@@ -166,10 +166,10 @@ export const primaryNav = [
 
 /** Mobile nav drawer — "Our Work" accordion links */
 export const mobileOurWorkLinks: MobileAccordionLink[] = [
-  { label: "Interior & Architect", href: "#" },
-  { label: "Medical Healthcare", href: "#" },
-  { label: "E-Commerce", href: "#" },
-  { label: "Real Estate", href: "#" },
+  { label: "Interior & Architect", href: "/categories/interior-architecture" },
+  { label: "Medical Healthcare", href: "/categories/healthcare" },
+  { label: "E-Commerce", href: "/categories/ecommerce" },
+  { label: "Real Estate", href: "/categories/real-estate" },
   { label: "Tour & Travels", href: "#" },
   { label: "Jewelry Store", href: "#" },
 ];

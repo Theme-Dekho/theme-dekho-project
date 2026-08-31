@@ -1251,3 +1251,17 @@ body.mnav-open .mnav {
     gap: 10px;
   }
 }
+
+@media (max-width: 480px) {
+  .header-inner {
+    padding: 0 10px !important;
+    gap: 6px !important;
+  }
+  .logo-img {
+    height: 22px !important;
+  }
+  .btn-quote {
+    padding: 6px 12px !important;
+    font-size: 11.5px !important;
+  }
+}

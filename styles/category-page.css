@@ -1203,3 +1203,40 @@
 .category-page .btn-load:active {
   transform: translateY(0);
 }
+
+/* ============================================================
+   CATEGORY PAGE MOBILE RESPONSIVE OPTIMIZATIONS
+   ============================================================ */
+
+@media (max-width: 850px) {
+  .category-page .sidebar {
+    position: static !important;
+    width: 100% !important;
+    height: auto !important;
+  }
+
+  .category-page .main-wrap {
+    flex-direction: column !important;
+    width: min(100% - 24px, 1260px) !important;
+    margin: 16px auto !important;
+  }
+}
+
+@media (max-width: 550px) {
+  .category-page .cat-hero {
+    padding: 28px 16px !important;
+  }
+
+  .category-page .cat-hero h1 {
+    font-size: 24px !important;
+  }
+
+  .category-page .product-grid.list-view .pcard {
+    display: block !important;
+  }
+
+  .category-page .product-grid.list-view .pcard-img {
+    height: 190px !important;
+    min-height: 0 !important;
+  }
+}

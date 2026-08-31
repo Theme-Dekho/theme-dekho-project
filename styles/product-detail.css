@@ -4713,3 +4713,25 @@ strong {
     width: min(260px, calc(100vw - 70px));
   }
 }
+
+/* ============================================================
+   PRODUCT DETAIL MOBILE FIXES
+   ============================================================ */
+
+@media (max-width: 680px) {
+  .product-detail-page {
+    padding-bottom: 90px !important; /* Prevents sticky buy bar from covering bottom content */
+  }
+
+  .product-detail-page .product-cta-row {
+    grid-template-columns: 1fr !important;
+  }
+
+  .product-detail-page .product-main-image {
+    aspect-ratio: 4 / 3 !important;
+  }
+
+  .product-detail-page .product-sticky-bar {
+    padding: 8px 0;
+  }
+}

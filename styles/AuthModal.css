@@ -287,3 +287,26 @@
     max-height: 50vh;
   }
 }
+
+@media (max-width: 480px) {
+  .auth-modal-overlay {
+    padding: 12px !important;
+  }
+
+  .auth-modal-card {
+    width: 100% !important;
+    max-height: 85vh !important;
+    padding: 16px 14px !important;
+  }
+
+  .auth-modal-close {
+    top: 10px !important;
+    right: 10px !important;
+    background: rgba(15, 23, 42, 0.08) !important;
+    border: none !important;
+  }
+
+  .auth-modal-form {
+    max-height: 55vh !important;
+  }
+}

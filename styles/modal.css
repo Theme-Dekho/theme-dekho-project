@@ -500,3 +500,51 @@
 
   animation: slideModal 0.25s ease;
 }
+
+/* ============================================================
+   MODALS & DRAWERS MOBILE RESPONSIVE OPTIMIZATIONS
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .modal-overlay,
+  .quote-overlay,
+  .pinfo-overlay {
+    align-items: flex-end !important;
+    padding: 0 !important;
+  }
+
+  .modal-box,
+  .quote-box,
+  .pinfo-box {
+    max-width: 100% !important;
+    max-height: 90vh !important;
+    border-radius: 20px 20px 0 0 !important;
+    margin: 0 !important;
+  }
+
+  .modal-grid,
+  .quote-grid {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+
+  .modal-body,
+  .quote-body {
+    padding: 20px 18px 24px !important;
+  }
+
+  .saved-drawer {
+    width: 100% !important;
+    right: -100% !important;
+  }
+  .saved-drawer.open {
+    right: 0 !important;
+  }
+
+  .preview-modal {
+    width: 100vw !important;
+    height: 100vh !important;
+    border-radius: 0 !important;
+    max-width: none !important;
+  }
+}

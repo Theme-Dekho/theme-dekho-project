@@ -716,3 +716,69 @@ margin-bottom: 11px;
     grid-template-columns: 1fr;
   }
 }
+
+/* ============================================================
+   PRODUCT GRID & CARD MOBILE RESPONSIVE OPTIMIZATIONS
+   ============================================================ */
+
+@media (max-width: 768px) {
+  /* Ensure product grids stack cleanly into a single column */
+  .section-inner .product-grid,
+  .product-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  /* Optimize product card image preview height on mobile */
+  .pc-img {
+    height: 220px !important;
+  }
+
+  /* Ensure product action buttons meet minimum touch target sizes */
+  .pc-buy,
+  .pc-details {
+    min-height: 44px !important;
+    padding: 12px 0 !important;
+    font-size: 13px !important;
+  }
+
+  .pc-share,
+  .pc-save {
+    width: 44px !important;
+    height: 44px !important;
+  }
+
+  /* Stack ad banners vertically on mobile viewports */
+  .ad-inner {
+    flex-direction: column !important;
+    padding: 0 16px !important;
+    gap: 28px !important;
+    text-align: center !important;
+  }
+
+  .ad-title {
+    font-size: 24px !important;
+    max-width: 100% !important;
+  }
+
+  .ad-sub {
+    justify-content: center !important;
+  }
+
+  .ad-right-stack {
+    width: 100% !important;
+    min-width: 0 !important;
+    padding: 20px 16px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .pc-name {
+    font-size: 13px !important;
+    min-height: auto !important;
+  }
+
+  .ad-price {
+    font-size: 32px !important;
+  }
+}

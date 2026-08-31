@@ -98,3 +98,53 @@
     text-transform: uppercase; padding: 2px 5px; border-radius: 4px;
     background: var(--border); color: var(--text);
   }
+
+  
+/* ============================================================
+   CATEGORY & SUBCATEGORY MOBILE RESPONSIVE OPTIMIZATIONS
+   ============================================================ */
+
+@media (max-width: 768px) {
+  .cat-strip {
+    top: 60px !important; /* Matches mobile header height */
+    padding: 10px 0 !important;
+  }
+
+  .cat-inner {
+    padding: 0 14px !important;
+    overflow-x: auto !important;
+    flex-wrap: nowrap !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .cat-inner::-webkit-scrollbar {
+    display: none;
+  }
+
+  .subcat-row {
+    top: 108px !important; /* Pinned cleanly below mobile category strip */
+    padding: 8px 14px !important;
+  }
+
+  .subcat-pills {
+    overflow-x: auto !important;
+    flex-wrap: nowrap !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    gap: 6px !important;
+  }
+
+  .subcat-pills::-webkit-scrollbar {
+    display: none;
+  }
+
+  .cat-pill,
+  .subcat-pill {
+    flex-shrink: 0 !important;
+    min-height: 38px !important;
+    display: inline-flex !important;
+    align-items: center !important;
+  }
+}
+  

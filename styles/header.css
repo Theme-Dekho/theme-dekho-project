@@ -122,7 +122,7 @@ header {
   flex-shrink: 0;
 }
 .logo-img {
-  height: 26px;
+  height: 28px;
   width: auto;
   object-fit: contain;
   transition: transform 0.2s;
@@ -132,19 +132,19 @@ header {
 }
 
 /* NAV */
-nav {
+.desktop-nav {
   display: flex;
   align-items: center;
   gap: 0;
   height: 68px;
 }
-nav > .nav-item {
+.desktop-nav > .nav-item {
   position: relative;
   height: 100%;
   display: flex;
   align-items: center;
 }
-nav > .nav-item > a {
+.desktop-nav > .nav-item > a {
   font-size: 13px;
   font-weight: 600;
   color: var(--dark);
@@ -156,7 +156,8 @@ nav > .nav-item > a {
   transition: color 0.18s, background 0.18s;
   position: relative;
 }
-nav > .nav-item > a::after {
+
+.desktop-nav > .nav-item > a::after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -167,20 +168,22 @@ nav > .nav-item > a::after {
   transform: scaleX(0);
   transition: transform 0.2s;
 }
-nav > .nav-item > a:hover {
+
+.desktop-nav > .nav-item > a:hover {
   color: var(--navy);
 }
-nav > .nav-item > a:hover::after {
+
+.desktop-nav > .nav-item > a:hover::after {
   transform: scaleX(1);
 }
-nav > .nav-item.active > a {
+.desktop-nav > .nav-item.active > a {
   color: var(--navy);
   font-weight: 700;
 }
-nav > .nav-item.active > a::after {
+.desktop-nav > .nav-item.active > a::after {
   transform: scaleX(1);
 }
-nav > .nav-item > a .arrow {
+.desktop-nav > .nav-item > a .arrow {
   font-size: 9px;
   margin-left: 4px;
   opacity: 0.5;
@@ -1034,96 +1037,131 @@ nav > .nav-item > a .arrow {
 /* ============================================================
    MOBILE NAV TOGGLE + DRAWER
    ============================================================ */
+
 .mnav-toggle {
   display: none;
   flex-direction: column;
   justify-content: center;
   gap: 5px;
-  width: 42px;
-  height: 42px;
-  padding: 0 9px;
-  background: none;
-  border: none;
-  cursor: pointer;
+  width: 44px;
+  height: 44px;
+  padding: 0 10px;
+  background: transparent;
+  border: 0;
   border-radius: 10px;
+  color: var(--dark);
+  cursor: pointer;
   flex-shrink: 0;
   -webkit-tap-highlight-color: transparent;
 }
-.mnav-toggle:active {
-  background: rgba(15, 23, 42, 0.07);
+
+.mnav-toggle:hover,
+.mnav-toggle:focus-visible {
+  background: rgba(15, 23, 42, 0.06);
 }
+
+.mnav-toggle:focus-visible,
+.mnav-close:focus-visible,
+.mnav-link:focus-visible,
+.mnav-acc:focus-visible,
+.mnav-call:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 2px;
+}
+
 .mnav-toggle span {
   display: block;
-  height: 2px;
   width: 100%;
-  background: var(--dark);
-  border-radius: 2px;
-  transition: transform .28s ease, opacity .2s ease;
+  height: 2px;
+  background: currentColor;
+  border-radius: 999px;
+  transform-origin: center;
+  transition: transform 0.25s ease, opacity 0.2s ease;
 }
-body.mnav-open .mnav-toggle span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-body.mnav-open .mnav-toggle span:nth-child(2) { opacity: 0; }
-body.mnav-open .mnav-toggle span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+.mnav-toggle[aria-expanded="true"] span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.mnav-toggle[aria-expanded="true"] span:nth-child(2) {
+  opacity: 0;
+}
+
+.mnav-toggle[aria-expanded="true"] span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
 
 .mnav-scrim {
   position: fixed;
   inset: 0;
   z-index: 900;
-  background: rgba(11, 18, 32, 0.45);
+  border: 0;
+  background: rgba(11, 18, 32, 0.46);
   backdrop-filter: blur(2px);
   opacity: 0;
   visibility: hidden;
-  transition: opacity .28s ease, visibility .28s ease;
+  pointer-events: none;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
 }
-body.mnav-open .mnav-scrim {
+
+.mnav-scrim.open {
   opacity: 1;
   visibility: visible;
+  pointer-events: auto;
 }
 
 .mnav {
   position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
+  inset: 0 auto 0 0;
   z-index: 901;
-  width: min(84vw, 340px);
+  width: min(86vw, 360px);
+  height: 100dvh;
+  max-height: 100dvh;
   background: #fff;
   display: flex;
   flex-direction: column;
-  transform: translateX(-100%);
-  transition: transform .3s cubic-bezier(.4, 0, .2, 1);
+  transform: translateX(-102%);
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    transform 0.28s cubic-bezier(.4, 0, .2, 1),
+    visibility 0.28s ease;
   box-shadow: 4px 0 40px rgba(11, 18, 32, 0.18);
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
+  overflow: hidden;
 }
-body.mnav-open .mnav {
+
+.mnav.open {
   transform: translateX(0);
+  visibility: visible;
+  pointer-events: auto;
 }
 
 .mnav-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 18px 20px;
+  min-height: 64px;
+  padding: 12px 18px;
   border-bottom: 1px solid var(--border);
-  position: sticky;
-  top: 0;
   background: #fff;
-  z-index: 2;
+  flex-shrink: 0;
 }
+
 .mnav-title {
   font-size: 12px;
   font-weight: 800;
-  letter-spacing: .1em;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
   color: var(--muted);
 }
+
 .mnav-close {
-  width: 36px;
-  height: 36px;
-  border: none;
+  width: 40px;
+  height: 40px;
+  border: 0;
   background: var(--light);
   border-radius: 50%;
-  font-size: 22px;
+  font-size: 24px;
   line-height: 1;
   color: var(--dark);
   cursor: pointer;
@@ -1134,9 +1172,14 @@ body.mnav-open .mnav {
 
 .mnav-list {
   display: flex;
-  flex-direction: column; /* Forces all menu items to stack vertically */
-  padding: 10px 0;
+  flex-direction: column;
   flex: 1;
+  /* min-height: 0; */
+  padding: 10px 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 .mnav-link,
@@ -1145,85 +1188,382 @@ body.mnav-open .mnav {
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  text-align: left;
-  padding: 15px 20px;
+  min-height: 52px;
+  padding: 13px 20px;
+  border: 0;
+  background: transparent;
+  color: var(--dark);
   font-family: var(--font);
   font-size: 15px;
   font-weight: 600;
-  color: var(--dark);
-  background: none;
-  border: none;
+  line-height: 1.35;
+  text-align: left;
+  text-decoration: none;
   cursor: pointer;
-  min-height: 48px;
 }
-.mnav-link.active {
-  color: var(--navy);
-}
+
+.mnav-link:hover,
+.mnav-acc:hover,
 .mnav-link:active,
 .mnav-acc:active {
   background: var(--light);
 }
+
+.mnav-link.active {
+  color: var(--navy);
+  font-weight: 700;
+}
+
 .mnav-chev {
-  transition: transform .25s ease;
+  margin-left: 16px;
+  flex-shrink: 0;
   font-size: 11px;
   color: var(--muted);
+  transition: transform 0.25s ease;
 }
+
+/* The JSX already changes ▾ to ▴, so no extra 180deg rotation is required. */
+/* .mnav-panel {
+  max-height: 0;
+  overflow: hidden;
+  background: var(--light);
+  transition: max-height 0.3s ease;
+} */
+/* .mnav-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  background: var(--light);
+  transition: grid-template-rows 0.3s ease;
+}  */
+
+/* .mnav-panel.open {
+  max-height: 800px;
+} */
+/* .mnav-panel.open {
+  grid-template-rows: 1fr;
+}  */
+.mnav-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  background: #e2e7ee;
+  transition:
+    grid-template-rows 0.3s ease,
+    background-color 0.2s ease;
+}
+
+.mnav-panel.open {
+  grid-template-rows: 1fr;
+  background: #dce2ea;
+}  
+
+.mnav-panel-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* .mnav-panel a {
+  display: flex;
+  align-items: center;
+  min-height: 46px;
+  padding: 11px 20px 11px 36px;
+  border-bottom: 1px solid rgba(11, 18, 32, 0.04);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.4;
+  text-decoration: none;
+} */
+/* .mnav-panel a {
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 13px 20px 13px 34px;
+  font-size: 14px;
+  color: var(--text);
+  text-decoration: none;
+  border-bottom: 1px solid rgba(11, 18, 32, 0.04);
+} 
+
+.mnav-panel a:hover {
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.mnav-panel a:active {
+  color: var(--navy);
+} */
+.mnav-panel a {
+  display: flex;
+  align-items: center;
+
+  min-height: 50px;
+  padding: 14px 20px 14px 42px;
+
+  font-size: 14px;
+  font-weight: 500;
+  color: #1e293b;
+
+  text-decoration: none;
+
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease,
+    padding-left 0.18s ease;
+}
+
+.mnav-panel a:hover {
+  background: #cfd6df;
+  color: var(--navy);
+  padding-left: 46px;
+}
+
+.mnav-panel a:active {
+  background: #c5ced9;
+  color: #0f172a;
+  padding-left: 46px;
+} 
+
+.mnav-chev {
+  font-size: 11px;
+  color: var(--muted);
+  transition: transform 0.2s ease;
+}
+
+/* =========================================
+   MOBILE ACCORDION CLICK EFFECT
+   ========================================= */
+
+.mnav-acc {
+  transition:
+    background-color 0.18s ease,
+    color 0.18s ease,
+    transform 0.12s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* When user presses the option */
+/* .mnav-acc:active {
+  background: #f3f6fd;
+  color: var(--navy);
+  transform: scale(0.98);
+} */
+.mnav-acc:active {
+  background: #c5ced9;
+  color: var(--navy);
+  transform: scale(0.98);
+} 
+
+/* Keep the opened accordion visually highlighted */
+/* .mnav-acc[aria-expanded="true"] {
+  background: #f3f6fd;
+  color: var(--navy);
+  font-weight: 700;
+} */
+.mnav-acc[aria-expanded="true"] {
+  background: #d5dce5;
+  color: var(--navy);
+  font-weight: 700;
+} 
+
+/* Arrow transition */
+.mnav-chev {
+  display: inline-flex;
+  transition: transform 0.2s ease;
+}
+
+/* Rotate arrow when opened */
 .mnav-acc[aria-expanded="true"] .mnav-chev {
   transform: rotate(180deg);
 }
 
-/* .mnav-panel {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height .3s ease;
-  background: var(--light);
-}
-.mnav-panel.open {
-  max-height: 420px;
-} */
-.mnav-panel {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.3s ease;
-  background: var(--light);
+/* My Account sits inside the scrollable hamburger navigation. */
+.mnav-account {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
 }
 
-.mnav-panel.open {
-  max-height: 800px; /* Increased from 420px to fit all mobile links */
+/* ============================================================
+   MOBILE ACCOUNT
+   ============================================================ */
+
+.mnav-account-toggle {
+  width: 100%;
 }
 
+/* Account submenu */
+.mnav-account-link {
+  width: 100%;
+  min-height: 48px;
 
-.mnav-panel a {
-  display: block;
-  padding: 13px 20px 13px 34px;
-  font-size: 14px;
-  color: var(--text);
-  min-height: 44px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+
+  gap: 10px;
+
+  padding: 12px 20px 12px 34px;
+
+  border: 0;
   border-bottom: 1px solid rgba(11, 18, 32, 0.04);
+
+  background: transparent;
+  color: var(--text);
+
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 600;
+
+  line-height: 1.2;
+  text-align: left;
+  text-decoration: none;
+
+  cursor: pointer;
+  box-sizing: border-box;
 }
-.mnav-panel a:active {
+
+/* Keep icon and text on the same line */
+.mnav-account-link > span:first-child {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Label takes remaining width */
+.mnav-account-link > span:nth-child(2) {
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+/* Badge stays on the right */
+.mnav-account-link .dd-badge {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+/* Hover / active */
+.mnav-account-link:hover,
+.mnav-account-link:active {
+  background: var(--light);
   color: var(--navy);
 }
 
-.mnav-foot {
-  padding: 18px 20px 24px;
-  border-top: 1px solid var(--border);
+/* Logout */
+.mnav-account-logout {
+  color: #cc2222;
 }
+
+.mnav-account-logout:hover,
+.mnav-account-logout:active {
+  background: #fff0f0;
+  color: #cc2222;
+}
+
+.mnav-section-label {
+  padding: 7px 20px 9px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mnav-account .profile-wrap,
+.mnav-account .profile-btn,
+.mnav-account .mnav-login-btn {
+  width: 100%;
+}
+
+.mnav-account .profile-btn {
+  min-height: 50px;
+  padding: 8px 20px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.mnav-account .profile-btn:hover {
+  background: var(--light);
+}
+
+.mnav-account .profile-dropdown {
+  position: static;
+  width: 100%;
+  min-width: 0;
+  margin-top: 2px;
+  border-right: 0;
+  border-left: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.mnav-account .mnav-login-btn {
+  min-height: 50px;
+  padding: 12px 20px;
+  border: 0;
+  border-radius: 0;
+  text-align: left;
+}
+
+.mnav-foot {
+  padding: 14px 18px calc(14px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--border);
+  background: #fff;
+  flex-shrink: 0;
+}
+
 .mnav-call {
-  display: block;
-  text-align: center;
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--dark);
-  padding: 12px;
-  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: 100%;
+  min-height: 46px;
+  padding: 11px 14px;
   border: 1px solid var(--border);
   border-radius: 10px;
+  background: var(--light);
+  color: var(--dark);
+  font-size: 14px;
+  font-weight: 700;
+  text-align: center;
+  text-decoration: none;
 }
+
+.mnav-call:hover {
+  border-color: var(--orange);
+  color: var(--navy);
+}
+
+.mnav-login-btn {
+  width: 100%;
+  min-height: 46px;
+  padding: 12px;
+  border: 1.5px solid var(--border);
+  border-radius: 10px;
+  background: var(--white);
+  color: var(--dark);
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  transition: all 0.18s ease;
+}
+
+.mnav-login-btn:hover {
+  border-color: var(--orange);
+  color: var(--navy);
+  background: var(--orange-light);
+}
+
 .mnav-cta {
   width: 100%;
   padding: 14px;
-  border: none;
+  border: 0;
   border-radius: 10px;
   background: var(--orange);
   color: var(--on-primary);
@@ -1233,35 +1573,157 @@ body.mnav-open .mnav {
   cursor: pointer;
 }
 
-/* ── PHONE ≤ 768px ── */
-@media (max-width: 768px) {
+/* ============================================================
+   TABLET + MOBILE
+   Long desktop labels need the hamburger before 768px.
+   ============================================================ */
+@media (max-width: 1024px) {
+  .topbar {
+    padding: 8px 0;
+  }
+
+  .topbar .inner {
+    padding: 0 18px;
+    gap: 12px;
+  }
+
+  .header-inner {
+    position: relative;
+    height: 62px;
+    padding: 0 16px;
+    justify-content: flex-start;
+  }
+
   .mnav-toggle {
     display: flex;
+    position: relative;
+    z-index: 2;
   }
-  header nav {
+
+  .desktop-nav,
+  .header-right {
     display: none;
   }
-  .header-right .btn-login,
-  .header-right .phone-tag {
-    display: none;
+
+  .logo-img-link {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
   }
-  .header-inner {
-    padding: 0 14px;
-    height: 60px;
-    gap: 10px;
+
+  .logo-img {
+    height: 28px;
+    max-width: min(48vw, 190px);
   }
 }
 
-@media (max-width: 480px) {
+/* ============================================================
+   SMALL PHONES
+   ============================================================ */
+@media (max-width: 600px) {
+  .topbar .inner {
+    padding: 0 12px;
+  }
+
+  .topbar span,
+  .topbar a {
+    font-size: 11.5px;
+  }
+
+  .ai-badge-topbar {
+    padding: 5px 10px;
+    font-size: 11px;
+  }
+
   .header-inner {
-    padding: 0 10px !important;
-    gap: 6px !important;
+    height: 58px;
+    padding: 0 10px;
   }
+
+  .mnav-toggle {
+    width: 42px;
+    height: 42px;
+    padding: 0 9px;
+  }
+
   .logo-img {
-    height: 22px !important;
+    height: 25px;
+    max-width: 52vw;
   }
-  .btn-quote {
-    padding: 6px 12px !important;
-    font-size: 11.5px !important;
+
+  .mnav {
+    width: min(90vw, 350px);
+  }
+
+  .mnav-link,
+  .mnav-acc {
+    padding-right: 18px;
+    padding-left: 18px;
+  }
+
+  /* .mnav-panel a {
+    padding-left: 32px;
+  } */
+  .mnav-panel a {
+  min-height: 46px;
+  padding-left: 32px;
+  font-size: 13.5px;
+} 
+
+  .mnav-section-label {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+}
+
+@media (max-width: 380px) {
+  .header-inner {
+    height: 56px;
+    padding: 0 8px;
+  }
+
+  .logo-img {
+    height: 23px;
+    max-width: 50vw;
+  }
+
+  .mnav {
+    width: 92vw;
+  }
+
+  .mnav-head {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .mnav-link,
+  .mnav-acc {
+    min-height: 50px;
+    padding: 12px 16px;
+    font-size: 14.5px;
+  }
+
+  .mnav-panel a {
+    min-height: 44px;
+    padding-left: 28px;
+    font-size: 13.5px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mnav,
+  .mnav-scrim,
+  .mnav-toggle span,
+  .mnav-panel,
+  .logo-img {
+    transition: none;
+  }
+
+  .phone-tag .ph-icon,
+  .profile-badge,
+  .ai-free-tag {
+    animation: none;
   }
 }

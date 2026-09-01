@@ -75,25 +75,173 @@ if (!sessionChecked) {
     );
   }
 
+  // if (mobile) {
+  //   return (
+  //     <>
+  //       <Link
+  //         href="/account/profile"
+  //         className="mnav-link"
+  //       >
+  //         My Account
+  //       </Link>
+
+  //       <button
+  //         type="button"
+  //         className="mnav-link"
+  //         onClick={() => {
+  //           void logout();
+  //         }}
+  //       >
+  //         Logout
+  //       </button>
+  //     </>
+  //   );
+  // }
   if (mobile) {
     return (
       <>
-        <Link
-          href="/account/profile"
-          className="mnav-link"
-        >
-          My Account
-        </Link>
-
+        {/* Mobile My Account Accordion */}
         <button
           type="button"
-          className="mnav-link"
+          className="mnav-acc mnav-account-toggle"
+          aria-expanded={profileMenuOpen}
           onClick={() => {
-            void logout();
+            setProfileMenuOpen((current) => !current);
           }}
         >
-          Logout
+          <span>👤 My Account</span>
+
+          <span className="mnav-chev">
+            {profileMenuOpen ? "▴" : "▾"}
+          </span>
         </button>
+
+        {/* Account submenu */}
+        <div
+          className={cn(
+            "mnav-panel",
+            profileMenuOpen && "open"
+          )}
+        >
+          <div className="mnav-panel-inner">
+
+            {/* My Profile */}
+            <Link
+              href="/account/profile"
+              className="mnav-account-link"
+              onClick={() => {
+                setProfileMenuOpen(false);
+              }}
+            >
+              <span>👤</span>
+              <span>My Profile</span>
+            </Link>
+
+            {/* My Enquiries */}
+            <button
+              type="button"
+              className="mnav-account-link"
+              onClick={() => {
+                setProfileMenuOpen(false);
+                enquiryDrawer.open();
+              }}
+            >
+              <span>📋</span>
+              <span>My Enquiries</span>
+
+              {enquiryItems.length > 0 && (
+                <span className="dd-badge">
+                  {enquiryItems.length}
+                </span>
+              )}
+            </button>
+
+            {/* My Wishlist */}
+            <button
+              type="button"
+              className="mnav-account-link"
+              onClick={() => {
+                setProfileMenuOpen(false);
+                savedDrawer.open();
+              }}
+            >
+              <span>❤️</span>
+              <span>My Wishlist</span>
+
+              {savedItems.length > 0 && (
+                <span className="dd-badge">
+                  {savedItems.length}
+                </span>
+              )}
+            </button>
+
+            {/* Logout */}
+            <button
+              type="button"
+              className="mnav-account-link mnav-account-logout"
+              onClick={() => {
+                setProfileMenuOpen(false);
+                setShowLogoutConfirm(true);
+              }}
+            >
+              <span>🚪</span>
+              <span>Logout</span>
+            </button>
+
+          </div>
+        </div>
+
+        {/* Logout confirmation */}
+        {showLogoutConfirm && (
+          <div
+            className="logout-confirm-overlay"
+            role="presentation"
+            onClick={() => {
+              setShowLogoutConfirm(false);
+            }}
+          >
+            <div
+              className="logout-confirm-modal"
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="mobile-logout-title"
+              onClick={(event) => {
+                event.stopPropagation();
+              }}
+            >
+              <h3 id="mobile-logout-title">
+                Confirm Logout
+              </h3>
+
+              <p>
+                Are you sure you want to logout?
+              </p>
+
+              <div className="logout-confirm-actions">
+                <button
+                  type="button"
+                  className="logout-cancel-btn"
+                  onClick={() => {
+                    setShowLogoutConfirm(false);
+                  }}
+                >
+                  Cancel
+                </button>
+
+                <button
+                  type="button"
+                  className="logout-confirm-btn"
+                  onClick={() => {
+                    setShowLogoutConfirm(false);
+                    void logout();
+                  }}
+                >
+                  Logout
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </>
     );
   }

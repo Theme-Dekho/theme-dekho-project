@@ -1,10 +1,1021 @@
+// // UPDATED Header.tsx 26-AUGUST-2026
+// "use client";
+
+// import {
+//   ChangeEvent,
+//   ClipboardEvent,
+//   KeyboardEvent,
+//   useEffect,
+//   useRef,
+//   useState,
+// } from "react";
+// import Image from "next/image";
+// import Link from "next/link";
+// import { usePathname } from "next/navigation";
+// import MegaMenu from "@/components/navigation/MegaMenu";
+// import {
+//   customDevLinks,
+//   mobileOurWorkLinks,
+//   phoneNumber,
+// } from "@/constants/menu";
+// import { cn } from "@/lib/utils";
+// import { useSite } from "@/lib/site-context";
+// import { useAuth } from "@/lib/auth-context";
+// import { trackEvent } from "@/lib/analytics/trackEvent";
+// import AuthModal from "@/components/auth/AuthModal";
+// import AuthControls from "@/components/auth/AuthControls";
+// import WishlistDrawer from "@/components/account/WishlistDrawer";
+// import EnquiryDrawer from "@/components/account/EnquiryDrawer";
+// import logo from "@/public/images/logo.jpg";
+
+// type LoginStep = "phone" | "otp" | "success";
+
+// type ApiResponse = {
+//   success?: boolean;
+//   status?: string;
+//   authenticated?: boolean;
+//   message?: string;
+//   detail?: string;
+//   error?: string;
+//   retry_after?: number;
+//   user?: {
+//     id?: number;
+//     phone?: string;
+//     name?: string | null;
+//     email?: string | null;
+//   };
+// };
+
+// const OTP_LENGTH = 4;
+// const DEFAULT_RESEND_SECONDS = 30;
+
+// interface HeaderProps {
+//   showNavigation?: boolean;
+//   modalOnly?: boolean;
+// }
+
+// export default function Header({
+//   showNavigation = true,
+//   modalOnly = false,
+// }: HeaderProps) {
+//   const pathname = usePathname();
+//   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+//   const [mobileAccOpen, setMobileAccOpen] = useState(false);
+//   const [mobileCustomDevOpen, setMobileCustomDevOpen] = useState(false);
+
+//   const [loginStep, setLoginStep] = useState<LoginStep>("phone");
+//   const [loginName, setLoginName] = useState("");
+//   const [loginEmail, setLoginEmail] = useState("");
+//   const [loginPhone, setLoginPhone] = useState("");
+//   const [loginOtp, setLoginOtp] = useState<string[]>(
+//     Array(OTP_LENGTH).fill(""),
+//   );
+
+//   const [loginError, setLoginError] = useState("");
+//   const [loginMessage, setLoginMessage] = useState("");
+//   const [loginLoading, setLoginLoading] = useState(false);
+//   const [resendSeconds, setResendSeconds] = useState(0);
+
+//   const otpInputRefs = useRef<Array<HTMLInputElement | null>>([]);
+
+//   const { customQuoteModal } = useSite();
+//   const {
+//     loginModalOpen,
+//     openLoginModal,
+//     closeLoginModal: closeGlobalLoginModal,
+//     setAuthenticatedUser,
+//   } = useAuth();
+
+//   const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL;
+//   const completeOtp = loginOtp.join("");
+//   const formattedPhone = `${loginPhone}`;
+
+//   const openMobileNav = () => {
+//     setMobileNavOpen(true);
+//   };
+
+//   const closeMobileNav = () => {
+//     setMobileNavOpen(false);
+//     setMobileAccOpen(false);
+//     setMobileCustomDevOpen(false);
+//   };
+
+//   const resetLoginModal = () => {
+//     setLoginStep("phone");
+//     setLoginPhone("");
+//     setLoginOtp(Array(OTP_LENGTH).fill(""));
+//     setLoginError("");
+//     setLoginMessage("");
+//     setLoginLoading(false);
+//     setResendSeconds(0);
+//   };
+
+//   const closeLoginModal = () => {
+//     if (loginLoading) {
+//       return;
+//     }
+//     closeGlobalLoginModal();
+//     resetLoginModal();
+//   };
+
+//   const getApiErrorMessage = (data: unknown): string => {
+//     if (!data || typeof data !== "object") {
+//       return "Request failed.";
+//     }
+
+//     const responseData = data as {
+//       detail?: unknown;
+//       message?: unknown;
+//       error?: unknown;
+//     };
+
+//     if (typeof responseData.detail === "string") {
+//       return responseData.detail;
+//     }
+
+//     if (Array.isArray(responseData.detail)) {
+//       return responseData.detail
+//         .map((item) => {
+//           if (
+//             item &&
+//             typeof item === "object" &&
+//             "msg" in item &&
+//             typeof item.msg === "string"
+//           ) {
+//             const location =
+//               "loc" in item && Array.isArray(item.loc)
+//                 ? item.loc.join(".")
+//                 : "";
+//             return location ? `${location}: ${item.msg}` : item.msg;
+//           }
+//           return JSON.stringify(item);
+//         })
+//         .join(", ");
+//     }
+
+//     if (typeof responseData.message === "string") {
+//       return responseData.message;
+//     }
+
+//     if (typeof responseData.error === "string") {
+//       return responseData.error;
+//     }
+
+//     return "Request failed.";
+//   };
+
+//   const readApiResponse = async (
+//     response: Response,
+//   ): Promise<ApiResponse> => {
+//     const contentType = response.headers.get("content-type") ?? "";
+
+//     if (!contentType.includes("application/json")) {
+//       const responseText = await response.text();
+//       throw new Error(
+//         responseText ||
+//           `Backend returned an invalid response (${response.status}).`,
+//       );
+//     }
+
+//     const data = (await response.json()) as ApiResponse;
+
+//     if (!response.ok) {
+//       throw new Error(getApiErrorMessage(data));
+//     }
+
+//     return data;
+//   };
+
+//   const validateName = () => {
+//     const trimmedName = loginName.trim();
+//     if (trimmedName.length < 2) {
+//       setLoginError("Enter your full name.");
+//       return false;
+//     }
+//     if (!/^[a-zA-Z\s.'-]+$/.test(trimmedName)) {
+//       setLoginError("Enter a valid full name.");
+//       return false;
+//     }
+//     return true;
+//   };
+
+//   const validateEmail = () => {
+//     const trimmedEmail = loginEmail.trim();
+//     if (!trimmedEmail) {
+//       setLoginError("Enter your email address.");
+//       return false;
+//     }
+//     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+//     if (!emailPattern.test(trimmedEmail)) {
+//       setLoginError("Enter a valid email address.");
+//       return false;
+//     }
+//     return true;
+//   };
+
+//   const validatePhone = () => {
+//     if (!/^[6-9]\d{9}$/.test(loginPhone)) {
+//       setLoginError("Enter a valid 10-digit Indian mobile number.");
+//       return false;
+//     }
+//     return true;
+//   };
+
+//   const handleSendOtp = async () => {
+//     if (!validateName() || !validateEmail() || !validatePhone()) {
+//       return;
+//     }
+
+//     if (!API_BASE_URL) {
+//       setLoginError(
+//         "NEXT_PUBLIC_API_BASE_URL is missing from the .env.local file.",
+//       );
+//       return;
+//     }
+
+//     try {
+//       setLoginLoading(true);
+//       setLoginError("");
+//       setLoginMessage("");
+
+//       const response = await fetch(`${API_BASE_URL}/api/auth/generate-otp`, {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         credentials: "include",
+//         body: JSON.stringify({
+//           phone: formattedPhone,
+//         }),
+//       });
+
+//       const data = await readApiResponse(response);
+
+//       setLoginOtp(Array(OTP_LENGTH).fill(""));
+//       setLoginStep("otp");
+//       setLoginMessage(data.message || "OTP sent successfully.");
+//       setResendSeconds(
+//         typeof data.retry_after === "number"
+//           ? data.retry_after
+//           : DEFAULT_RESEND_SECONDS,
+//       );
+
+//       void trackEvent({
+//         eventName: "otp_requested",
+//         elementName: "login-generate-otp-button",
+//         metadata: {
+//           delivery_channel: "whatsapp",
+//           otp_length: OTP_LENGTH,
+//         },
+//       });
+
+//       window.setTimeout(() => {
+//         otpInputRefs.current[0]?.focus();
+//       }, 50);
+//     } catch (error: unknown) {
+//       setLoginError(
+//         error instanceof Error
+//           ? error.message
+//           : "Unable to send OTP. Please try again.",
+//       );
+//     } finally {
+//       setLoginLoading(false);
+//     }
+//   };
+
+//   const handleVerifyOtp = async () => {
+//     if (completeOtp.length !== OTP_LENGTH) {
+//       setLoginError(`Enter the complete ${OTP_LENGTH}-digit OTP.`);
+//       return;
+//     }
+
+//     if (!API_BASE_URL) {
+//       setLoginError(
+//         "NEXT_PUBLIC_API_BASE_URL is missing from the .env.local file.",
+//       );
+//       return;
+//     }
+
+//     try {
+//       setLoginLoading(true);
+//       setLoginError("");
+//       setLoginMessage("");
+
+//       const response = await fetch(`${API_BASE_URL}/api/auth/verify-otp`, {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/json",
+//         },
+//         credentials: "include",
+//         body: JSON.stringify({
+//           name: loginName.trim(),
+//           email: loginEmail.trim().toLowerCase(),
+//           phone: formattedPhone,
+//           otp: completeOtp,
+//         }),
+//       });
+
+//       const data = await readApiResponse(response);
+
+//       if (!data.user?.id || !data.user.phone) {
+//         throw new Error("The backend did not return the authenticated user.");
+//       }
+
+//       setAuthenticatedUser({
+//         id: data.user.id,
+//         phone: data.user.phone,
+//         name: data.user.name ?? null,
+//         email: data.user.email ?? null,
+//       });
+
+//       closeGlobalLoginModal();
+//       setLoginStep("phone");
+//       setLoginOtp(Array(OTP_LENGTH).fill(""));
+//       setLoginError("");
+//       setLoginMessage("");
+//       setResendSeconds(0);
+//     } catch (error: unknown) {
+//       setLoginError(
+//         error instanceof Error
+//           ? error.message
+//           : "OTP verification failed. Please try again.",
+//       );
+//       setLoginOtp(Array(OTP_LENGTH).fill(""));
+//       window.setTimeout(() => {
+//         otpInputRefs.current[0]?.focus();
+//       }, 50);
+//     } finally {
+//       setLoginLoading(false);
+//     }
+//   };
+
+//   const handleResendOtp = async () => {
+//     if (resendSeconds > 0 || loginLoading) {
+//       return;
+//     }
+//     await handleSendOtp();
+//   };
+
+//   useEffect(() => {
+//     document.body.classList.toggle("mnav-open", mobileNavOpen);
+//     return () => {
+//       document.body.classList.remove("mnav-open");
+//     };
+//   }, [mobileNavOpen]);
+
+//   useEffect(() => {
+//     if (!loginModalOpen) {
+//       return;
+//     }
+//     const oldOverflow = document.body.style.overflow;
+//     document.body.style.overflow = "hidden";
+//     return () => {
+//       document.body.style.overflow = oldOverflow;
+//     };
+//   }, [loginModalOpen]);
+
+//   useEffect(() => {
+//     if (resendSeconds <= 0) {
+//       return;
+//     }
+//     const timer = window.setInterval(() => {
+//       setResendSeconds((current) => Math.max(current - 1, 0));
+//     }, 1000);
+//     return () => {
+//       window.clearInterval(timer);
+//     };
+//   }, [resendSeconds]);
+
+//   useEffect(() => {
+//     if (!loginModalOpen) {
+//       return;
+//     }
+//     const handleEscape = (event: globalThis.KeyboardEvent) => {
+//       if (event.key === "Escape") {
+//         closeLoginModal();
+//       }
+//     };
+//     document.addEventListener("keydown", handleEscape);
+//     return () => {
+//       document.removeEventListener("keydown", handleEscape);
+//     };
+//   }, [loginModalOpen, loginLoading]);
+
+
+//   // Automatically close mobile menu whenever the page route changes
+//   useEffect(() => {
+//     setMobileNavOpen(false);
+//     setMobileAccOpen(false);
+//     setMobileCustomDevOpen(false);
+//   }, [pathname]);
+
+//   // return (
+//   //   <>
+//   //     {!modalOnly && (
+//   //       <>
+//   //         <header>
+//   //           <div className="header-inner">
+//   //             <button
+//   //               type="button"
+//   //               className="mnav-toggle"
+//   //               aria-label="Open menu"
+//   //               aria-expanded={mobileNavOpen}
+//   //               onClick={openMobileNav}
+//   //             >
+//   //               <span />
+//   //               <span />
+//   //               <span />
+//   //             </button>
+
+//   //             <Link href="/" className="logo-img-link">
+//   //               <Image
+//   //                 src={logo}
+//   //                 alt="Theme Dekho"
+//   //                 className="logo-img"
+//   //                 priority
+//   //               />
+//   //             </Link>
+
+//   //             {showNavigation && (
+//   //               <nav>
+//   //                 <div
+//   //                   className={cn(
+//   //                     "nav-item",
+//   //                     pathname === "/" && "active",
+//   //                   )}
+//   //                 >
+//   //                   <Link href="/">Home</Link>
+//   //                 </div>
+
+//   //                 <div
+//   //                   className={cn(
+//   //                     "nav-item",
+//   //                     (pathname.startsWith("/categories/") ||
+//   //                       pathname.startsWith("/products/")) &&
+//   //                       "active",
+//   //                   )}
+//   //                 >
+//   //                   <Link href="#">
+//   //                     Our Work <span className="arrow">▾</span>
+//   //                   </Link>
+//   //                   <MegaMenu />
+//   //                 </div>
+
+//   //                 <div
+//   //                   className={cn(
+//   //                     "nav-item",
+//   //                     (pathname.startsWith("/custom-web-development") ||
+//   //                       pathname.startsWith("/shopify-development") ||
+//   //                       pathname.startsWith("/wordpress-development") ||
+//   //                       pathname.startsWith("/ecommerce-development")) &&
+//   //                       "active",
+//   //                   )}
+//   //                 >
+//   //                   <Link href="#">
+//   //                     Custom web development <span className="arrow">▾</span>
+//   //                   </Link>
+//   //                   <div className="simple-drop">
+//   //                     {customDevLinks.map((item) => (
+//   //                       <Link href={item.href} key={item.label}>
+//   //                         <span className="li-dot" />
+//   //                         {item.label}
+//   //                       </Link>
+//   //                     ))}
+//   //                   </div>
+//   //                 </div>
+
+//   //                 <div
+//   //                   className={cn(
+//   //                     "nav-item",
+//   //                     pathname === "/redesign-wordpress" && "active",
+//   //                   )}
+//   //                 >
+//   //                   <Link href="/redesign-wordpress">
+//   //                     Redesign WordPress Website
+//   //                   </Link>
+//   //                 </div>
+
+//   //                 <div
+//   //                   className={cn(
+//   //                     "nav-item",
+//   //                     pathname === "/contact" && "active",
+//   //                   )}
+//   //                 >
+//   //                   <Link href="/contact">Contact us</Link>
+//   //                 </div>
+//   //               </nav>
+//   //             )}
+
+//   //             <div className="header-right">
+//   //               <div className="phone-tag">
+//   //                 <div className="ph-icon">📞</div>
+//   //                 {phoneNumber.display}
+//   //               </div>
+
+//   //               <AuthControls
+//   //                 onLoginClick={() => {
+//   //                   resetLoginModal();
+//   //                   openLoginModal();
+//   //                 }}
+//   //               />
+//   //             </div>
+//   //           </div>
+//   //         </header>
+
+//   //         <div className="mnav-scrim" onClick={closeMobileNav} />
+
+//   //         <aside className="mnav" aria-hidden={!mobileNavOpen}>
+//   //           <div className="mnav-head">
+//   //             <span className="mnav-title">Menu</span>
+//   //             <button
+//   //               type="button"
+//   //               className="mnav-close"
+//   //               aria-label="Close menu"
+//   //               onClick={closeMobileNav}
+//   //             >
+//   //               &times;
+//   //             </button>
+//   //           </div>
+
+//   //           <nav className="mnav-list">
+//   //             <Link
+//   //               href="/"
+//   //               className={cn("mnav-link", pathname === "/" && "active")}
+//   //               onClick={closeMobileNav}
+//   //             >
+//   //               Home
+//   //             </Link>
+
+//   //             {/* Our Work Mobile Accordion */}
+//   //             <button
+//   //               type="button"
+//   //               className="mnav-acc"
+//   //               aria-expanded={mobileAccOpen}
+//   //               onClick={() => setMobileAccOpen((current) => !current)}
+//   //             >
+//   //               Our Work <span className="mnav-chev">▾</span>
+//   //             </button>
+//   //             <div
+//   //               className={cn(
+//   //                 "mnav-panel",
+//   //                 mobileAccOpen && "open",
+//   //               )}
+//   //             >
+//   //               {mobileOurWorkLinks.map((link) => (
+//   //                 <Link
+//   //                   href={link.href}
+//   //                   key={link.label}
+//   //                   onClick={closeMobileNav}
+//   //                 >
+//   //                   {link.label}
+//   //                 </Link>
+//   //               ))}
+//   //             </div>
+
+//   //             {/* Custom Web Development Mobile Accordion */}
+//   //             <button
+//   //               type="button"
+//   //               className="mnav-acc"
+//   //               aria-expanded={mobileCustomDevOpen}
+//   //               onClick={() => setMobileCustomDevOpen((current) => !current)}
+//   //             >
+//   //               Custom Web Development <span className="mnav-chev">▾</span>
+//   //             </button>
+//   //             <div
+//   //               className={cn(
+//   //                 "mnav-panel",
+//   //                 mobileCustomDevOpen && "open",
+//   //               )}
+//   //             >
+//   //               {customDevLinks.map((item) => (
+//   //                 <Link
+//   //                   href={item.href}
+//   //                   key={item.label}
+//   //                   onClick={closeMobileNav}
+//   //                 >
+//   //                   {item.label}
+//   //                 </Link>
+//   //               ))}
+//   //             </div>
+
+//   //             {/* Redesign WordPress Website Link */}
+//   //             <Link
+//   //               href="/redesign-wordpress"
+//   //               className={cn(
+//   //                 "mnav-link",
+//   //                 pathname === "/redesign-wordpress" && "active",
+//   //               )}
+//   //               onClick={closeMobileNav}
+//   //             >
+//   //               Redesign WordPress Website
+//   //             </Link>
+
+//   //             {/* Mobile Auth Controls */}
+//   //             {/* <div style={{ padding: "10px 20px" }}>
+//   //               <AuthControls
+//   //                 mobile
+//   //                 onLoginClick={() => {
+//   //                   closeMobileNav();
+//   //                   resetLoginModal();
+//   //                   openLoginModal();
+//   //                 }}
+//   //               />
+//   //             </div> */}
+
+//   //             {/* Contact Us Link */}
+//   //             <Link
+//   //               href="/contact"
+//   //               className={cn(
+//   //                 "mnav-link",
+//   //                 pathname === "/contact" && "active",
+//   //               )}
+//   //               onClick={closeMobileNav}
+//   //             >
+//   //               Contact us
+//   //             </Link>
+//   //           </nav>
+
+//   //           <div className="mnav-foot">
+//   //             <a className="mnav-call" href={phoneNumber.href}>
+//   //               📞 {phoneNumber.display}
+//   //             </a>
+
+//   //                <AuthControls
+//   //                 mobile
+//   //                 onLoginClick={() => {
+//   //                   closeMobileNav();
+//   //                   resetLoginModal();
+//   //                   openLoginModal();
+//   //                 }}
+//   //               />
+
+//   //             {/* <button
+//   //               type="button"
+//   //               className="mnav-cta"
+//   //               onClick={() => {
+//   //                 closeMobileNav();
+//   //                 customQuoteModal.open();
+//   //               }}
+//   //             >
+//   //               Get a Free Quote
+//   //             </button> */}
+//   //           </div>
+//   //         </aside>
+//   //       </>
+//   //     )}
+
+//   //     <WishlistDrawer />
+//   //     <EnquiryDrawer />
+
+//   //     <AuthModal
+//   //       isOpen={loginModalOpen}
+//   //       onClose={closeLoginModal}
+//   //       onAuthenticated={(data) => {
+//   //         if (!data.user?.id || !data.user.phone) {
+//   //           return;
+//   //         }
+
+//   //         setAuthenticatedUser({
+//   //           id: Number(data.user.id),
+//   //           phone: data.user.phone,
+//   //           name: data.user.name ?? null,
+//   //           email: data.user.email ?? null,
+//   //         });
+
+//   //         closeGlobalLoginModal();
+//   //       }}
+//   //     />
+//   //   </>
+//   // );
+
+// return (
+//   <>
+//     {!modalOnly && (
+//       <>
+//         {/* ================= DESKTOP / MOBILE HEADER ================= */}
+//         <header>
+//           <div className="header-inner">
+
+//             {/* Mobile hamburger */}
+//             <button
+//               type="button"
+//               className="mnav-toggle"
+//               aria-label={mobileNavOpen ? "Close menu" : "Open menu"}
+//               aria-expanded={mobileNavOpen}
+//               onClick={() =>
+//                 mobileNavOpen ? closeMobileNav() : openMobileNav()
+//               }
+//             >
+//               <span />
+//               <span />
+//               <span />
+//             </button>
+
+//             {/* Logo */}
+//             <Link href="/" className="logo-img-link">
+//               <Image
+//                 src={logo}
+//                 alt="Theme Dekho"
+//                 className="logo-img"
+//                 priority
+//               />
+//             </Link>
+
+//             {/* Desktop navigation */}
+//             {showNavigation && (
+//               <nav className="desktop-nav">
+//                 <div
+//                   className={cn(
+//                     "nav-item",
+//                     pathname === "/" && "active"
+//                   )}
+//                 >
+//                   <Link href="/">Home</Link>
+//                 </div>
+
+//                 <div
+//                   className={cn(
+//                     "nav-item",
+//                     (pathname.startsWith("/categories/") ||
+//                       pathname.startsWith("/products/")) &&
+//                       "active"
+//                   )}
+//                 >
+//                   <Link href="#">
+//                     Our Work <span className="arrow">▾</span>
+//                   </Link>
+
+//                   <MegaMenu />
+//                 </div>
+
+//                 <div
+//                   className={cn(
+//                     "nav-item",
+//                     (pathname.startsWith("/custom-web-development") ||
+//                       pathname.startsWith("/shopify-development") ||
+//                       pathname.startsWith("/wordpress-development") ||
+//                       pathname.startsWith("/ecommerce-development")) &&
+//                       "active"
+//                   )}
+//                 >
+//                   <Link href="#">
+//                     Custom web development{" "}
+//                     <span className="arrow">▾</span>
+//                   </Link>
+
+//                   <div className="simple-drop">
+//                     {customDevLinks.map((item) => (
+//                       <Link href={item.href} key={item.label}>
+//                         <span className="li-dot" />
+//                         {item.label}
+//                       </Link>
+//                     ))}
+//                   </div>
+//                 </div>
+
+//                 <div
+//                   className={cn(
+//                     "nav-item",
+//                     pathname === "/redesign-wordpress" && "active"
+//                   )}
+//                 >
+//                   <Link href="/redesign-wordpress">
+//                     Redesign WordPress Website
+//                   </Link>
+//                 </div>
+
+//                 <div
+//                   className={cn(
+//                     "nav-item",
+//                     pathname === "/contact" && "active"
+//                   )}
+//                 >
+//                   <Link href="/contact">Contact us</Link>
+//                 </div>
+//               </nav>
+//             )}
+
+//             {/* Desktop right side */}
+//             <div className="header-right">
+//               <div className="phone-tag">
+//                 <div className="ph-icon">📞</div>
+//                 {phoneNumber.display}
+//               </div>
+
+//               <AuthControls
+//                 onLoginClick={() => {
+//                   resetLoginModal();
+//                   openLoginModal();
+//                 }}
+//               />
+//             </div>
+//           </div>
+//         </header>
+
+//         {/* Mobile backdrop */}
+//         <div
+//           className={cn(
+//             "mnav-scrim",
+//             mobileNavOpen && "open"
+//           )}
+//           onClick={closeMobileNav}
+//           aria-hidden="true"
+//         />
+
+//         {/* ================= MOBILE DRAWER ================= */}
+//         <aside
+//           className={cn(
+//             "mnav",
+//             mobileNavOpen && "open"
+//           )}
+//           aria-hidden={!mobileNavOpen}
+//         >
+//           {/* Drawer header */}
+//           <div className="mnav-head">
+//             <span className="mnav-title">Menu</span>
+
+//             <button
+//               type="button"
+//               className="mnav-close"
+//               aria-label="Close menu"
+//               onClick={closeMobileNav}
+//             >
+//               &times;
+//             </button>
+//           </div>
+
+//           <nav className="mnav-list">
+
+//             {/* Home */}
+//             <Link
+//               href="/"
+//               className={cn(
+//                 "mnav-link",
+//                 pathname === "/" && "active"
+//               )}
+//               onClick={closeMobileNav}
+//             >
+//               <span>Home</span>
+//             </Link>
+
+//             {/* Our Work */}
+//             <button
+//               type="button"
+//               className={cn(
+//                 "mnav-acc",
+//                 mobileAccOpen && "open"
+//               )}
+//               aria-expanded={mobileAccOpen}
+//               onClick={() =>
+//                 setMobileAccOpen((current) => !current)
+//               }
+//             >
+//               <span>Our Work</span>
+//               <span className="mnav-chev">
+//                 {mobileAccOpen ? "▴" : "▾"}
+//               </span>
+//             </button>
+
+//             <div
+//               className={cn(
+//                 "mnav-panel",
+//                 mobileAccOpen && "open"
+//               )}
+//             >
+//               {mobileOurWorkLinks.map((link) => (
+//                 <Link
+//                   href={link.href}
+//                   key={link.label}
+//                   onClick={closeMobileNav}
+//                 >
+//                   {link.label}
+//                 </Link>
+//               ))}
+//             </div>
+
+//             {/* Custom Web Development */}
+//             <button
+//               type="button"
+//               className={cn(
+//                 "mnav-acc",
+//                 mobileCustomDevOpen && "open"
+//               )}
+//               aria-expanded={mobileCustomDevOpen}
+//               onClick={() =>
+//                 setMobileCustomDevOpen((current) => !current)
+//               }
+//             >
+//               <span>Custom Web Development</span>
+
+//               <span className="mnav-chev">
+//                 {mobileCustomDevOpen ? "▴" : "▾"}
+//               </span>
+//             </button>
+
+//             <div
+//               className={cn(
+//                 "mnav-panel",
+//                 mobileCustomDevOpen && "open"
+//               )}
+//             >
+//               {customDevLinks.map((item) => (
+//                 <Link
+//                   href={item.href}
+//                   key={item.label}
+//                   onClick={closeMobileNav}
+//                 >
+//                   {item.label}
+//                 </Link>
+//               ))}
+//             </div>
+
+//             {/* Redesign WordPress */}
+//             <Link
+//               href="/redesign-wordpress"
+//               className={cn(
+//                 "mnav-link",
+//                 pathname === "/redesign-wordpress" && "active"
+//               )}
+//               onClick={closeMobileNav}
+//             >
+//               <span>Redesign WordPress Website</span>
+//             </Link>
+
+//             {/* Contact */}
+//             <Link
+//               href="/contact"
+//               className={cn(
+//                 "mnav-link",
+//                 pathname === "/contact" && "active"
+//               )}
+//               onClick={closeMobileNav}
+//             >
+//               <span>Contact us</span>
+//             </Link>
+
+//             {/* ================= MY ACCOUNT ================= */}
+//             <div className="mnav-account">
+//               <div className="mnav-section-label">
+//                 My Account
+//               </div>
+
+//               <AuthControls
+//                 mobile
+//                 onLoginClick={() => {
+//                   closeMobileNav();
+//                   resetLoginModal();
+//                   openLoginModal();
+//                 }}
+//               />
+//             </div>
+//           </nav>
+
+//           {/* Mobile footer */}
+//           <div className="mnav-foot">
+//             <a
+//               className="mnav-call"
+//               href={phoneNumber.href}
+//             >
+//               <span>📞</span>
+//               {phoneNumber.display}
+//             </a>
+//           </div>
+//         </aside>
+//       </>
+//     )}
+
+//     {/* Account drawers */}
+//     <WishlistDrawer />
+//     <EnquiryDrawer />
+
+//     {/* Authentication modal */}
+//     <AuthModal
+//       isOpen={loginModalOpen}
+//       onClose={closeLoginModal}
+//       onAuthenticated={(data) => {
+//         if (!data.user?.id || !data.user.phone) {
+//           return;
+//         }
+
+//         setAuthenticatedUser({
+//           id: Number(data.user.id),
+//           phone: data.user.phone,
+//           name: data.user.name ?? null,
+//           email: data.user.email ?? null,
+//         });
+
+//         closeGlobalLoginModal();
+//       }}
+//     />
+//   </>
+// );
+// } 
+
+
 // UPDATED Header.tsx 26-AUGUST-2026
 "use client";
 
 import {
-  ChangeEvent,
-  ClipboardEvent,
-  KeyboardEvent,
   useEffect,
   useRef,
   useState,
@@ -19,7 +1030,6 @@ import {
   phoneNumber,
 } from "@/constants/menu";
 import { cn } from "@/lib/utils";
-import { useSite } from "@/lib/site-context";
 import { useAuth } from "@/lib/auth-context";
 import { trackEvent } from "@/lib/analytics/trackEvent";
 import AuthModal from "@/components/auth/AuthModal";
@@ -78,7 +1088,6 @@ export default function Header({
 
   const otpInputRefs = useRef<Array<HTMLInputElement | null>>([]);
 
-  const { customQuoteModal } = useSite();
   const {
     loginModalOpen,
     openLoginModal,
@@ -357,9 +1366,24 @@ export default function Header({
   };
 
   useEffect(() => {
-    document.body.classList.toggle("mnav-open", mobileNavOpen);
+    if (!mobileNavOpen) {
+      return;
+    }
+
+    const oldOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const handleEscape = (event: globalThis.KeyboardEvent) => {
+      if (event.key === "Escape") {
+        closeMobileNav();
+      }
+    };
+
+    document.addEventListener("keydown", handleEscape);
+
     return () => {
-      document.body.classList.remove("mnav-open");
+      document.body.style.overflow = oldOverflow;
+      document.removeEventListener("keydown", handleEscape);
     };
   }, [mobileNavOpen]);
 
@@ -409,273 +1433,420 @@ export default function Header({
     setMobileCustomDevOpen(false);
   }, [pathname]);
 
-  return (
-    <>
-      {!modalOnly && (
-        <>
-          <header>
-            <div className="header-inner">
-              <button
-                type="button"
-                className="mnav-toggle"
-                aria-label="Open menu"
-                aria-expanded={mobileNavOpen}
-                onClick={openMobileNav}
-              >
-                <span />
-                <span />
-                <span />
-              </button>
+return (
+  <>
+    {!modalOnly && (
+      <>
+        {/* ================= DESKTOP / MOBILE HEADER ================= */}
+        <header>
+          <div className="header-inner">
 
-              <Link href="/" className="logo-img-link">
-                <Image
-                  src={logo}
-                  alt="Theme Dekho"
-                  className="logo-img"
-                  priority
-                />
-              </Link>
+            {/* Mobile hamburger */}
+            <button
+              type="button"
+              className="mnav-toggle"
+              aria-label={mobileNavOpen ? "Close menu" : "Open menu"}
+              aria-expanded={mobileNavOpen}
+              aria-controls="theme-dekho-mobile-menu"
+              onClick={() =>
+                mobileNavOpen ? closeMobileNav() : openMobileNav()
+              }
+            >
+              <span />
+              <span />
+              <span />
+            </button>
 
-              {showNavigation && (
-                <nav>
-                  <div
-                    className={cn(
-                      "nav-item",
-                      pathname === "/" && "active",
-                    )}
-                  >
-                    <Link href="/">Home</Link>
-                  </div>
+            {/* Logo */}
+            <Link href="/" className="logo-img-link">
+              <Image
+                src={logo}
+                alt="Theme Dekho"
+                className="logo-img"
+                priority
+              />
+            </Link>
 
-                  <div
-                    className={cn(
-                      "nav-item",
-                      (pathname.startsWith("/categories/") ||
-                        pathname.startsWith("/products/")) &&
-                        "active",
-                    )}
-                  >
-                    <Link href="#">
-                      Our Work <span className="arrow">▾</span>
-                    </Link>
-                    <MegaMenu />
-                  </div>
-
-                  <div
-                    className={cn(
-                      "nav-item",
-                      (pathname.startsWith("/custom-web-development") ||
-                        pathname.startsWith("/shopify-development") ||
-                        pathname.startsWith("/wordpress-development") ||
-                        pathname.startsWith("/ecommerce-development")) &&
-                        "active",
-                    )}
-                  >
-                    <Link href="#">
-                      Custom web development <span className="arrow">▾</span>
-                    </Link>
-                    <div className="simple-drop">
-                      {customDevLinks.map((item) => (
-                        <Link href={item.href} key={item.label}>
-                          <span className="li-dot" />
-                          {item.label}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div
-                    className={cn(
-                      "nav-item",
-                      pathname === "/redesign-wordpress" && "active",
-                    )}
-                  >
-                    <Link href="/redesign-wordpress">
-                      Redesign WordPress Website
-                    </Link>
-                  </div>
-
-                  <div
-                    className={cn(
-                      "nav-item",
-                      pathname === "/contact" && "active",
-                    )}
-                  >
-                    <Link href="/contact">Contact us</Link>
-                  </div>
-                </nav>
-              )}
-
-              <div className="header-right">
-                <div className="phone-tag">
-                  <div className="ph-icon">📞</div>
-                  {phoneNumber.display}
+            {/* Desktop navigation */}
+            {showNavigation && (
+              <nav className="desktop-nav">
+                <div
+                  className={cn(
+                    "nav-item",
+                    pathname === "/" && "active"
+                  )}
+                >
+                  <Link href="/">Home</Link>
                 </div>
 
-                <AuthControls
-                  onLoginClick={() => {
-                    resetLoginModal();
-                    openLoginModal();
-                  }}
-                />
+                <div
+                  className={cn(
+                    "nav-item",
+                    (pathname.startsWith("/categories/") ||
+                      pathname.startsWith("/products/")) &&
+                      "active"
+                  )}
+                >
+                  <Link href="#">
+                    Our Work <span className="arrow">▾</span>
+                  </Link>
+
+                  <MegaMenu />
+                </div>
+
+                <div
+                  className={cn(
+                    "nav-item",
+                    (pathname.startsWith("/custom-web-development") ||
+                      pathname.startsWith("/shopify-development") ||
+                      pathname.startsWith("/wordpress-development") ||
+                      pathname.startsWith("/ecommerce-development")) &&
+                      "active"
+                  )}
+                >
+                  <Link href="#">
+                    Custom web development{" "}
+                    <span className="arrow">▾</span>
+                  </Link>
+
+                  <div className="simple-drop">
+                    {customDevLinks.map((item) => (
+                      <Link href={item.href} key={item.label}>
+                        <span className="li-dot" />
+                        {item.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+
+                <div
+                  className={cn(
+                    "nav-item",
+                    pathname === "/redesign-wordpress" && "active"
+                  )}
+                >
+                  <Link href="/redesign-wordpress">
+                    Redesign WordPress Website
+                  </Link>
+                </div>
+
+                <div
+                  className={cn(
+                    "nav-item",
+                    pathname === "/contact" && "active"
+                  )}
+                >
+                  <Link href="/contact">Contact us</Link>
+                </div>
+              </nav>
+            )}
+
+            {/* Desktop right side */}
+            <div className="header-right">
+              <div className="phone-tag">
+                <div className="ph-icon">📞</div>
+                {phoneNumber.display}
               </div>
+
+              <AuthControls
+                onLoginClick={() => {
+                  resetLoginModal();
+                  openLoginModal();
+                }}
+              />
             </div>
-          </header>
+          </div>
+        </header>
 
-          <div className="mnav-scrim" onClick={closeMobileNav} />
+        {/* Mobile backdrop */}
+        <div
+          className={cn(
+            "mnav-scrim",
+            mobileNavOpen && "open"
+          )}
+          onClick={closeMobileNav}
+          aria-hidden="true"
+        />
 
-          <aside className="mnav" aria-hidden={!mobileNavOpen}>
-            <div className="mnav-head">
-              <span className="mnav-title">Menu</span>
-              <button
-                type="button"
-                className="mnav-close"
-                aria-label="Close menu"
-                onClick={closeMobileNav}
-              >
-                &times;
-              </button>
-            </div>
+        {/* ================= MOBILE DRAWER ================= */}
+        <aside
+          id="theme-dekho-mobile-menu"
+          className={cn(
+            "mnav",
+            mobileNavOpen && "open"
+          )}
+          aria-hidden={!mobileNavOpen}
+          aria-label="Mobile navigation"
+        >
+          {/* Drawer header */}
+          <div className="mnav-head">
+            <span className="mnav-title">Menu</span>
 
-            <nav className="mnav-list">
-              <Link
-                href="/"
-                className={cn("mnav-link", pathname === "/" && "active")}
-                // onClick={closeMobileNav}
-              >
-                Home
-              </Link>
+            <button
+              type="button"
+              className="mnav-close"
+              aria-label="Close menu"
+              onClick={closeMobileNav}
+            >
+              &times;
+            </button>
+          </div>
 
-              {/* Our Work Mobile Accordion */}
-              <button
-                type="button"
-                className="mnav-acc"
-                aria-expanded={mobileAccOpen}
-                onClick={() => setMobileAccOpen((current) => !current)}
-              >
-                Our Work <span className="mnav-chev">▾</span>
-              </button>
-              <div
-                className={cn(
-                  "mnav-panel",
-                  mobileAccOpen && "open",
-                )}
-              >
+          <nav className="mnav-list">
+
+            {/* Home */}
+            <Link
+              href="/"
+              className={cn(
+                "mnav-link",
+                pathname === "/" && "active"
+              )}
+              onClick={closeMobileNav}
+            >
+              <span>Home</span>
+            </Link>
+
+            {/* Our Work */}
+            {/* <button
+              type="button"
+              className={cn(
+                "mnav-acc",
+                mobileAccOpen && "open"
+              )}
+              aria-expanded={mobileAccOpen}
+              onClick={() =>
+                setMobileAccOpen((current) => !current)
+              }
+            >
+              <span>Our Work</span>
+              <span className="mnav-chev">
+                {mobileAccOpen ? "▴" : "▾"}
+              </span>
+            </button> */}
+            <button
+              type="button"
+              className={cn(
+                "mnav-acc",
+                mobileAccOpen && "open"
+              )}
+              aria-expanded={mobileAccOpen}
+              // onClick={() => {
+              //   setMobileAccOpen((current) => !current);
+              // }}
+              onClick={() => {
+                setMobileAccOpen((current) => {
+                  const next = !current;
+
+                  if (next) {
+                    setMobileCustomDevOpen(false);
+                  }
+
+                  return next;
+                });
+              }}
+            >
+              <span>Our Work</span>
+              <span className="mnav-chev">
+                {mobileAccOpen ? "▴" : "▾"}
+              </span>
+            </button>
+
+            <div
+              className={cn(
+                "mnav-panel",
+                mobileAccOpen && "open"
+              )}
+            >
+              <div className="mnav-panel-inner">
                 {mobileOurWorkLinks.map((link) => (
                   <Link
                     href={link.href}
                     key={link.label}
-                    // onClick={closeMobileNav}
+                    onClick={closeMobileNav}
                   >
                     {link.label}
                   </Link>
                 ))}
               </div>
+            </div>
 
-              {/* Custom Web Development Mobile Accordion */}
-              <button
-                type="button"
-                className="mnav-acc"
-                aria-expanded={mobileCustomDevOpen}
-                onClick={() => setMobileCustomDevOpen((current) => !current)}
-              >
-                Custom Web Development <span className="mnav-chev">▾</span>
-              </button>
-              <div
-                className={cn(
-                  "mnav-panel",
-                  mobileCustomDevOpen && "open",
-                )}
-              >
+            {/* <div
+              className={cn(
+                "mnav-panel",
+                mobileAccOpen && "open"
+              )}
+            >
+              {mobileOurWorkLinks.map((link) => (
+                <Link
+                  href={link.href}
+                  key={link.label}
+                  onClick={closeMobileNav}
+                >
+                  {link.label}
+                </Link>
+              ))}
+            </div> */}
+
+            {/* Custom Web Development */}
+            {/* <button
+              type="button"
+              className={cn(
+                "mnav-acc",
+                mobileCustomDevOpen && "open"
+              )}
+              aria-expanded={mobileCustomDevOpen}
+              onClick={() =>
+                setMobileCustomDevOpen((current) => !current)
+              }
+            >
+              <span>Custom Web Development</span>
+
+              <span className="mnav-chev">
+                {mobileCustomDevOpen ? "▴" : "▾"}
+              </span>
+            </button> */}
+            <button
+              type="button"
+              className={cn(
+                "mnav-acc",
+                mobileCustomDevOpen && "open"
+              )}
+              aria-expanded={mobileCustomDevOpen}
+              // onClick={() => {
+              //   setMobileCustomDevOpen((current) => !current);
+              // }}
+              onClick={() => {
+                setMobileCustomDevOpen((current) => {
+                  const next = !current;
+
+                  if (next) {
+                    setMobileAccOpen(false);
+                  }
+
+                  return next;
+                });
+              }}
+            >
+              <span>Custom Web Development</span>
+              <span className="mnav-chev">
+                {mobileCustomDevOpen ? "▴" : "▾"}
+              </span>
+            </button>
+
+            <div
+              className={cn(
+                "mnav-panel",
+                mobileCustomDevOpen && "open"
+              )}
+            >
+              <div className="mnav-panel-inner">
                 {customDevLinks.map((item) => (
                   <Link
                     href={item.href}
                     key={item.label}
-                    // onClick={closeMobileNav}
+                    onClick={closeMobileNav}
                   >
                     {item.label}
                   </Link>
                 ))}
               </div>
+            </div>
 
-              {/* Redesign WordPress Website Link */}
-              <Link
-                href="/redesign-wordpress"
-                className={cn(
-                  "mnav-link",
-                  pathname === "/redesign-wordpress" && "active",
-                )}
-                // onClick={closeMobileNav}
-              >
-                Redesign WordPress Website
-              </Link>
+            {/* <div
+              className={cn(
+                "mnav-panel",
+                mobileCustomDevOpen && "open"
+              )}
+            >
+              {customDevLinks.map((item) => (
+                <Link
+                  href={item.href}
+                  key={item.label}
+                  onClick={closeMobileNav}
+                >
+                  {item.label}
+                </Link>
+              ))}
+            </div> */}
 
-              {/* Mobile Auth Controls */}
-              <div style={{ padding: "10px 20px" }}>
-                <AuthControls
-                  mobile
-                  onLoginClick={() => {
-                    closeMobileNav();
-                    resetLoginModal();
-                    openLoginModal();
-                  }}
-                />
+            {/* Redesign WordPress */}
+            <Link
+              href="/redesign-wordpress"
+              className={cn(
+                "mnav-link",
+                pathname === "/redesign-wordpress" && "active"
+              )}
+              onClick={closeMobileNav}
+            >
+              <span>Redesign WordPress Website</span>
+            </Link>
+
+            {/* Contact */}
+            <Link
+              href="/contact"
+              className={cn(
+                "mnav-link",
+                pathname === "/contact" && "active"
+              )}
+              onClick={closeMobileNav}
+            >
+              <span>Contact us</span>
+            </Link>
+
+            {/* ================= MY ACCOUNT ================= */}
+            <div className="mnav-account">
+              <div className="mnav-section-label">
+                My Account
               </div>
 
-              {/* Contact Us Link */}
-              <Link
-                href="/contact"
-                className={cn(
-                  "mnav-link",
-                  pathname === "/contact" && "active",
-                )}
-                // onClick={closeMobileNav}
-              >
-                Contact us
-              </Link>
-            </nav>
-
-            <div className="mnav-foot">
-              <a className="mnav-call" href={phoneNumber.href}>
-                📞 {phoneNumber.display}
-              </a>
-
-              {/* <button
-                type="button"
-                className="mnav-cta"
-                onClick={() => {
+              <AuthControls
+                mobile
+                onLoginClick={() => {
                   closeMobileNav();
-                  customQuoteModal.open();
+                  resetLoginModal();
+                  openLoginModal();
                 }}
-              >
-                Get a Free Quote
-              </button> */}
+              />
             </div>
-          </aside>
-        </>
-      )}
+          </nav>
 
-      <WishlistDrawer />
-      <EnquiryDrawer />
+          {/* Mobile footer */}
+          <div className="mnav-foot">
+            <a
+              className="mnav-call"
+              href={phoneNumber.href}
+            >
+              <span>📞</span>
+              {phoneNumber.display}
+            </a>
+          </div>
+        </aside>
+      </>
+    )}
 
-      <AuthModal
-        isOpen={loginModalOpen}
-        onClose={closeLoginModal}
-        onAuthenticated={(data) => {
-          if (!data.user?.id || !data.user.phone) {
-            return;
-          }
+    {/* Account drawers */}
+    <WishlistDrawer />
+    <EnquiryDrawer />
 
-          setAuthenticatedUser({
-            id: Number(data.user.id),
-            phone: data.user.phone,
-            name: data.user.name ?? null,
-            email: data.user.email ?? null,
-          });
+    {/* Authentication modal */}
+    <AuthModal
+      isOpen={loginModalOpen}
+      onClose={closeLoginModal}
+      onAuthenticated={(data) => {
+        if (!data.user?.id || !data.user.phone) {
+          return;
+        }
 
-          closeGlobalLoginModal();
-        }}
-      />
-    </>
-  );
+        setAuthenticatedUser({
+          id: Number(data.user.id),
+          phone: data.user.phone,
+          name: data.user.name ?? null,
+          email: data.user.email ?? null,
+        });
+
+        closeGlobalLoginModal();
+      }}
+    />
+  </>
+);
 } 

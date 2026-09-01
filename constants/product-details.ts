@@ -511,7 +511,7 @@ function createProductDetail(
     priceRange: input.priceRange,
 
     previewUrl:
-      input.previewUrl ?? "https://themedekho.com/",
+      input.previewUrl ?? "https://theme-dekho.github.io/development_page/",
 
     mainImage: input.mainImage,
 

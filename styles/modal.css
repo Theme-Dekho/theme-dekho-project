@@ -547,4 +547,31 @@
     border-radius: 0 !important;
     max-width: none !important;
   }
+
+  .preview-modal-header {
+    flex-wrap: nowrap !important;
+    gap: 10px !important;
+    padding: 10px 14px !important;
+  }
+
+  .preview-url-bar {
+    display: none !important; /* Hides the long URL bar on mobile to reserve space for title and close button */
+  }
+
+  .preview-title {
+    flex: 1 !important;
+    min-width: 0 !important;
+    font-size: 12px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+  }
+
+  .preview-close {
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 20px !important;
+    flex-shrink: 0 !important;
+    background: rgba(255, 255, 255, 0.2) !important;
+  }
 }

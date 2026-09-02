@@ -541,18 +541,36 @@
     right: 0 !important;
   }
 
-  .preview-modal {
+  /* .preview-modal {
     width: 100vw !important;
     height: 100vh !important;
     border-radius: 0 !important;
     max-width: none !important;
-  }
+  } */
+  .preview-modal {
+    width: 100vw !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    border-radius: 0 !important;
+    max-width: none !important;
+} 
 
-  .preview-modal-header {
+  /* .preview-modal-header {
     flex-wrap: nowrap !important;
     gap: 10px !important;
     padding: 10px 14px !important;
-  }
+  } */
+  .preview-modal-header {
+    position: relative !important;
+    z-index: 10 !important;
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 10px 14px !important;
+    min-height: 56px !important;
+    flex-shrink: 0 !important;
+} 
 
   .preview-url-bar {
     display: none !important; /* Hides the long URL bar on mobile to reserve space for title and close button */
@@ -567,11 +585,38 @@
     white-space: nowrap !important;
   }
 
-  .preview-close {
+  /* .preview-close {
     width: 36px !important;
     height: 36px !important;
     font-size: 20px !important;
     flex-shrink: 0 !important;
     background: rgba(255, 255, 255, 0.2) !important;
+  } */
+  .preview-close {
+      position: relative !important;
+      z-index: 20 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      width: 36px !important;
+      min-width: 36px !important;
+      height: 36px !important;
+      min-height: 36px !important;
+      flex: 0 0 36px !important;
+      padding: 0 !important;
+      margin: 0 !important;
+      background: rgba(255,255,255,0.2) !important;
+      color: #fff !important;
+      font-size: 20px !important;
+      line-height: 1 !important;
+      border: 1px solid rgba(255,255,255,0.15) !important;
+      border-radius: 50% !important;
+      cursor: pointer;
+  }
+  
+  .preview-frame-wrap {
+      flex: 1 1 auto !important;
+      min-height: 0 !important;
+      overflow: hidden !important;
   }
 }

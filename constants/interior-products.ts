@@ -13,12 +13,12 @@ export const interiorProducts: Product[] = [
     discount: 68,
     img: "/images/templates/interior/interior1.webp",
     alt: "Decorpot Interior Design Website",
-    previewUrl: "https://theme-dekho.github.io/development_page/",
+    previewUrl: "https://www.decorpot.com",
     badges: [
-      {
-        type: "badge-sale",
-        label: "68% Off",
-      },
+      // {
+      //   type: "badge-sale",
+      //   label: "68% Off",
+      // },
       {
         type: "badge-hot",
         label: "Popular",
@@ -45,7 +45,7 @@ export const interiorProducts: Product[] = [
     discount: 55,
     img: "/images/templates/interior/interior2.webp",
     alt: "Gopesh Interior Furniture House Website",
-    previewUrl: "https://theme-dekho.github.io/development_page/",
+    previewUrl: "https://gifhouse.in",
     badges: [
       {
         type: "badge-hot",

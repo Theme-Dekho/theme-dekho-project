@@ -76,10 +76,17 @@ export default function ProductCard({ product, sectionLabel }: ProductCardProps)
   return (
     <div className="product-card">
       <div className="pc-img" style={{ background: product.bgColor }}>
-        <span className="pc-preview" onClick={handlePreview}>
+        {/* <span className="pc-preview" onClick={handlePreview}>
           <span className="eye-icon" />
           <span className="eye-text">Live Preview</span>
-        </span>
+        </span> */}
+        <button
+        type="button"
+        className="pcard-preview-btn"
+        onClick={handlePreview}
+      >
+        👁 Live Preview
+      </button>
         {product.image ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img className="scroll-img" src={product.image} alt="website preview" />
@@ -137,13 +144,20 @@ export default function ProductCard({ product, sectionLabel }: ProductCardProps)
           {/* <a className="pc-details" href="/product-page">
             <span className="det-arrow">&#9654;</span>Get Details
           </a> */}
-          <Link
+          {/* <Link
             className="pc-details"
             href={`/products/${productSlug}`}
           >
             <span className="det-arrow">&#9654;</span>
             Get Details
-          </Link>
+          </Link> */}
+          <Link
+              href={`/products/${productSlug}`}
+              className="btn-buy"
+            >
+              <span aria-hidden="true">▶</span>
+              Get Details
+            </Link>
 
           {/* <button className={cn("pc-save", saved && "saved")} onClick={() => toggleSave(product.name, sectionLabel)}> */}
           {/* <button type="button" className={cn("pc-save", saved && "saved",)}onClick={handleWishlist}

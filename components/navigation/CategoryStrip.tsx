@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import type { CategoryFilter } from "@/types/category";
 import { categoryPills } from "@/constants/section";
 import { cn } from "@/lib/utils";
@@ -10,14 +11,36 @@ interface CategoryStripProps {
 }
 
 export default function CategoryStrip({ active, onSelect, searchTerm, onSearchChange }: CategoryStripProps) {
+  const categoryRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+  
+  useEffect(() => {
+    if (typeof window === "undefined" || window.innerWidth > 768) return;
+
+    const button = categoryRefs.current[active];
+
+    if (!button) return;
+
+    button.scrollIntoView({
+      behavior: "smooth",
+      inline: "center",
+      block: "nearest",
+    });
+  }, [active]);
+
   return (
     <div className="cat-strip">
       <div className="cat-inner">
         <span className="cat-lbl">&#9654; Browse Our Work :</span>
 
         {categoryPills.map((pill) => (
+          // <button
+          //   key={pill.label}
+          //   className={cn("cat-pill", pill.soon && "soon", !pill.soon && active === pill.key && "active")}
           <button
             key={pill.label}
+            ref={(el) => {
+              categoryRefs.current[pill.key] = el;
+            }}
             className={cn("cat-pill", pill.soon && "soon", !pill.soon && active === pill.key && "active")}
             disabled={pill.soon}
             title={pill.soon ? "Coming soon" : undefined}

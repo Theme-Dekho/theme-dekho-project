@@ -573,27 +573,6 @@ export const productDetails: Record<
   string,
   ProductDetail
 > = {
-  // decorpot: createProductDetail({
-  //   slug: "decorpot",
-  //   name: "Decorpot",
-  //   category: "Interior Design Business Website",
-
-  //   tagline:
-  //     "A premium interior design website for modern studios, residential designers and turnkey interior firms.",
-
-  //   rating: "4.8",
-  //   reviewCount: 52,
-  //   purchases: 98,
-
-  //   currentPrice: "₹14,999",
-  //   oldPrice: "₹46,999",
-  //   discount: "68% OFF",
-  //   priceRange: "Up to 30 pages",
-
-  //   mainImage:
-  //     "/images/templates/interior/decorpot.jpg",
-  // }),
-
   decorpot: createProductDetail({
   slug: "decorpot",
 
@@ -614,7 +593,7 @@ export const productDetails: Record<
   priceRange: "Up to 30 pages",
 
   mainImage:
-    "/images/templates/interior/decorpot.jpg",
+    "/images/templates/interior/interior1.webp",
 
   customFeatures: [
     {
@@ -919,29 +898,6 @@ export const productDetails: Record<
   ],
 }),
 
-  // "gopesh-interior": createProductDetail({
-  //   slug: "gopesh-interior",
-
-  //   name: "Gopesh Interior Furniture House",
-
-  //   category:
-  //     "Interior and Furniture Business Website",
-
-  //   tagline:
-  //     "A complete business website for interior contractors, furniture manufacturers and home-furnishing companies.",
-
-  //   rating: "4.5",
-  //   reviewCount: 31,
-  //   purchases: 33,
-
-  //   currentPrice: "₹9,999",
-  //   oldPrice: "₹22,000",
-  //   discount: "55% OFF",
-  //   priceRange: "Up to 15 pages",
-
-  //   mainImage:
-  //     "/images/templates/interior/gopesh-interior.jpg",
-  // }),
 
   "gopesh-interior": createProductDetail({
   slug: "gopesh-interior",
@@ -964,7 +920,7 @@ export const productDetails: Record<
   priceRange: "Up to 15 pages",
 
   mainImage:
-    "/images/templates/interior/gopesh-interior.jpg",
+    "/images/templates/interior/interior2.webp",
 
   customFeatures: [
     {

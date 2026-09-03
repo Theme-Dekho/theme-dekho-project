@@ -4,6 +4,10 @@
   background: #f1f4f9;
 }
 
+.product-card .pc-img {
+  position: relative;
+}
+
 /* ================================
    Breadcrumb
 ================================ */
@@ -765,7 +769,7 @@
 
 .pcard-img {
   position: relative;
-  height: 185px;
+  height: 260px;
   overflow: hidden;
   background: #e1e8f0;
 }
@@ -777,6 +781,29 @@
 
 .pcard:hover .pcard-img img {
   transform: scale(1.04);
+}
+
+/* Hover contrast overlay */
+.pcard-img::after,
+.product-card .pc-img::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.22) 0%,
+    rgba(0, 0, 0, 0.40) 100%
+  );
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+  z-index: 2;
+}
+
+/* Show overlay on hover */
+.pcard:hover .pcard-img::after,
+.product-card .pc-img:hover::after {
+  opacity: 1;
 }
 
 .pcard-badges {
@@ -838,10 +865,15 @@
     transform 0.2s ease;
 }
 
-.pcard:hover .pcard-preview-btn {
+/* .pcard:hover .pcard-preview-btn {
   opacity: 1;
   transform: translateY(0);
-}
+} */
+.pcard:hover .pcard-preview-btn,
+.product-card:hover .pcard-preview-btn {
+  opacity: 1;
+  transform: translateY(0);
+} 
 
 .pcard-body {
   padding: 14px 14px 16px;
@@ -914,6 +946,15 @@
   margin-bottom: 11px;
 }
 
+/* .pcard-addon-label {
+  display: block;
+  margin-bottom: 5px;
+  color: #a82a4f;
+  font-size: 9.5px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+} */
 .pcard-addon-label {
   display: block;
   margin-bottom: 5px;
@@ -922,7 +963,8 @@
   font-weight: 800;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-}
+  white-space: nowrap;
+} 
 
 .pcard-tags {
   display: flex;

@@ -82,7 +82,7 @@ export default function ProductCard({ product, sectionLabel }: ProductCardProps)
         </span> */}
         <button
         type="button"
-        className="pcard-preview-btn"
+        className="pc-home-preview-btn"
         onClick={handlePreview}
       >
         👁 Live Preview

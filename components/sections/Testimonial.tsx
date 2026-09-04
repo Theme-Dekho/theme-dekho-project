@@ -13,9 +13,15 @@ export default function Testimonial() {
           </div>
         </div>
 
-        <div className="test-grid">
+        {/* <div className="test-grid">
           {testimonials.map((t) => (
-            <Card variant="test" key={t.name}>
+            <Card variant="test" key={t.name}> */}
+            {/* <div className="test-grid">
+              {[...testimonials, ...testimonials].map((t, index) => ( */}
+              <div className="test-carousel">
+                <div className="test-grid">
+                  {[...testimonials, ...testimonials].map((t, index) => (
+                <Card variant="test" key={`${t.name}-${index}`}>
               <div className="test-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
               <p className="test-text">&quot;{t.text}&quot;</p>
               <div className="test-author">
@@ -30,6 +36,7 @@ export default function Testimonial() {
             </Card>
           ))}
         </div>
+      </div>
       </Container>
     </section>
   );

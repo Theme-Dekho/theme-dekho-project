@@ -300,7 +300,7 @@ export default function ProductHero({
             {/* PRICE */}
             <div className="product-price-box">
 
-              <div className="product-price-row">
+              {/* <div className="product-price-row">
                 <strong className="product-current-price">
                   {product.currentPrice}
                 </strong>
@@ -312,11 +312,11 @@ export default function ProductHero({
                 <span className="product-discount">
                   {product.discount}
                 </span>
-              </div>
+              </div> */}
 
-              <p className="product-price-range">
+              {/* <p className="product-price-range">
                 {product.priceRange}
-              </p>
+              </p> */}
 
               <div className="product-cta-row">
 

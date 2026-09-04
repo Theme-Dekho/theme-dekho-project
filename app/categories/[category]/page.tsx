@@ -34,7 +34,7 @@ export async function generateMetadata({
   }
 
   return {
-    title: currentCategory.title,
+    title: "Theme Dekho",
     description: currentCategory.description,
   };
 }

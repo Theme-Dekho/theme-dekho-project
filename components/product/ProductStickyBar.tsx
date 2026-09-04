@@ -94,13 +94,13 @@ export default function ProductStickyBar({
         </div>
 
         <div className="product-sticky-price">
-          <strong>
+          {/* <strong>
             {product.currentPrice}
-          </strong>
+          </strong> */}
 
-          <span>
+          {/* <span>
             {product.oldPrice}
-          </span>
+          </span> */}
         </div>
 
         <div className="product-sticky-actions">

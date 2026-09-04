@@ -737,7 +737,11 @@ margin-bottom: 11px;
   }
 
 .pc-details:hover,
-.btn-buy:hover{ background: var(--orange-dark); box-shadow: 0 6px 18px rgba(240,191,18,0.5); transform: translateY(-1px); }
+.btn-buy:hover{ 
+  background:#828283; 
+  box-shadow: 0 10px 18px rgba(68, 67, 66, 0.5); 
+  transform: translateY(-1px); 
+}
 
 .pc-details .det-arrow { font-size: 13px; line-height: 1; }
 

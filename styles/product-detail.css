@@ -3761,14 +3761,25 @@ RESPONSIVE REVIEWS
 
 /* FAQ GRID */
 
+/* .product-detail-page .product-faq-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  align-items: start;
+} */
 .product-detail-page .product-faq-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-
-  gap: 14px;
-
+  gap: 18px;
   align-items: start;
 }
+
+.product-detail-page .product-faq-column {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+} 
 
 
 /* FAQ ITEM */
@@ -3922,11 +3933,29 @@ RESPONSIVE REVIEWS
 
 /* RESPONSIVE */
 
+/* @media (max-width: 900px) {
+  .product-detail-page .product-faq-grid {
+    grid-template-columns: 1fr;
+  }
+} */
 @media (max-width: 900px) {
   .product-detail-page .product-faq-grid {
     grid-template-columns: 1fr;
   }
+
+  .product-detail-page .product-faq-column {
+    gap: 14px;
+  }
+
+  .product-detail-page .product-faq-grid {
+  display: flex;
+  flex-direction: column;
 }
+
+.product-detail-page .product-faq-column {
+  display: contents;
+}
+} 
 
 /* =========================================
    STICKY BUY BAR — REFERENCE MATCH

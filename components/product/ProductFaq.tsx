@@ -29,7 +29,7 @@ const faqs = [
 ];
 
 export default function ProductFaq() {
-  const [openIndex, setOpenIndex] = useState(0);
+  const [openIndex, setOpenIndex] = useState(-1);
 
   return (
     <section className="product-faq-section">
@@ -44,7 +44,7 @@ export default function ProductFaq() {
           </p>
         </div>
 
-        <div className="product-faq-grid">
+        {/* <div className="product-faq-grid">
           {faqs.map((faq, index) => {
             const isOpen = openIndex === index;
 
@@ -83,6 +83,95 @@ export default function ProductFaq() {
               </article>
             );
           })}
+        </div> */}
+        <div className="product-faq-grid">
+          <div className="product-faq-column">
+            {faqs
+              .filter((_, index) => index % 2 === 0)
+              .map((faq, index) => {
+                const actualIndex = index * 2;
+                const isOpen = openIndex === actualIndex;
+
+                return (
+                  <article
+                    className={
+                      isOpen
+                        ? "product-faq-item open"
+                        : "product-faq-item"
+                    }
+                    key={faq.question}
+                  >
+                    <button
+                      type="button"
+                      className="product-faq-question"
+                      aria-expanded={isOpen}
+                      onClick={() =>
+                        setOpenIndex(
+                          isOpen ? -1 : actualIndex
+                        )
+                      }
+                    >
+                      <span>{faq.question}</span>
+
+                      <span
+                        className="product-faq-toggle"
+                        aria-hidden="true"
+                      />
+                    </button>
+
+                    {isOpen && (
+                      <div className="product-faq-answer">
+                        <p>{faq.answer}</p>
+                      </div>
+                    )}
+                  </article>
+                );
+              })}
+          </div>
+
+          <div className="product-faq-column">
+            {faqs
+              .filter((_, index) => index % 2 === 1)
+              .map((faq, index) => {
+                const actualIndex = index * 2 + 1;
+                const isOpen = openIndex === actualIndex;
+
+                return (
+                  <article
+                    className={
+                      isOpen
+                        ? "product-faq-item open"
+                        : "product-faq-item"
+                    }
+                    key={faq.question}
+                  >
+                    <button
+                      type="button"
+                      className="product-faq-question"
+                      aria-expanded={isOpen}
+                      onClick={() =>
+                        setOpenIndex(
+                          isOpen ? -1 : actualIndex
+                        )
+                      }
+                    >
+                      <span>{faq.question}</span>
+
+                      <span
+                        className="product-faq-toggle"
+                        aria-hidden="true"
+                      />
+                    </button>
+
+                    {isOpen && (
+                      <div className="product-faq-answer">
+                        <p>{faq.answer}</p>
+                      </div>
+                    )}
+                  </article>
+                );
+              })}
+          </div>
         </div>
 
       </div>
